@@ -49,3 +49,11 @@ d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\obj\Debug\net8.0-windows10
 d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\obj\Debug\net8.0-windows10.0.19041.0\Views\ConfigHomePage.xaml
 d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\obj\Debug\net8.0-windows10.0.19041.0\Views\ConfigHomePage.xbf
 d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\obj\Debug\net8.0-windows10.0.19041.0\XamlSaveStateFile.xml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Config\Views\ConfigNavigationView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Core.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Core.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\obj\Debug\net8.0-windows10.0.19041.0\Views\ConfigNavigationView.g.i.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\obj\Debug\net8.0-windows10.0.19041.0\Views\ConfigNavigationView.g.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\obj\Debug\net8.0-windows10.0.19041.0\Views\ConfigNavigationView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\obj\Debug\net8.0-windows10.0.19041.0\Views\ConfigNavigationView.xbf
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Config\obj\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Config.sourcelink.json

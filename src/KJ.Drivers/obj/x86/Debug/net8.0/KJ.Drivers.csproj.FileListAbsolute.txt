@@ -1,0 +1,16 @@
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\bin\x86\Debug\net8.0\KJ.Drivers.deps.json
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\bin\x86\Debug\net8.0\KJ.Drivers.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\bin\x86\Debug\net8.0\KJ.Drivers.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\bin\x86\Debug\net8.0\KJ.Domain.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\bin\x86\Debug\net8.0\KJ.Domain.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\x86\Debug\net8.0\KJ.Drivers.csproj.AssemblyReference.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\x86\Debug\net8.0\KJ.Drivers.GeneratedMSBuildEditorConfig.editorconfig
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\x86\Debug\net8.0\KJ.Drivers.AssemblyInfoInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\x86\Debug\net8.0\KJ.Drivers.AssemblyInfo.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\x86\Debug\net8.0\KJ.Drivers.csproj.CoreCompileInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\x86\Debug\net8.0\KJ.Drivers.sourcelink.json
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\x86\Debug\net8.0\KJ.Drivers.csproj.Up2Date
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\x86\Debug\net8.0\KJ.Drivers.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\x86\Debug\net8.0\refint\KJ.Drivers.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\x86\Debug\net8.0\KJ.Drivers.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\x86\Debug\net8.0\ref\KJ.Drivers.dll

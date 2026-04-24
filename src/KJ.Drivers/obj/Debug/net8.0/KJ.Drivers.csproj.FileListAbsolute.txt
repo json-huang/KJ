@@ -13,3 +13,4 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\Debug\net8.0\KJ.Drivers.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\Debug\net8.0\refint\KJ.Drivers.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\Debug\net8.0\KJ.Drivers.pdb
 D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\Debug\net8.0\ref\KJ.Drivers.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Drivers\obj\Debug\net8.0\KJ.Drivers.sourcelink.json

@@ -49,3 +49,11 @@ d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\obj\Debug\net8.0-window
 d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\obj\Debug\net8.0-windows10.0.19041.0\Views\ReportingHomePage.xaml
 d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\obj\Debug\net8.0-windows10.0.19041.0\Views\ReportingHomePage.xbf
 d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\obj\Debug\net8.0-windows10.0.19041.0\XamlSaveStateFile.xml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Reporting\Views\ReportingNavigationView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Core.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Core.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\obj\Debug\net8.0-windows10.0.19041.0\Views\ReportingNavigationView.g.i.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\obj\Debug\net8.0-windows10.0.19041.0\Views\ReportingNavigationView.g.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\obj\Debug\net8.0-windows10.0.19041.0\Views\ReportingNavigationView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\obj\Debug\net8.0-windows10.0.19041.0\Views\ReportingNavigationView.xbf
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Reporting\obj\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Reporting.sourcelink.json

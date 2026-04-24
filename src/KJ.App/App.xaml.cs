@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using System.IO;
 using KJ.App.Dialogs;
 using KJ.App.Services;
 using KJ.App.ViewModels.Dialogs;
@@ -26,6 +27,19 @@ public partial class App : PrismApplication
 
     public static Task WaitForDatabaseInitializationAsync() => DatabaseInitializationCompleted.Task;
 
+    public App()
+    {
+        InitializeComponent();
+        HookGlobalExceptionLogging();
+    }
+
+    protected override void ConfigureWindow(Window window)
+    {
+        base.ConfigureWindow(window);
+        window.Title = "KJ";
+        window.Activate();
+    }
+
     protected override void ConfigureServices(IServiceCollection services)
     {
         var configuration = new ConfigurationBuilder()
@@ -46,7 +60,6 @@ public partial class App : PrismApplication
         containerRegistry.RegisterSingleton<INavigator, FrameNavigator>();
         containerRegistry.RegisterSingleton<IAuthenticationContext, AuthenticationContext>();
         containerRegistry.RegisterSingleton<ILoginCredentialStore, LoginCredentialStore>();
-        containerRegistry.RegisterSingleton<ISessionResumeService, SessionResumeService>();
         containerRegistry.RegisterSingleton<IShellContentNavigation, ShellRegionNavigationAdapter>();
         containerRegistry.RegisterSingleton<IPermissionService, PermissionService>();
 
@@ -108,5 +121,39 @@ public partial class App : PrismApplication
         {
             System.Diagnostics.Debug.WriteLine($"Database init failed: {ex}");
         }
+    }
+
+    private void HookGlobalExceptionLogging()
+    {
+        var logPath = Path.Combine(Path.GetTempPath(), "KJ.App-crash.log");
+
+        static string Format(object? ex) => ex?.ToString() ?? "<null>";
+
+        void Write(string message)
+        {
+            try
+            {
+                File.AppendAllText(logPath, $"{DateTimeOffset.Now:O} {message}{Environment.NewLine}");
+            }
+            catch
+            {
+                // best-effort only
+            }
+        }
+
+        AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+            Write($"AppDomain.UnhandledException: {Format(e.ExceptionObject)}");
+
+        TaskScheduler.UnobservedTaskException += (_, e) =>
+        {
+            Write($"TaskScheduler.UnobservedTaskException: {Format(e.Exception)}");
+            e.SetObserved();
+        };
+
+        UnhandledException += (_, e) =>
+        {
+            Write($"Application.UnhandledException: {Format(e.Exception)}");
+            // keep default behavior in release; we only need evidence
+        };
     }
 }

@@ -80,3 +80,4 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring.WinUI\bin\Release\net8
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring.WinUI\bin\Release\net8.0-windows10.0.19041.0\KJ.Infrastructure.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring.WinUI\bin\Release\net8.0-windows10.0.19041.0\KJ.Infrastructure.pdb
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring.WinUI\bin\Release\net8.0-windows10.0.19041.0\KJ.Domain.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring.WinUI\obj\Release\net8.0-windows10.0.19041.0\KJ.Modules.Monitoring.sourcelink.json

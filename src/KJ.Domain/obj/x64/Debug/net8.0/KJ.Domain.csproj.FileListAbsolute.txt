@@ -1,0 +1,12 @@
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\bin\x64\Debug\net8.0\KJ.Domain.deps.json
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\bin\x64\Debug\net8.0\KJ.Domain.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\bin\x64\Debug\net8.0\KJ.Domain.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\obj\x64\Debug\net8.0\KJ.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\obj\x64\Debug\net8.0\KJ.Domain.AssemblyInfoInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\obj\x64\Debug\net8.0\KJ.Domain.AssemblyInfo.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\obj\x64\Debug\net8.0\KJ.Domain.csproj.CoreCompileInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\obj\x64\Debug\net8.0\KJ.Domain.sourcelink.json
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\obj\x64\Debug\net8.0\KJ.Domain.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\obj\x64\Debug\net8.0\refint\KJ.Domain.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\obj\x64\Debug\net8.0\KJ.Domain.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Domain\obj\x64\Debug\net8.0\ref\KJ.Domain.dll

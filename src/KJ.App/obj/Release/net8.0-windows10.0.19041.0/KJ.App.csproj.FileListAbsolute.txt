@@ -341,8 +341,6 @@ d:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.
 d:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 d:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\KJ.Modules.Core.dll
 d:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\KJ.Modules.Core.pdb
-d:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\KJ.Modules.Core.pri
-d:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\Release\net8.0-windows10.0.19041.0\KJ.Modules.Core.pri.xml
 d:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\KJ.Modules.Monitoring\Views\MonitoringNavigationView.xaml
 d:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\KJ.Modules.Config\Views\ConfigNavigationView.xaml
 d:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\KJ.Modules.Alarm\Views\AlarmNavigationView.xaml
@@ -353,3 +351,8 @@ d:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\Release\net8.0-windows10.0.19041.
 d:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\Release\net8.0-windows10.0.19041.0\Views\Navigation\HomeNavigationView.xaml
 d:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\Release\net8.0-windows10.0.19041.0\Views\Navigation\HomeNavigationView.xbf
 d:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\KJ.Modules.Auth\Views\LoginView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\KJ.Modules.Monitoring\Views\DashboardView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\KJ.Modules.Monitoring\Views\DeviceListView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\KJ.Modules.Monitoring\Views\TagMonitorView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Release\net8.0-windows10.0.19041.0\KJ.Modules.Monitoring\Views\TrendChartView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\Release\net8.0-windows10.0.19041.0\KJ.App.sourcelink.json

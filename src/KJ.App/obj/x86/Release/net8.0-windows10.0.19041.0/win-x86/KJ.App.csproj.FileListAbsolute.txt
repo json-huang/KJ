@@ -518,3 +518,4 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\x86\Release\net8.0-windows10.0.19
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\x86\Release\net8.0-windows10.0.19041.0\win-x86\qualifiers.txt
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\x86\Release\net8.0-windows10.0.19041.0\win-x86\qualifiers.txt.intermediate
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\x86\Release\net8.0-windows10.0.19041.0\win-x86\MultipleQualifiersPerDimensionFound.txt
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\x86\Release\net8.0-windows10.0.19041.0\win-x86\KJ.App.sourcelink.json

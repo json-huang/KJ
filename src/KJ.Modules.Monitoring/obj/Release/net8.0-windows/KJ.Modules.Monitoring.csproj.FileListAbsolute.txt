@@ -21,3 +21,4 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring\obj\Release\net8.0-win
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring\obj\Release\net8.0-windows\refint\KJ.Modules.Monitoring.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring\obj\Release\net8.0-windows\KJ.Modules.Monitoring.pdb
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring\obj\Release\net8.0-windows\ref\KJ.Modules.Monitoring.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring\obj\Release\net8.0-windows\KJ.Modules.Monitoring.sourcelink.json

@@ -13,3 +13,4 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Release\net8.0\KJ.C
 D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Release\net8.0\refint\KJ.Comms.Drivers.Tcp.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Release\net8.0\KJ.Comms.Drivers.Tcp.pdb
 D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Release\net8.0\ref\KJ.Comms.Drivers.Tcp.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Release\net8.0\KJ.Comms.Drivers.Tcp.sourcelink.json

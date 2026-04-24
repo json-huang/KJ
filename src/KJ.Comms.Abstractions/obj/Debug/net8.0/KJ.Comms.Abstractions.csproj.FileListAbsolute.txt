@@ -9,3 +9,4 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\KJ.Co
 D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\refint\KJ.Comms.Abstractions.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\KJ.Comms.Abstractions.pdb
 D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\ref\KJ.Comms.Abstractions.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\KJ.Comms.Abstractions.sourcelink.json

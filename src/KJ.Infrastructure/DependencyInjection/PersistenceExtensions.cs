@@ -16,7 +16,11 @@ public static class PersistenceExtensions
         var connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is missing.");
 
-        services.AddDbContext<KjDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddDbContext<KjDbContext>(options =>
+        {
+            var serverVersion = ServerVersion.AutoDetect(connectionString);
+            options.UseMySql(connectionString, serverVersion);
+        });
 
         services
             .AddIdentityCore<IdentityUser>(options =>

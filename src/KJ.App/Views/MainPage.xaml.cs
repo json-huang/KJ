@@ -20,7 +20,7 @@ public sealed partial class MainPage : Page
 
     private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        // 默认导航到概览页（HomeOverview 已 RegisterForNavigation）
+        // 先保持默认入口稳定；后续再切回“监控 → 设备列表”作为启动页
         _regionManager.RequestNavigate(KJ.Modules.Core.Regions.RegionNames.MainContent, new Uri("HomeOverview", UriKind.Relative));
     }
 }

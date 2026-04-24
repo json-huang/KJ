@@ -3,4 +3,5 @@ Dialogs\AboutDialog.xbf
 Views\HomeOverviewPage.xbf
 Views\LoginPage.xbf
 Views\MainPage.xbf
+Views\Navigation\HomeNavigationView.xbf
 Views\ShellPage.xbf

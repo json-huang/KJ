@@ -42,3 +42,17 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\obj\Debug\net8.0-windows10.0
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\obj\Debug\net8.0-windows10.0.19041.0\qualifiers.txt
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\obj\Debug\net8.0-windows10.0.19041.0\qualifiers.txt.intermediate
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\obj\Debug\net8.0-windows10.0.19041.0\MultipleQualifiersPerDimensionFound.txt
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Auth\Views\LoginView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\bin\Debug\net8.0-windows10.0.19041.0\KJ.Domain.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\bin\Debug\net8.0-windows10.0.19041.0\KJ.Infrastructure.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Core.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Core.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\bin\Debug\net8.0-windows10.0.19041.0\KJ.Infrastructure.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\bin\Debug\net8.0-windows10.0.19041.0\KJ.Domain.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\obj\Debug\net8.0-windows10.0.19041.0\Views\LoginView.g.i.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\obj\Debug\net8.0-windows10.0.19041.0\Views\LoginView.g.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\obj\Debug\net8.0-windows10.0.19041.0\XamlTypeInfo.g.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\obj\Debug\net8.0-windows10.0.19041.0\Views\LoginView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\obj\Debug\net8.0-windows10.0.19041.0\Views\LoginView.xbf
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\obj\Debug\net8.0-windows10.0.19041.0\XamlSaveStateFile.xml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Auth\obj\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Auth.sourcelink.json

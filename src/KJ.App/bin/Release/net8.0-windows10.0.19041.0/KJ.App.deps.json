@@ -1978,9 +1978,7 @@
       },
       "KJ.Modules.Core/1.0.0": {
         "dependencies": {
-          "Microsoft.Web.WebView2": "1.0.3912.50",
-          "Microsoft.WindowsAppSDK": "1.8.260416003",
-          "Prism.Uno.WinUI": "9.0.537"
+          "Prism.Core": "9.0.537"
         },
         "runtime": {
           "KJ.Modules.Core.dll": {
@@ -1991,6 +1989,7 @@
       },
       "KJ.Modules.Monitoring/1.0.0": {
         "dependencies": {
+          "KJ.Infrastructure": "1.0.0",
           "KJ.Modules.Core": "1.0.0",
           "Microsoft.Web.WebView2": "1.0.3912.50",
           "Microsoft.WindowsAppSDK": "1.8.260416003",

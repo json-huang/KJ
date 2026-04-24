@@ -49,3 +49,11 @@ d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\obj\Debug\net8.0-windows10.
 d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\obj\Debug\net8.0-windows10.0.19041.0\Views\AlarmHomePage.xaml
 d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\obj\Debug\net8.0-windows10.0.19041.0\Views\AlarmHomePage.xbf
 d:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\obj\Debug\net8.0-windows10.0.19041.0\XamlSaveStateFile.xml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Alarm\Views\AlarmNavigationView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Core.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\bin\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Core.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\obj\Debug\net8.0-windows10.0.19041.0\Views\AlarmNavigationView.g.i.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\obj\Debug\net8.0-windows10.0.19041.0\Views\AlarmNavigationView.g.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\obj\Debug\net8.0-windows10.0.19041.0\Views\AlarmNavigationView.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\obj\Debug\net8.0-windows10.0.19041.0\Views\AlarmNavigationView.xbf
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Alarm\obj\Debug\net8.0-windows10.0.19041.0\KJ.Modules.Alarm.sourcelink.json

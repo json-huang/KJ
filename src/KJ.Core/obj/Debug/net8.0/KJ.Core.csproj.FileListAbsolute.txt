@@ -15,3 +15,4 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\KJ.Core.csproj.Asse
 D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\KJ.Core.csproj.Up2Date
 D:\Users\DBA126\source\repos\KJ\src\KJ.Core\bin\Debug\net8.0\KJ.Comms.Drivers.Tcp.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.Core\bin\Debug\net8.0\KJ.Comms.Drivers.Tcp.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\KJ.Core.sourcelink.json

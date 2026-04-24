@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<prism:PrismApplication
+    x:Class="KJ.App.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="using:Prism.DryIoc"
+    RequestedTheme="Dark"
+    mc:Ignorable="d">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <!-- Other merged dictionaries here -->
+            </ResourceDictionary.MergedDictionaries>
+            <!-- Other app resources here -->
+            <!-- A / 克制工业风：全局 Design Tokens -->
+            <Color x:Key="KjAccent">#F97316</Color>
+            <Color x:Key="KjBg">#0B0F14</Color>
+            <Color x:Key="KjPanel">#0E1319</Color>
+            <Color x:Key="KjPanel2">#121821</Color>
+            <Color x:Key="KjStroke">#263241</Color>
+            <Color x:Key="KjStrokeSubtle">#1B2530</Color>
+            <Color x:Key="KjTextPrimary">#E6EAF0</Color>
+            <Color x:Key="KjTextSecondary">#A7B0BD</Color>
+            <Color x:Key="KjTextMuted">#7B8696</Color>
+
+            <SolidColorBrush x:Key="KjAccentBrush" Color="{StaticResource KjAccent}" />
+            <SolidColorBrush x:Key="KjBackgroundBrush" Color="{StaticResource KjBg}" />
+            <SolidColorBrush x:Key="KjPanelBrush" Color="{StaticResource KjPanel}" />
+            <SolidColorBrush x:Key="KjPanel2Brush" Color="{StaticResource KjPanel2}" />
+            <SolidColorBrush x:Key="KjStrokeBrush" Color="{StaticResource KjStroke}" />
+            <SolidColorBrush x:Key="KjStrokeSubtleBrush" Color="{StaticResource KjStrokeSubtle}" />
+            <SolidColorBrush x:Key="KjTextPrimaryBrush" Color="{StaticResource KjTextPrimary}" />
+            <SolidColorBrush x:Key="KjTextSecondaryBrush" Color="{StaticResource KjTextSecondary}" />
+            <SolidColorBrush x:Key="KjTextMutedBrush" Color="{StaticResource KjTextMuted}" />
+
+            <!-- Sidebar interaction tones -->
+            <SolidColorBrush x:Key="KjNavHoverBrush" Color="{StaticResource KjPanel2}" Opacity="0.85" />
+            <SolidColorBrush x:Key="KjNavSelectedBrush" Color="{StaticResource KjPanel2}" />
+
+            <x:Double x:Key="AppFontSize">14</x:Double>
+
+            <!-- Typography -->
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource KjTextPrimaryBrush}" />
+            </Style>
+            <Style x:Key="KjSecondaryText" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource KjTextSecondaryBrush}" />
+            </Style>
+            <Style x:Key="KjMutedText" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource KjTextMutedBrush}" />
+            </Style>
+
+            <!-- Keep legacy key but map to new tokens -->
+            <Style x:Key="MyLabel" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource KjTextPrimaryBrush}" />
+            </Style>
+
+            <Style x:Key="Action" TargetType="Button">
+                <Setter Property="FontSize"
+                        Value="{StaticResource AppFontSize}" />
+                <Setter Property="Padding" Value="14,10" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Background" Value="{StaticResource KjPanel2Brush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource KjStrokeBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Foreground" Value="{StaticResource KjTextPrimaryBrush}" />
+            </Style>
+
+            <Style x:Key="PrimaryAction"
+                   TargetType="Button"
+                   BasedOn="{StaticResource Action}">
+                <Setter Property="Background"
+                        Value="{StaticResource KjAccentBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource KjAccentBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource KjBg}" />
+            </Style>
+
+            <!-- Nav buttons (sidebar menu) -->
+            <Style x:Key="KjNavButton"
+                   TargetType="Button"
+                   BasedOn="{StaticResource Action}">
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                <Setter Property="MinHeight" Value="42" />
+            </Style>
+
+            <Style x:Key="KjNavToggle" TargetType="ToggleButton">
+                <Setter Property="FontSize" Value="{StaticResource AppFontSize}" />
+                <Setter Property="Padding" Value="12,10" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="{StaticResource KjStrokeBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Foreground" Value="{StaticResource KjTextPrimaryBrush}" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                <Setter Property="MinHeight" Value="42" />
+                <Setter Property="Margin" Value="0,2,0,2" />
+            </Style>
+
+            <!-- Inputs -->
+            <Style TargetType="TextBox">
+                <Setter Property="Background" Value="{StaticResource KjPanelBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource KjStrokeBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Foreground" Value="{StaticResource KjTextPrimaryBrush}" />
+                <Setter Property="PlaceholderForeground" Value="{StaticResource KjTextMutedBrush}" />
+                <Setter Property="Padding" Value="12,10" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</prism:PrismApplication>
+

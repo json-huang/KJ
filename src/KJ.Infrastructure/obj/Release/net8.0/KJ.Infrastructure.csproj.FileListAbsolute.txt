@@ -15,3 +15,4 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure\obj\Release\net8.0\refint\
 D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure\obj\Release\net8.0\KJ.Infrastructure.pdb
 D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure\obj\Release\net8.0\KJ.Infrastructure.genruntimeconfig.cache
 D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure\obj\Release\net8.0\ref\KJ.Infrastructure.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure\obj\Release\net8.0\KJ.Infrastructure.sourcelink.json

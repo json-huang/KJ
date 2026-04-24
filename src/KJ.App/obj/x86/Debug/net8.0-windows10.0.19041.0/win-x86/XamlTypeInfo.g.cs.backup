@@ -302,7 +302,6 @@ namespace KJ.App.KJ_App_XamlTypeInfo
         }
 
         private object Activate_5_XamlControlsResources() { return new global::Microsoft.UI.Xaml.Controls.XamlControlsResources(); }
-        private object Activate_12_MainPage() { return new global::KJ.App.Views.MainPage(); }
         private object Activate_15_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
         private void StaticInitializer_0_PrismApplication() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.DryIoc.PrismApplication).TypeHandle);
         private void StaticInitializer_1_PrismApplicationBase() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.PrismApplicationBase).TypeHandle);
@@ -417,7 +416,6 @@ namespace KJ.App.KJ_App_XamlTypeInfo
 
             case 12:   //  KJ.App.Views.MainPage
                 userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Page"));
-                userType.Activator = Activate_12_MainPage;
                 userType.StaticInitializer = StaticInitializer_12_MainPage;
                 userType.SetIsLocalType();
                 xamlType = userType;

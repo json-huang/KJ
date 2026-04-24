@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Page
+    x:Class="KJ.Modules.Auth.Views.LoginView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid>
+        <Border
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            CornerRadius="12"
+            Padding="24"
+            MaxWidth="520"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+            <StackPanel Spacing="14">
+                <TextBlock FontSize="22" Text="登录" />
+                <TextBox
+                    Header="邮箱"
+                    PlaceholderText="admin@local"
+                    Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <PasswordBox x:ConnectionId='2' Header="密码"                                                 />
+                <TextBlock
+                    Foreground="DarkRed"
+                    MinHeight="20"
+                    Text="{Binding ErrorMessage}"
+                    TextWrapping="WrapWholeWords" />
+                <Button
+                    HorizontalAlignment="Stretch"
+                    Content="登录"
+                    Command="{Binding SignInCommand}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>
+
+

@@ -7,14 +7,14 @@
     xmlns:prism="using:Prism.Navigation.Regions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Grid>
+    <Grid Background="{StaticResource KjBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <!-- 左侧：模块导航区域（文档 §6：Regions.MainNavigation） -->
-        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid Background="{StaticResource KjPanelBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -22,16 +22,16 @@
             </Grid.RowDefinitions>
 
             <StackPanel Padding="16,16,16,12" Spacing="8">
-                <TextBlock FontSize="18" Style="{StaticResource MyLabel}" Text="KJ" />
+                <TextBlock FontSize="18" FontWeight="SemiBold" Text="KJ" />
                 <TextBlock
                     Opacity="0.9"
-                    Style="{StaticResource MyLabel}"
+                    Style="{StaticResource KjSecondaryText}"
                     Text="{Binding WelcomeText}"
                     TextWrapping="WrapWholeWords" />
                 <TextBlock
                     FontSize="12"
                     Opacity="0.75"
-                    Style="{StaticResource MyLabel}"
+                    Style="{StaticResource KjMutedText}"
                     Text="{Binding PermissionHint}"
                     TextWrapping="WrapWholeWords" />
             </StackPanel>
@@ -57,7 +57,7 @@
         </Grid>
 
         <!-- 右侧：内容区域（文档 §6：Regions.MainContent） -->
-        <Border Grid.Column="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Border Grid.Column="1" Background="{StaticResource KjBackgroundBrush}">
             <ContentControl
                 x:Name="MainContentRegionHost"
                 HorizontalContentAlignment="Stretch"

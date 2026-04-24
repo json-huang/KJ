@@ -10,3 +10,4 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Core\obj\Debug\net8.0\KJ.Modules.
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Core\obj\Debug\net8.0\refint\KJ.Modules.Core.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Core\obj\Debug\net8.0\KJ.Modules.Core.pdb
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Core\obj\Debug\net8.0\ref\KJ.Modules.Core.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Core\obj\Debug\net8.0\KJ.Modules.Core.sourcelink.json

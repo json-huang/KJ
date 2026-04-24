@@ -18,5 +18,4 @@
   <Folder Name="/src/KJ.Modules.Monitoring.WinUI/">
     <Project Path="src/KJ.Modules.Monitoring.WinUI/KJ.Modules.Monitoring.csproj" />
   </Folder>
-  <Project Path="KJ/KJ.csproj" />
 </Solution>

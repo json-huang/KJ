@@ -15,11 +15,11 @@ namespace KJ.Infrastructure.Data.Migrations
                 name: "AuditLogs",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "datetime2(3)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Action = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Details = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UserId = table.Column<string>(type: "longtext", nullable: true),
+                    Action = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false),
+                    Details = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -30,15 +30,15 @@ namespace KJ.Infrastructure.Data.Migrations
                 name: "Devices",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     State = table.Column<int>(type: "int", nullable: false),
-                    LastConnected = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Address_Host = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    LastConnected = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Address_Host = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false),
                     Address_Port = table.Column<int>(type: "int", nullable: false),
-                    PropertiesJson = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PropertiesJson = table.Column<string>(type: "longtext", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,11 +49,11 @@ namespace KJ.Infrastructure.Data.Migrations
                 name: "Recipes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Version = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false),
+                    Version = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,14 +64,14 @@ namespace KJ.Infrastructure.Data.Migrations
                 name: "Tags",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DeviceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    DeviceId = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
                     DataType = table.Column<int>(type: "int", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: false),
+                    Value = table.Column<string>(type: "longtext", nullable: true),
                     Quality = table.Column<int>(type: "int", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Direction = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -89,10 +89,10 @@ namespace KJ.Infrastructure.Data.Migrations
                 name: "RecipeParameters",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RecipeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    RecipeId = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Key = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
+                    Value = table.Column<string>(type: "longtext", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,15 +109,15 @@ namespace KJ.Infrastructure.Data.Migrations
                 name: "Alarms",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    TagId = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false),
                     Condition = table.Column<int>(type: "int", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
-                    IsEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    TriggeredAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AcknowledgedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AcknowledgedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    IsEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    TriggeredAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    AcknowledgedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    AcknowledgedBy = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -134,10 +134,10 @@ namespace KJ.Infrastructure.Data.Migrations
                 name: "TagHistory",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "datetime2(3)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    TagId = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime(3)", nullable: false),
+                    Value = table.Column<string>(type: "longtext", nullable: true),
                     Quality = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -155,12 +155,12 @@ namespace KJ.Infrastructure.Data.Migrations
                 name: "AlarmHistory",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AlarmId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "datetime2(3)", nullable: false),
-                    EventType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false),
+                    AlarmId = table.Column<Guid>(type: "char(36)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime(3)", nullable: false),
+                    EventType = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Message = table.Column<string>(type: "longtext", nullable: true),
+                    UserId = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
                 {

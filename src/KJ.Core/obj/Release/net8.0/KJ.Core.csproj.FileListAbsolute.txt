@@ -15,3 +15,4 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Release\net8.0\KJ.Core.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Release\net8.0\refint\KJ.Core.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Release\net8.0\KJ.Core.pdb
 D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Release\net8.0\ref\KJ.Core.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Release\net8.0\KJ.Core.sourcelink.json

@@ -12,10 +12,10 @@ public sealed class KjDbContextFactory : IDesignTimeDbContextFactory<KjDbContext
     {
         var connectionString =
             Environment.GetEnvironmentVariable("KJ_CONNECTION_STRING")
-            ?? "Server=(localdb)\\mssqllocaldb;Database=KJ;Trusted_Connection=True;MultipleActiveResultSets=true";
+            ?? "Server=localhost;Port=3306;Database=mesdb;Uid=root;Pwd=root;SslMode=none;Charset=utf8mb4;";
 
         var options = new DbContextOptionsBuilder<KjDbContext>()
-            .UseSqlServer(connectionString)
+            .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
             .Options;
 
         return new KjDbContext(options);
