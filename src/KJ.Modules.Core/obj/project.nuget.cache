@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "G7jXRckCFOU=",
+  "success": true,
+  "projectFilePath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Modules.Core\\KJ.Modules.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.1\\microsoft.extensions.dependencyinjection.abstractions.8.0.1.nupkg.sha512",
+    "C:\\Users\\DBA126\\.nuget\\packages\\prism.container.abstractions\\9.0.106\\prism.container.abstractions.9.0.106.nupkg.sha512",
+    "C:\\Users\\DBA126\\.nuget\\packages\\prism.core\\9.0.537\\prism.core.9.0.537.nupkg.sha512",
+    "C:\\Users\\DBA126\\.nuget\\packages\\prism.events\\9.0.537\\prism.events.9.0.537.nupkg.sha512"
+  ],
+  "logs": []
+}

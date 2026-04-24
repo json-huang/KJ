@@ -1,0 +1,73 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "KJ.Modules.Monitoring/1.0.0": {
+        "dependencies": {
+          "KJ.Comms.Abstractions": "1.0.0",
+          "KJ.Core": "1.0.0"
+        },
+        "runtime": {
+          "KJ.Modules.Monitoring.dll": {}
+        }
+      },
+      "KJ.Comms.Abstractions/1.0.0": {
+        "runtime": {
+          "KJ.Comms.Abstractions.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "KJ.Comms.Drivers.Tcp/1.0.0": {
+        "dependencies": {
+          "KJ.Comms.Abstractions": "1.0.0"
+        },
+        "runtime": {
+          "KJ.Comms.Drivers.Tcp.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "KJ.Core/1.0.0": {
+        "dependencies": {
+          "KJ.Comms.Abstractions": "1.0.0",
+          "KJ.Comms.Drivers.Tcp": "1.0.0"
+        },
+        "runtime": {
+          "KJ.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "KJ.Modules.Monitoring/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KJ.Comms.Abstractions/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KJ.Comms.Drivers.Tcp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KJ.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

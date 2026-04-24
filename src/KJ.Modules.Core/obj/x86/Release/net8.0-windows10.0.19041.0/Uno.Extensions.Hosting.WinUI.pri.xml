@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PriInfo>
+	<ResourceMap name="Uno.Extensions.Hosting.WinUI" version="1.0" primary="true">
+		<Qualifiers/>
+		<ResourceMapSubtree name="Files">
+			<ResourceMapSubtree name="Uno.Extensions.Hosting.WinUI">
+				<ResourceMapSubtree name="buildTransitive">
+					<NamedResource name="Uno.Extensions.Hosting.WinUI.props" uri="ms-resource://Uno.Extensions.Hosting.WinUI/Files/Uno.Extensions.Hosting.WinUI/buildTransitive/Uno.Extensions.Hosting.WinUI.props">
+						<Candidate type="Path">
+							<Value>Uno.Extensions.Hosting.WinUI\buildTransitive\Uno.Extensions.Hosting.WinUI.props</Value>
+						</Candidate>
+					</NamedResource>
+				</ResourceMapSubtree>
+			</ResourceMapSubtree>
+		</ResourceMapSubtree>
+	</ResourceMap>
+</PriInfo>

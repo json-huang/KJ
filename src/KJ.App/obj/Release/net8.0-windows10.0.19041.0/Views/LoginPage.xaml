@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Page
+    x:Class="KJ.App.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Content>
+        <StackPanel
+            Padding="32"
+            HorizontalAlignment="Center"
+            Spacing="16"
+            VerticalAlignment="Center"
+            MaxWidth="420">
+            <TextBlock
+                FontSize="22"
+                Style="{StaticResource MyLabel}"
+                Text="登录" />
+            <TextBox x:ConnectionId='2'
+                x:Name="EmailBox"
+                Header="邮箱"
+                PlaceholderText="admin@local"
+                Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <PasswordBox x:ConnectionId='3'
+                x:Name="PasswordBox"
+                Header="密码"
+                                                                />
+            <CheckBox
+                Content="记住邮箱"
+                IsChecked="{Binding RememberEmail, Mode=TwoWay}" />
+            <CheckBox
+                Content="保持登录（凭据以本机当前用户 DPAPI 加密保存）"
+                IsChecked="{Binding StaySignedIn, Mode=TwoWay}" />
+            <TextBlock
+                Foreground="DarkRed"
+                MinHeight="20"
+                Text="{Binding ErrorMessage}"
+                TextWrapping="WrapWholeWords" />
+            <Button
+                HorizontalAlignment="Stretch"
+                Content="登录"
+                Style="{StaticResource PrimaryAction}"
+                Command="{Binding SignInCommand}" />
+        </StackPanel>
+    </Page.Content>
+</Page>
+

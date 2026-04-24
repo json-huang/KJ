@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PriInfo>
+	<ResourceMap name="KJ.Modules.Alarm" version="1.0" primary="true">
+		<Qualifiers/>
+		<ResourceMapSubtree name="Files">
+			<ResourceMapSubtree name="KJ.Modules.Alarm">
+				<ResourceMapSubtree name="Views">
+					<NamedResource name="AlarmHomePage.xbf" uri="ms-resource://KJ.Modules.Alarm/Files/KJ.Modules.Alarm/Views/AlarmHomePage.xbf">
+						<Candidate type="EmbeddedData">
+							<Base64Value>[Embedded Binary Data]</Base64Value>
+						</Candidate>
+					</NamedResource>
+				</ResourceMapSubtree>
+			</ResourceMapSubtree>
+		</ResourceMapSubtree>
+	</ResourceMap>
+</PriInfo>

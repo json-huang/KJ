@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UserControl
+    x:Class="KJ.Modules.Config.Views.ConfigNavigationView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <StackPanel Spacing="10">
+        <TextBlock Opacity="0.85" Text="配置模块" />
+        <Button Click="GoHome_Click" Content="配置首页" Style="{StaticResource Action}" />
+    </StackPanel>
+</UserControl>
+

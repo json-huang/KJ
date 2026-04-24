@@ -1,0 +1,15 @@
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\bin\Debug\net8.0\KJ.Comms.Drivers.Tcp.deps.json
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\bin\Debug\net8.0\KJ.Comms.Drivers.Tcp.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\bin\Debug\net8.0\KJ.Comms.Drivers.Tcp.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\bin\Debug\net8.0\KJ.Comms.Abstractions.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\bin\Debug\net8.0\KJ.Comms.Abstractions.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Debug\net8.0\KJ.Comms.Drivers.Tcp.csproj.AssemblyReference.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Debug\net8.0\KJ.Comms.Drivers.Tcp.GeneratedMSBuildEditorConfig.editorconfig
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Debug\net8.0\KJ.Comms.Drivers.Tcp.AssemblyInfoInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Debug\net8.0\KJ.Comms.Drivers.Tcp.AssemblyInfo.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Debug\net8.0\KJ.Comms.Drivers.Tcp.csproj.CoreCompileInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Debug\net8.0\KJ.Comms.7D699BC4.Up2Date
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Debug\net8.0\KJ.Comms.Drivers.Tcp.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Debug\net8.0\refint\KJ.Comms.Drivers.Tcp.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Debug\net8.0\KJ.Comms.Drivers.Tcp.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Drivers.Tcp\obj\Debug\net8.0\ref\KJ.Comms.Drivers.Tcp.dll

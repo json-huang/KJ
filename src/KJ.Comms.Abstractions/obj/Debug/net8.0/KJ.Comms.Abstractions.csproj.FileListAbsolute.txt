@@ -1,0 +1,11 @@
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\bin\Debug\net8.0\KJ.Comms.Abstractions.deps.json
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\bin\Debug\net8.0\KJ.Comms.Abstractions.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\bin\Debug\net8.0\KJ.Comms.Abstractions.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\KJ.Comms.Abstractions.GeneratedMSBuildEditorConfig.editorconfig
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\KJ.Comms.Abstractions.AssemblyInfoInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\KJ.Comms.Abstractions.AssemblyInfo.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\KJ.Comms.Abstractions.csproj.CoreCompileInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\KJ.Comms.Abstractions.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\refint\KJ.Comms.Abstractions.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\KJ.Comms.Abstractions.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Comms.Abstractions\obj\Debug\net8.0\ref\KJ.Comms.Abstractions.dll

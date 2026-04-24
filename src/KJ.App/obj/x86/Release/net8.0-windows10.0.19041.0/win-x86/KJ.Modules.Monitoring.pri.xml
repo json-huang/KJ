@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PriInfo>
+	<ResourceMap name="KJ.Modules.Monitoring" version="1.0" primary="true">
+		<Qualifiers/>
+		<ResourceMapSubtree name="Files">
+			<ResourceMapSubtree name="KJ.Modules.Monitoring">
+				<ResourceMapSubtree name="Views">
+					<NamedResource name="DashboardView.xbf" uri="ms-resource://KJ.Modules.Monitoring/Files/KJ.Modules.Monitoring/Views/DashboardView.xbf">
+						<Candidate type="EmbeddedData">
+							<Base64Value>[Embedded Binary Data]</Base64Value>
+						</Candidate>
+					</NamedResource>
+					<NamedResource name="DeviceListView.xbf" uri="ms-resource://KJ.Modules.Monitoring/Files/KJ.Modules.Monitoring/Views/DeviceListView.xbf">
+						<Candidate type="EmbeddedData">
+							<Base64Value>[Embedded Binary Data]</Base64Value>
+						</Candidate>
+					</NamedResource>
+					<NamedResource name="MonitoringHomePage.xbf" uri="ms-resource://KJ.Modules.Monitoring/Files/KJ.Modules.Monitoring/Views/MonitoringHomePage.xbf">
+						<Candidate type="EmbeddedData">
+							<Base64Value>[Embedded Binary Data]</Base64Value>
+						</Candidate>
+					</NamedResource>
+					<NamedResource name="MonitoringNavigationView.xbf" uri="ms-resource://KJ.Modules.Monitoring/Files/KJ.Modules.Monitoring/Views/MonitoringNavigationView.xbf">
+						<Candidate type="EmbeddedData">
+							<Base64Value>[Embedded Binary Data]</Base64Value>
+						</Candidate>
+					</NamedResource>
+					<NamedResource name="TagMonitorView.xbf" uri="ms-resource://KJ.Modules.Monitoring/Files/KJ.Modules.Monitoring/Views/TagMonitorView.xbf">
+						<Candidate type="EmbeddedData">
+							<Base64Value>[Embedded Binary Data]</Base64Value>
+						</Candidate>
+					</NamedResource>
+					<NamedResource name="TrendChartView.xbf" uri="ms-resource://KJ.Modules.Monitoring/Files/KJ.Modules.Monitoring/Views/TrendChartView.xbf">
+						<Candidate type="EmbeddedData">
+							<Base64Value>[Embedded Binary Data]</Base64Value>
+						</Candidate>
+					</NamedResource>
+				</ResourceMapSubtree>
+			</ResourceMapSubtree>
+		</ResourceMapSubtree>
+	</ResourceMap>
+</PriInfo>

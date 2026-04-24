@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "KJ.App (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "KJ.App (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\bin\Debug\net8.0\KJ.Core.deps.json
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\bin\Debug\net8.0\KJ.Core.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\bin\Debug\net8.0\KJ.Core.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\KJ.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\KJ.Core.AssemblyInfoInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\KJ.Core.AssemblyInfo.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\KJ.Core.csproj.CoreCompileInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\KJ.Core.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\refint\KJ.Core.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\KJ.Core.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\ref\KJ.Core.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\bin\Debug\net8.0\KJ.Comms.Abstractions.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\bin\Debug\net8.0\KJ.Comms.Abstractions.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\KJ.Core.csproj.AssemblyReference.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\obj\Debug\net8.0\KJ.Core.csproj.Up2Date
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\bin\Debug\net8.0\KJ.Comms.Drivers.Tcp.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Core\bin\Debug\net8.0\KJ.Comms.Drivers.Tcp.pdb
