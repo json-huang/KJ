@@ -123,7 +123,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "KJ.Comms.Abstractions": "1.0.0"
+          "KJ.Comms.Abstractions": "1.0.0",
+          "KJ.Diagnostics": "1.0.0"
         },
         "compile": {
           "bin/placeholder/KJ.Comms.Drivers.Tcp.dll": {}
@@ -144,6 +145,16 @@
         },
         "runtime": {
           "bin/placeholder/KJ.Core.dll": {}
+        }
+      },
+      "KJ.Diagnostics/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/KJ.Diagnostics.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KJ.Diagnostics.dll": {}
         }
       }
     }
@@ -323,6 +334,11 @@
       "type": "project",
       "path": "../KJ.Core/KJ.Core.csproj",
       "msbuildProject": "../KJ.Core/KJ.Core.csproj"
+    },
+    "KJ.Diagnostics/1.0.0": {
+      "type": "project",
+      "path": "../KJ.Diagnostics/KJ.Diagnostics.csproj",
+      "msbuildProject": "../KJ.Diagnostics/KJ.Diagnostics.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -363,7 +379,6 @@
       },
       "frameworks": {
         "net8.0-windows7.0": {
-          "framework": "net8.0-windows7.0",
           "targetAlias": "net8.0-windows",
           "projectReferences": {
             "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Comms.Abstractions\\KJ.Comms.Abstractions.csproj": {
@@ -389,7 +404,6 @@
     },
     "frameworks": {
       "net8.0-windows7.0": {
-        "framework": "net8.0-windows7.0",
         "targetAlias": "net8.0-windows",
         "dependencies": {
           "Prism.Wpf": {

@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Security.Claims;
 using KJ.Domain.Security;
+using KJ.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -48,25 +49,64 @@ public sealed class DatabaseInitializer
         var password = _configuration["Seed:AdminPassword"] ?? "Admin123!";
 
         var user = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
-        if (user is not null)
-            return;
-
-        user = new IdentityUser
+        if (user is null)
         {
-            UserName = email,
-            Email = email,
-            EmailConfirmed = true,
-        };
+            user = new IdentityUser
+            {
+                UserName = email,
+                Email = email,
+                EmailConfirmed = true,
+            };
 
-        var result = await _userManager.CreateAsync(user, password).ConfigureAwait(false);
-        if (!result.Succeeded)
-        {
-            _logger.LogWarning("Failed to seed admin user {Email}: {Errors}", email, string.Join(", ", result.Errors.Select(e => e.Description)));
-            return;
+            var result = await _userManager.CreateAsync(user, password).ConfigureAwait(false);
+            if (!result.Succeeded)
+            {
+                _logger.LogWarning("Failed to seed admin user {Email}: {Errors}", email, string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+            else
+            {
+                await _userManager.AddToRoleAsync(user, adminRole).ConfigureAwait(false);
+                _logger.LogInformation("Seeded admin user {Email} with role {Role}.", email, adminRole);
+            }
         }
 
-        await _userManager.AddToRoleAsync(user, adminRole).ConfigureAwait(false);
-        _logger.LogInformation("Seeded admin user {Email} with role {Role}.", email, adminRole);
+        await EnsureSeedDeviceAndTagAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task EnsureSeedDeviceAndTagAsync(CancellationToken cancellationToken)
+    {
+        if (!await _db.Devices.AnyAsync(cancellationToken).ConfigureAwait(false))
+        {
+            _db.Devices.Add(new Device
+            {
+                Id = TagIdentity.SimulatedDeviceId,
+                Name = "Simulated",
+                Description = "Local development seed device.",
+                Type = DeviceType.Plc,
+                State = ConnectionState.Connected,
+                LastConnected = DateTime.Now,
+                Address = new DeviceAddress { Host = "127.0.0.1", Port = 0 },
+                PropertiesJson = "{}",
+            });
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        var heartbeatTagId = TagIdentity.GetTagId("Heartbeat");
+        if (!await _db.Tags.AnyAsync(t => t.Id == heartbeatTagId, cancellationToken).ConfigureAwait(false))
+        {
+            _db.Tags.Add(new Tag
+            {
+                Id = heartbeatTagId,
+                DeviceId = TagIdentity.SimulatedDeviceId,
+                Name = "Heartbeat",
+                DataType = TagDataType.String,
+                Address = "Heartbeat",
+                Quality = QualityCode.Uncertain,
+                Timestamp = DateTime.Now,
+                Direction = TagDirection.Read,
+            });
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        }
     }
 
     private async Task EnsureAdminRolePermissionsAsync(string adminRoleName)

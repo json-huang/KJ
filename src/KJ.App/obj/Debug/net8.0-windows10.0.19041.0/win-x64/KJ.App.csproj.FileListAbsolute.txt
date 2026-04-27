@@ -588,3 +588,5 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\Debug\net8.0-windows10.0.19041.0\
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\obj\Debug\net8.0-windows10.0.19041.0\win-x64\MultipleQualifiersPerDimensionFound.txt
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Debug\net8.0-windows10.0.19041.0\win-x64\MySqlConnector.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Debug\net8.0-windows10.0.19041.0\win-x64\Pomelo.EntityFrameworkCore.MySql.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Debug\net8.0-windows10.0.19041.0\win-x64\KJ.Infrastructure.Migrations.SqlServer.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Debug\net8.0-windows10.0.19041.0\win-x64\KJ.Infrastructure.Migrations.SqlServer.pdb

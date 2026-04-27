@@ -16,13 +16,24 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "KJ.Comms.Abstractions": "1.0.0"
+          "KJ.Comms.Abstractions": "1.0.0",
+          "KJ.Diagnostics": "1.0.0"
         },
         "compile": {
           "bin/placeholder/KJ.Comms.Drivers.Tcp.dll": {}
         },
         "runtime": {
           "bin/placeholder/KJ.Comms.Drivers.Tcp.dll": {}
+        }
+      },
+      "KJ.Diagnostics/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/KJ.Diagnostics.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KJ.Diagnostics.dll": {}
         }
       }
     }
@@ -37,6 +48,11 @@
       "type": "project",
       "path": "../KJ.Comms.Drivers.Tcp/KJ.Comms.Drivers.Tcp.csproj",
       "msbuildProject": "../KJ.Comms.Drivers.Tcp/KJ.Comms.Drivers.Tcp.csproj"
+    },
+    "KJ.Diagnostics/1.0.0": {
+      "type": "project",
+      "path": "../KJ.Diagnostics/KJ.Diagnostics.csproj",
+      "msbuildProject": "../KJ.Diagnostics/KJ.Diagnostics.csproj"
     }
   },
   "projectFileDependencyGroups": {

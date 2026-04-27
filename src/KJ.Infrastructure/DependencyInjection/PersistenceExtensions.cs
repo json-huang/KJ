@@ -18,8 +18,24 @@ public static class PersistenceExtensions
 
         services.AddDbContext<KjDbContext>(options =>
         {
+            var provider = (configuration["Database:Provider"] ?? "MySql").Trim();
+
+            if (provider.Equals("SqlServer", StringComparison.OrdinalIgnoreCase) ||
+                provider.Equals("Mssql", StringComparison.OrdinalIgnoreCase))
+            {
+                options.UseSqlServer(connectionString, sql =>
+                {
+                    sql.MigrationsAssembly("KJ.Infrastructure.Migrations.SqlServer");
+                });
+                return;
+            }
+
             var serverVersion = ServerVersion.AutoDetect(connectionString);
-            options.UseMySql(connectionString, serverVersion);
+            options.UseMySql(connectionString, serverVersion, mySql =>
+            {
+                // MySQL migrations live with Infrastructure for now.
+                mySql.MigrationsAssembly(typeof(KjDbContext).Assembly.GetName().Name);
+            });
         });
 
         services

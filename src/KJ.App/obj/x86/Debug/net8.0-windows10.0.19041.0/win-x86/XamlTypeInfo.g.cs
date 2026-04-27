@@ -14,10 +14,10 @@ namespace KJ.App
 {
     public partial class App : global::Microsoft.UI.Xaml.Markup.IXamlMetadataProvider
     {
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2604")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2602")]
         private global::KJ.App.KJ_App_XamlTypeInfo.XamlMetaDataProvider __appProvider;
 
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2604")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2602")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private global::KJ.App.KJ_App_XamlTypeInfo.XamlMetaDataProvider _AppProvider
         {
@@ -34,7 +34,7 @@ namespace KJ.App
         /// <summary>
         /// GetXamlType(Type)
         /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2604")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2602")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public global::Microsoft.UI.Xaml.Markup.IXamlType GetXamlType(global::System.Type type)
         {
@@ -44,7 +44,7 @@ namespace KJ.App
         /// <summary>
         /// GetXamlType(String)
         /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2604")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2602")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public global::Microsoft.UI.Xaml.Markup.IXamlType GetXamlType(string fullName)
         {
@@ -54,7 +54,7 @@ namespace KJ.App
         /// <summary>
         /// GetXmlnsDefinitions()
         /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2604")]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2602")]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public global::Microsoft.UI.Xaml.Markup.XmlnsDefinition[] GetXmlnsDefinitions()
         {
@@ -68,7 +68,7 @@ namespace KJ.App.KJ_App_XamlTypeInfo
     /// <summary>
     /// Main class for providing metadata for the app or library
     /// </summary>
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2604")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2602")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     public sealed partial class XamlMetaDataProvider : global::Microsoft.UI.Xaml.Markup.IXamlMetadataProvider
     {
@@ -112,7 +112,7 @@ namespace KJ.App.KJ_App_XamlTypeInfo
         }
     }
 
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2604")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2602")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     internal partial class XamlTypeInfoProvider
     {
@@ -226,7 +226,7 @@ namespace KJ.App.KJ_App_XamlTypeInfo
         
         private void InitTypeTables()
         {
-            _typeNameTable = new string[28];
+            _typeNameTable = new string[29];
             _typeNameTable[0] = "Prism.DryIoc.PrismApplication";
             _typeNameTable[1] = "Prism.PrismApplicationBase";
             _typeNameTable[2] = "Microsoft.UI.Xaml.Application";
@@ -250,13 +250,14 @@ namespace KJ.App.KJ_App_XamlTypeInfo
             _typeNameTable[20] = "Microsoft.UI.Xaml.DependencyObject";
             _typeNameTable[21] = "Prism.Navigation.Regions.IRegionManager";
             _typeNameTable[22] = "KJ.App.Views.MainPage";
-            _typeNameTable[23] = "KJ.App.Views.Navigation.HomeNavigationView";
-            _typeNameTable[24] = "KJ.App.Views.ShellPage";
-            _typeNameTable[25] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
-            _typeNameTable[26] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
-            _typeNameTable[27] = "Int32";
+            _typeNameTable[23] = "KJ.App.Converters.BoolToVisibilityConverter";
+            _typeNameTable[24] = "KJ.App.Views.Navigation.HomeNavigationView";
+            _typeNameTable[25] = "KJ.App.Views.ShellPage";
+            _typeNameTable[26] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
+            _typeNameTable[27] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
+            _typeNameTable[28] = "Int32";
 
-            _typeTable = new global::System.Type[28];
+            _typeTable = new global::System.Type[29];
             _typeTable[0] = typeof(global::Prism.DryIoc.PrismApplication);
             _typeTable[1] = typeof(global::Prism.PrismApplicationBase);
             _typeTable[2] = typeof(global::Microsoft.UI.Xaml.Application);
@@ -280,11 +281,12 @@ namespace KJ.App.KJ_App_XamlTypeInfo
             _typeTable[20] = typeof(global::Microsoft.UI.Xaml.DependencyObject);
             _typeTable[21] = typeof(global::Prism.Navigation.Regions.IRegionManager);
             _typeTable[22] = typeof(global::KJ.App.Views.MainPage);
-            _typeTable[23] = typeof(global::KJ.App.Views.Navigation.HomeNavigationView);
-            _typeTable[24] = typeof(global::KJ.App.Views.ShellPage);
-            _typeTable[25] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
-            _typeTable[26] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
-            _typeTable[27] = typeof(global::System.Int32);
+            _typeTable[23] = typeof(global::KJ.App.Converters.BoolToVisibilityConverter);
+            _typeTable[24] = typeof(global::KJ.App.Views.Navigation.HomeNavigationView);
+            _typeTable[25] = typeof(global::KJ.App.Views.ShellPage);
+            _typeTable[26] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
+            _typeTable[27] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
+            _typeTable[28] = typeof(global::System.Int32);
         }
 
         private int LookupTypeIndexByName(string typeName)
@@ -322,7 +324,8 @@ namespace KJ.App.KJ_App_XamlTypeInfo
         private object Activate_5_XamlControlsResources() { return new global::Microsoft.UI.Xaml.Controls.XamlControlsResources(); }
         private object Activate_12_AboutDialog() { return new global::KJ.App.Dialogs.AboutDialog(); }
         private object Activate_17_RegionManager() { return new global::Prism.Navigation.Regions.RegionManager(); }
-        private object Activate_25_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
+        private object Activate_23_BoolToVisibilityConverter() { return new global::KJ.App.Converters.BoolToVisibilityConverter(); }
+        private object Activate_26_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
         private void StaticInitializer_0_PrismApplication() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.DryIoc.PrismApplication).TypeHandle);
         private void StaticInitializer_1_PrismApplicationBase() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.PrismApplicationBase).TypeHandle);
         private void StaticInitializer_3_IContainerProvider() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.Ioc.IContainerProvider).TypeHandle);
@@ -338,10 +341,11 @@ namespace KJ.App.KJ_App_XamlTypeInfo
         private void StaticInitializer_18_IRegionCollection() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.Navigation.Regions.IRegionCollection).TypeHandle);
         private void StaticInitializer_21_IRegionManager() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.Navigation.Regions.IRegionManager).TypeHandle);
         private void StaticInitializer_22_MainPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Views.MainPage).TypeHandle);
-        private void StaticInitializer_23_HomeNavigationView() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Views.Navigation.HomeNavigationView).TypeHandle);
-        private void StaticInitializer_24_ShellPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Views.ShellPage).TypeHandle);
-        private void StaticInitializer_25_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
-        private void StaticInitializer_26_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
+        private void StaticInitializer_23_BoolToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Converters.BoolToVisibilityConverter).TypeHandle);
+        private void StaticInitializer_24_HomeNavigationView() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Views.Navigation.HomeNavigationView).TypeHandle);
+        private void StaticInitializer_25_ShellPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Views.ShellPage).TypeHandle);
+        private void StaticInitializer_26_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
+        private void StaticInitializer_27_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
         private void MapAdd_5_XamlControlsResources(object instance, object key, object item)
         {
             var collection = (global::System.Collections.Generic.IDictionary<global::System.Object, global::System.Object>)instance;
@@ -349,7 +353,7 @@ namespace KJ.App.KJ_App_XamlTypeInfo
             var newItem = (global::System.Object)item;
             collection.Add(newKey, newItem);
         }
-        private void VectorAdd_26_IList(object instance, object item)
+        private void VectorAdd_27_IList(object instance, object item)
         {
             var collection = (global::System.Collections.Generic.ICollection<global::Microsoft.UI.Xaml.Controls.TreeViewNode>)instance;
             var newItem = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)item;
@@ -512,24 +516,32 @@ namespace KJ.App.KJ_App_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 23:   //  KJ.App.Views.Navigation.HomeNavigationView
+            case 23:   //  KJ.App.Converters.BoolToVisibilityConverter
+                userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
+                userType.Activator = Activate_23_BoolToVisibilityConverter;
+                userType.StaticInitializer = StaticInitializer_23_BoolToVisibilityConverter;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 24:   //  KJ.App.Views.Navigation.HomeNavigationView
                 userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.UserControl"));
-                userType.StaticInitializer = StaticInitializer_23_HomeNavigationView;
+                userType.StaticInitializer = StaticInitializer_24_HomeNavigationView;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 24:   //  KJ.App.Views.ShellPage
+            case 25:   //  KJ.App.Views.ShellPage
                 userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Page"));
-                userType.StaticInitializer = StaticInitializer_24_ShellPage;
+                userType.StaticInitializer = StaticInitializer_25_ShellPage;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 25:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
+            case 26:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
                 userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
-                userType.Activator = Activate_25_TreeViewNode;
-                userType.StaticInitializer = StaticInitializer_25_TreeViewNode;
+                userType.Activator = Activate_26_TreeViewNode;
+                userType.StaticInitializer = StaticInitializer_26_TreeViewNode;
                 userType.AddMemberName("Children");
                 userType.AddMemberName("Content");
                 userType.AddMemberName("Depth");
@@ -541,15 +553,15 @@ namespace KJ.App.KJ_App_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 26:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
+            case 27:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
                 userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, null);
-                userType.StaticInitializer = StaticInitializer_26_IList;
-                userType.CollectionAdd = VectorAdd_26_IList;
+                userType.StaticInitializer = StaticInitializer_27_IList;
+                userType.CollectionAdd = VectorAdd_27_IList;
                 userType.SetIsReturnTypeStub();
                 xamlType = userType;
                 break;
 
-            case 27:   //  Int32
+            case 28:   //  Int32
                 xamlType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
             }
@@ -896,7 +908,7 @@ namespace KJ.App.KJ_App_XamlTypeInfo
         }
     }
 
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2604")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2602")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     internal partial class XamlSystemBaseType : global::Microsoft.UI.Xaml.Markup.IXamlType
     {
@@ -948,7 +960,7 @@ namespace KJ.App.KJ_App_XamlTypeInfo
     internal delegate object CreateFromStringMethod(string args);
     internal delegate object BoxInstanceMethod(object instance);
 
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2604")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2602")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     internal partial class XamlUserType : global::KJ.App.KJ_App_XamlTypeInfo.XamlSystemBaseType
         , global::Microsoft.UI.Xaml.Markup.IXamlType
@@ -1181,7 +1193,7 @@ namespace KJ.App.KJ_App_XamlTypeInfo
     internal delegate object Getter(object instance);
     internal delegate void Setter(object instance, object value);
 
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2604")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.UI.Xaml.Markup.Compiler"," 3.0.0.2602")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     internal partial class XamlMember : global::Microsoft.UI.Xaml.Markup.IXamlMember
     {

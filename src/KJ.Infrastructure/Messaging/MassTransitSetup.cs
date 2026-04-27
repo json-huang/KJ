@@ -8,6 +8,8 @@ public static class MassTransitSetup
 {
     public static IServiceCollection AddKjMassTransit(this IServiceCollection services)
     {
+        services.AddSingleton<TagValuePublishingBridge>();
+
         services.AddMassTransit(x =>
         {
             x.AddConsumer<TagValueChangedConsumer>();

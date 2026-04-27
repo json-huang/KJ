@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KJ.Drivers.Abstractions\KJ.Drivers.Abstractions.csproj" />
+    <ProjectReference Include="..\KJ.Diagnostics\KJ.Diagnostics.csproj" />
+  </ItemGroup>
+
+</Project>
+

@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KJ.Comms.Abstractions\KJ.Comms.Abstractions.csproj" />
+    <ProjectReference Include="..\KJ.Diagnostics\KJ.Diagnostics.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

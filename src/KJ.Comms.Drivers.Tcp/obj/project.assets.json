@@ -11,6 +11,16 @@
         "runtime": {
           "bin/placeholder/KJ.Comms.Abstractions.dll": {}
         }
+      },
+      "KJ.Diagnostics/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/KJ.Diagnostics.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KJ.Diagnostics.dll": {}
+        }
       }
     }
   },
@@ -19,11 +29,17 @@
       "type": "project",
       "path": "../KJ.Comms.Abstractions/KJ.Comms.Abstractions.csproj",
       "msbuildProject": "../KJ.Comms.Abstractions/KJ.Comms.Abstractions.csproj"
+    },
+    "KJ.Diagnostics/1.0.0": {
+      "type": "project",
+      "path": "../KJ.Diagnostics/KJ.Diagnostics.csproj",
+      "msbuildProject": "../KJ.Diagnostics/KJ.Diagnostics.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "KJ.Comms.Abstractions >= 1.0.0"
+      "KJ.Comms.Abstractions >= 1.0.0",
+      "KJ.Diagnostics >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -61,6 +77,9 @@
           "projectReferences": {
             "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Comms.Abstractions\\KJ.Comms.Abstractions.csproj": {
               "projectPath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Comms.Abstractions\\KJ.Comms.Abstractions.csproj"
+            },
+            "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Diagnostics\\KJ.Diagnostics.csproj": {
+              "projectPath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Diagnostics\\KJ.Diagnostics.csproj"
             }
           }
         }

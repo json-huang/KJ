@@ -79,6 +79,7 @@
     <ItemGroup>
       <ProjectReference Include="..\KJ.Domain\KJ.Domain.csproj" />
       <ProjectReference Include="..\KJ.Infrastructure\KJ.Infrastructure.csproj" />
+      <ProjectReference Include="..\KJ.Infrastructure.Migrations.SqlServer\KJ.Infrastructure.Migrations.SqlServer.csproj" />
       <ProjectReference Include="..\KJ.Drivers\KJ.Drivers.csproj" />
       <ProjectReference Include="..\KJ.Modules.Auth\KJ.Modules.Auth.csproj" />
       <ProjectReference Include="..\KJ.Modules.Monitoring.WinUI\KJ.Modules.Monitoring.csproj" />

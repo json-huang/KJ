@@ -1,0 +1,53 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "KJ.Drivers.Plc.Beckhoff.Ads/1.0.0": {
+        "dependencies": {
+          "KJ.Diagnostics": "1.0.0",
+          "KJ.Drivers.Abstractions": "1.0.0"
+        },
+        "runtime": {
+          "KJ.Drivers.Plc.Beckhoff.Ads.dll": {}
+        }
+      },
+      "KJ.Diagnostics/1.0.0": {
+        "runtime": {
+          "KJ.Diagnostics.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "KJ.Drivers.Abstractions/1.0.0": {
+        "runtime": {
+          "KJ.Drivers.Abstractions.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "KJ.Drivers.Plc.Beckhoff.Ads/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KJ.Diagnostics/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KJ.Drivers.Abstractions/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

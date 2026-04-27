@@ -1,0 +1,12 @@
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\bin\Debug\net8.0\KJ.Diagnostics.deps.json
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\bin\Debug\net8.0\KJ.Diagnostics.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\bin\Debug\net8.0\KJ.Diagnostics.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\obj\Debug\net8.0\KJ.Diagnostics.GeneratedMSBuildEditorConfig.editorconfig
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\obj\Debug\net8.0\KJ.Diagnostics.AssemblyInfoInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\obj\Debug\net8.0\KJ.Diagnostics.AssemblyInfo.cs
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\obj\Debug\net8.0\KJ.Diagnostics.csproj.CoreCompileInputs.cache
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\obj\Debug\net8.0\KJ.Diagnostics.sourcelink.json
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\obj\Debug\net8.0\KJ.Diagnostics.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\obj\Debug\net8.0\refint\KJ.Diagnostics.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\obj\Debug\net8.0\KJ.Diagnostics.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.Diagnostics\obj\Debug\net8.0\ref\KJ.Diagnostics.dll

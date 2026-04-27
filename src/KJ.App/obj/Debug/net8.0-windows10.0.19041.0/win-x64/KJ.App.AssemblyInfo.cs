@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KJ.App")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e884ec7d9b24b4934c96913cb0149f08baded3d8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ad3fba7e1eb17861c48d6054f28dacca22d6423")]
 [assembly: System.Reflection.AssemblyProductAttribute("KJ.App")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KJ.App")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

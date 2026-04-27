@@ -51,6 +51,13 @@ public partial class App : PrismApplication
         services.AddLogging(builder => builder.AddDebug().SetMinimumLevel(LogLevel.Information));
         services.AddKjPersistence(configuration);
         services.AddKjMessaging();
+
+        // Shared domain singletons must live in the MS.DI container so that
+        // MassTransit consumers and Prism viewmodels observe the same instance.
+        services.AddSingleton<KJ.Domain.ITagStore, KJ.Domain.Services.InMemoryTagStore>();
+        services.AddSingleton<KJ.Domain.IAlarmService, KJ.Domain.Services.AlarmService>();
+        services.AddSingleton<KJ.Domain.IRecipeEngine, KJ.Domain.Services.RecipeEngine>();
+        services.AddSingleton<KJ.Domain.IDeviceManager, KJ.Domain.Services.DeviceManager>();
     }
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -75,10 +82,7 @@ public partial class App : PrismApplication
         containerRegistry.Register<ViewModels.MainPageViewModel>();
         containerRegistry.Register<ViewModels.LoginViewModel>(); // legacy：对应 LoginPage
 
-        containerRegistry.RegisterSingleton<KJ.Domain.ITagStore, KJ.Domain.Services.InMemoryTagStore>();
-        containerRegistry.RegisterSingleton<KJ.Domain.IAlarmService, KJ.Domain.Services.AlarmService>();
-        containerRegistry.RegisterSingleton<KJ.Domain.IRecipeEngine, KJ.Domain.Services.RecipeEngine>();
-        containerRegistry.RegisterSingleton<KJ.Domain.IDeviceManager, KJ.Domain.Services.DeviceManager>();
+        // Domain services are registered in ConfigureServices so both MassTransit and Prism share instances.
     }
 
     protected override UIElement CreateShell()
@@ -100,6 +104,9 @@ public partial class App : PrismApplication
         base.OnInitialized();
         try
         {
+            // Ensure messaging bridges are instantiated early.
+            _ = Container.Resolve<KJ.Infrastructure.Messaging.TagValuePublishingBridge>();
+
             await InitializeDatabaseAsync().ConfigureAwait(false);
         }
         finally

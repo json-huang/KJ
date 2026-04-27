@@ -6,9 +6,13 @@
     <Project Path="src/KJ.Comms.Abstractions/KJ.Comms.Abstractions.csproj" />
     <Project Path="src/KJ.Comms.Drivers.Tcp/KJ.Comms.Drivers.Tcp.csproj" />
     <Project Path="src/KJ.Core/KJ.Core.csproj" />
+    <Project Path="src/KJ.Diagnostics/KJ.Diagnostics.csproj" />
+    <Project Path="src/KJ.Drivers.Abstractions/KJ.Drivers.Abstractions.csproj" />
+    <Project Path="src/KJ.Drivers.Plc.Beckhoff.Ads/KJ.Drivers.Plc.Beckhoff.Ads.csproj" />
     <Project Path="src/KJ.Domain/KJ.Domain.csproj" />
     <Project Path="src/KJ.Drivers/KJ.Drivers.csproj" />
     <Project Path="src/KJ.Infrastructure/KJ.Infrastructure.csproj" />
+    <Project Path="src/KJ.Infrastructure.Migrations.SqlServer/KJ.Infrastructure.Migrations.SqlServer.csproj" />
     <Project Path="src/KJ.Modules.Alarm/KJ.Modules.Alarm.csproj" />
     <Project Path="src/KJ.Modules.Auth/KJ.Modules.Auth.csproj" />
     <Project Path="src/KJ.Modules.Config/KJ.Modules.Config.csproj" />

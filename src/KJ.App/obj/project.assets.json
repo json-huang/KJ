@@ -72,7 +72,7 @@
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/Humanizer.dll": {
             "related": ".xml"
           }
         },
@@ -82,10 +82,10 @@
           }
         }
       },
-      "MassTransit/9.1.0": {
+      "MassTransit/8.5.8": {
         "type": "package",
         "dependencies": {
-          "MassTransit.Abstractions": "9.1.0",
+          "MassTransit.Abstractions": "8.5.8",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
@@ -103,7 +103,7 @@
           }
         }
       },
-      "MassTransit.Abstractions/9.1.0": {
+      "MassTransit.Abstractions/8.5.8": {
         "type": "package",
         "compile": {
           "lib/net8.0/MassTransit.Abstractions.dll": {
@@ -191,7 +191,7 @@
           "System.Text.Encoding.CodePages": "6.0.0"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -248,7 +248,7 @@
           "Microsoft.CodeAnalysis.Common": "[4.5.0]"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.CSharp.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -308,7 +308,7 @@
           "Microsoft.CodeAnalysis.Workspaces.Common": "[4.5.0]"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.CSharp.Workspaces.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -370,7 +370,7 @@
           "System.Threading.Channels": "6.0.0"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.Workspaces.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -828,7 +828,7 @@
       "Microsoft.Extensions.DependencyModel/8.0.2": {
         "type": "package",
         "compile": {
-          "lib/net8.0/_._": {
+          "lib/net8.0/Microsoft.Extensions.DependencyModel.dll": {
             "related": ".xml"
           }
         },
@@ -1666,7 +1666,7 @@
           "System.CodeDom": "4.4.0"
         },
         "compile": {
-          "lib/netstandard2.0/_._": {}
+          "lib/netstandard2.0/Mono.TextTemplating.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/Mono.TextTemplating.dll": {}
@@ -1935,7 +1935,7 @@
       "System.CodeDom/4.4.0": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/_._": {
+          "ref/netstandard2.0/System.CodeDom.dll": {
             "related": ".xml"
           }
         },
@@ -1978,7 +1978,7 @@
       "System.Composition.AttributedModel/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.AttributedModel.dll": {
             "related": ".xml"
           }
         },
@@ -1997,7 +1997,7 @@
           "System.Composition.AttributedModel": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Convention.dll": {
             "related": ".xml"
           }
         },
@@ -2016,7 +2016,7 @@
           "System.Composition.Runtime": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Hosting.dll": {
             "related": ".xml"
           }
         },
@@ -2032,7 +2032,7 @@
       "System.Composition.Runtime/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Runtime.dll": {
             "related": ".xml"
           }
         },
@@ -2053,7 +2053,7 @@
           "System.Composition.Runtime": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.TypedParts.dll": {
             "related": ".xml"
           }
         },
@@ -2193,7 +2193,7 @@
       "System.IO.Pipelines/6.0.3": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.IO.Pipelines.dll": {
             "related": ".xml"
           }
         },
@@ -2247,7 +2247,7 @@
           "System.Collections.Immutable": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Reflection.Metadata.dll": {
             "related": ".xml"
           }
         },
@@ -2410,7 +2410,7 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Text.Encoding.CodePages.dll": {
             "related": ".xml"
           }
         },
@@ -2473,7 +2473,7 @@
       "System.Threading.Channels/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Threading.Channels.dll": {
             "related": ".xml"
           }
         },
@@ -2910,7 +2910,7 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "KJ.Domain": "1.0.0",
-          "MassTransit": "9.1.0",
+          "MassTransit": "8.5.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
           "Microsoft.Extensions.Configuration.Binder": "8.0.1",
@@ -2926,6 +2926,21 @@
         },
         "runtime": {
           "bin/placeholder/KJ.Infrastructure.dll": {}
+        }
+      },
+      "KJ.Infrastructure.Migrations.SqlServer/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "KJ.Infrastructure": "1.0.0",
+          "Microsoft.EntityFrameworkCore.Design": "8.0.26",
+          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26"
+        },
+        "compile": {
+          "bin/placeholder/KJ.Infrastructure.Migrations.SqlServer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KJ.Infrastructure.Migrations.SqlServer.dll": {}
         }
       },
       "KJ.Modules.Alarm/1.0.0": {
@@ -3100,7 +3115,7 @@
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/Humanizer.dll": {
             "related": ".xml"
           }
         },
@@ -3110,10 +3125,10 @@
           }
         }
       },
-      "MassTransit/9.1.0": {
+      "MassTransit/8.5.8": {
         "type": "package",
         "dependencies": {
-          "MassTransit.Abstractions": "9.1.0",
+          "MassTransit.Abstractions": "8.5.8",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
@@ -3131,7 +3146,7 @@
           }
         }
       },
-      "MassTransit.Abstractions/9.1.0": {
+      "MassTransit.Abstractions/8.5.8": {
         "type": "package",
         "compile": {
           "lib/net8.0/MassTransit.Abstractions.dll": {
@@ -3219,7 +3234,7 @@
           "System.Text.Encoding.CodePages": "6.0.0"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -3276,7 +3291,7 @@
           "Microsoft.CodeAnalysis.Common": "[4.5.0]"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.CSharp.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -3336,7 +3351,7 @@
           "Microsoft.CodeAnalysis.Workspaces.Common": "[4.5.0]"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.CSharp.Workspaces.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -3398,7 +3413,7 @@
           "System.Threading.Channels": "6.0.0"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.Workspaces.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -3831,7 +3846,7 @@
       "Microsoft.Extensions.DependencyModel/8.0.2": {
         "type": "package",
         "compile": {
-          "lib/net8.0/_._": {
+          "lib/net8.0/Microsoft.Extensions.DependencyModel.dll": {
             "related": ".xml"
           }
         },
@@ -4622,7 +4637,7 @@
           "System.CodeDom": "4.4.0"
         },
         "compile": {
-          "lib/netstandard2.0/_._": {}
+          "lib/netstandard2.0/Mono.TextTemplating.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/Mono.TextTemplating.dll": {}
@@ -4891,7 +4906,7 @@
       "System.CodeDom/4.4.0": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/_._": {
+          "ref/netstandard2.0/System.CodeDom.dll": {
             "related": ".xml"
           }
         },
@@ -4934,7 +4949,7 @@
       "System.Composition.AttributedModel/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.AttributedModel.dll": {
             "related": ".xml"
           }
         },
@@ -4953,7 +4968,7 @@
           "System.Composition.AttributedModel": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Convention.dll": {
             "related": ".xml"
           }
         },
@@ -4972,7 +4987,7 @@
           "System.Composition.Runtime": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Hosting.dll": {
             "related": ".xml"
           }
         },
@@ -4988,7 +5003,7 @@
       "System.Composition.Runtime/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Runtime.dll": {
             "related": ".xml"
           }
         },
@@ -5009,7 +5024,7 @@
           "System.Composition.Runtime": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.TypedParts.dll": {
             "related": ".xml"
           }
         },
@@ -5130,7 +5145,7 @@
       "System.IO.Pipelines/6.0.3": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.IO.Pipelines.dll": {
             "related": ".xml"
           }
         },
@@ -5184,7 +5199,7 @@
           "System.Collections.Immutable": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Reflection.Metadata.dll": {
             "related": ".xml"
           }
         },
@@ -5319,7 +5334,7 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Text.Encoding.CodePages.dll": {
             "related": ".xml"
           }
         },
@@ -5370,7 +5385,7 @@
       "System.Threading.Channels/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Threading.Channels.dll": {
             "related": ".xml"
           }
         },
@@ -5801,7 +5816,7 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "KJ.Domain": "1.0.0",
-          "MassTransit": "9.1.0",
+          "MassTransit": "8.5.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
           "Microsoft.Extensions.Configuration.Binder": "8.0.1",
@@ -5817,6 +5832,21 @@
         },
         "runtime": {
           "bin/placeholder/KJ.Infrastructure.dll": {}
+        }
+      },
+      "KJ.Infrastructure.Migrations.SqlServer/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "KJ.Infrastructure": "1.0.0",
+          "Microsoft.EntityFrameworkCore.Design": "8.0.26",
+          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26"
+        },
+        "compile": {
+          "bin/placeholder/KJ.Infrastructure.Migrations.SqlServer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KJ.Infrastructure.Migrations.SqlServer.dll": {}
         }
       },
       "KJ.Modules.Alarm/1.0.0": {
@@ -5991,7 +6021,7 @@
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/Humanizer.dll": {
             "related": ".xml"
           }
         },
@@ -6001,10 +6031,10 @@
           }
         }
       },
-      "MassTransit/9.1.0": {
+      "MassTransit/8.5.8": {
         "type": "package",
         "dependencies": {
-          "MassTransit.Abstractions": "9.1.0",
+          "MassTransit.Abstractions": "8.5.8",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
@@ -6022,7 +6052,7 @@
           }
         }
       },
-      "MassTransit.Abstractions/9.1.0": {
+      "MassTransit.Abstractions/8.5.8": {
         "type": "package",
         "compile": {
           "lib/net8.0/MassTransit.Abstractions.dll": {
@@ -6110,7 +6140,7 @@
           "System.Text.Encoding.CodePages": "6.0.0"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -6167,7 +6197,7 @@
           "Microsoft.CodeAnalysis.Common": "[4.5.0]"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.CSharp.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -6227,7 +6257,7 @@
           "Microsoft.CodeAnalysis.Workspaces.Common": "[4.5.0]"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.CSharp.Workspaces.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -6289,7 +6319,7 @@
           "System.Threading.Channels": "6.0.0"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.Workspaces.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -6722,7 +6752,7 @@
       "Microsoft.Extensions.DependencyModel/8.0.2": {
         "type": "package",
         "compile": {
-          "lib/net8.0/_._": {
+          "lib/net8.0/Microsoft.Extensions.DependencyModel.dll": {
             "related": ".xml"
           }
         },
@@ -7513,7 +7543,7 @@
           "System.CodeDom": "4.4.0"
         },
         "compile": {
-          "lib/netstandard2.0/_._": {}
+          "lib/netstandard2.0/Mono.TextTemplating.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/Mono.TextTemplating.dll": {}
@@ -7782,7 +7812,7 @@
       "System.CodeDom/4.4.0": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/_._": {
+          "ref/netstandard2.0/System.CodeDom.dll": {
             "related": ".xml"
           }
         },
@@ -7825,7 +7855,7 @@
       "System.Composition.AttributedModel/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.AttributedModel.dll": {
             "related": ".xml"
           }
         },
@@ -7844,7 +7874,7 @@
           "System.Composition.AttributedModel": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Convention.dll": {
             "related": ".xml"
           }
         },
@@ -7863,7 +7893,7 @@
           "System.Composition.Runtime": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Hosting.dll": {
             "related": ".xml"
           }
         },
@@ -7879,7 +7909,7 @@
       "System.Composition.Runtime/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Runtime.dll": {
             "related": ".xml"
           }
         },
@@ -7900,7 +7930,7 @@
           "System.Composition.Runtime": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.TypedParts.dll": {
             "related": ".xml"
           }
         },
@@ -8021,7 +8051,7 @@
       "System.IO.Pipelines/6.0.3": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.IO.Pipelines.dll": {
             "related": ".xml"
           }
         },
@@ -8075,7 +8105,7 @@
           "System.Collections.Immutable": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Reflection.Metadata.dll": {
             "related": ".xml"
           }
         },
@@ -8210,7 +8240,7 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Text.Encoding.CodePages.dll": {
             "related": ".xml"
           }
         },
@@ -8261,7 +8291,7 @@
       "System.Threading.Channels/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Threading.Channels.dll": {
             "related": ".xml"
           }
         },
@@ -8692,7 +8722,7 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "KJ.Domain": "1.0.0",
-          "MassTransit": "9.1.0",
+          "MassTransit": "8.5.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
           "Microsoft.Extensions.Configuration.Binder": "8.0.1",
@@ -8708,6 +8738,21 @@
         },
         "runtime": {
           "bin/placeholder/KJ.Infrastructure.dll": {}
+        }
+      },
+      "KJ.Infrastructure.Migrations.SqlServer/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "KJ.Infrastructure": "1.0.0",
+          "Microsoft.EntityFrameworkCore.Design": "8.0.26",
+          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26"
+        },
+        "compile": {
+          "bin/placeholder/KJ.Infrastructure.Migrations.SqlServer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KJ.Infrastructure.Migrations.SqlServer.dll": {}
         }
       },
       "KJ.Modules.Alarm/1.0.0": {
@@ -8882,7 +8927,7 @@
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/Humanizer.dll": {
             "related": ".xml"
           }
         },
@@ -8892,10 +8937,10 @@
           }
         }
       },
-      "MassTransit/9.1.0": {
+      "MassTransit/8.5.8": {
         "type": "package",
         "dependencies": {
-          "MassTransit.Abstractions": "9.1.0",
+          "MassTransit.Abstractions": "8.5.8",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
@@ -8913,7 +8958,7 @@
           }
         }
       },
-      "MassTransit.Abstractions/9.1.0": {
+      "MassTransit.Abstractions/8.5.8": {
         "type": "package",
         "compile": {
           "lib/net8.0/MassTransit.Abstractions.dll": {
@@ -9001,7 +9046,7 @@
           "System.Text.Encoding.CodePages": "6.0.0"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -9058,7 +9103,7 @@
           "Microsoft.CodeAnalysis.Common": "[4.5.0]"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.CSharp.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -9118,7 +9163,7 @@
           "Microsoft.CodeAnalysis.Workspaces.Common": "[4.5.0]"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.CSharp.Workspaces.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -9180,7 +9225,7 @@
           "System.Threading.Channels": "6.0.0"
         },
         "compile": {
-          "lib/netcoreapp3.1/_._": {
+          "lib/netcoreapp3.1/Microsoft.CodeAnalysis.Workspaces.dll": {
             "related": ".pdb;.xml"
           }
         },
@@ -9613,7 +9658,7 @@
       "Microsoft.Extensions.DependencyModel/8.0.2": {
         "type": "package",
         "compile": {
-          "lib/net8.0/_._": {
+          "lib/net8.0/Microsoft.Extensions.DependencyModel.dll": {
             "related": ".xml"
           }
         },
@@ -10404,7 +10449,7 @@
           "System.CodeDom": "4.4.0"
         },
         "compile": {
-          "lib/netstandard2.0/_._": {}
+          "lib/netstandard2.0/Mono.TextTemplating.dll": {}
         },
         "runtime": {
           "lib/netstandard2.0/Mono.TextTemplating.dll": {}
@@ -10673,7 +10718,7 @@
       "System.CodeDom/4.4.0": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/_._": {
+          "ref/netstandard2.0/System.CodeDom.dll": {
             "related": ".xml"
           }
         },
@@ -10716,7 +10761,7 @@
       "System.Composition.AttributedModel/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.AttributedModel.dll": {
             "related": ".xml"
           }
         },
@@ -10735,7 +10780,7 @@
           "System.Composition.AttributedModel": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Convention.dll": {
             "related": ".xml"
           }
         },
@@ -10754,7 +10799,7 @@
           "System.Composition.Runtime": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Hosting.dll": {
             "related": ".xml"
           }
         },
@@ -10770,7 +10815,7 @@
       "System.Composition.Runtime/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.Runtime.dll": {
             "related": ".xml"
           }
         },
@@ -10791,7 +10836,7 @@
           "System.Composition.Runtime": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Composition.TypedParts.dll": {
             "related": ".xml"
           }
         },
@@ -10912,7 +10957,7 @@
       "System.IO.Pipelines/6.0.3": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.IO.Pipelines.dll": {
             "related": ".xml"
           }
         },
@@ -10966,7 +11011,7 @@
           "System.Collections.Immutable": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Reflection.Metadata.dll": {
             "related": ".xml"
           }
         },
@@ -11101,7 +11146,7 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         },
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Text.Encoding.CodePages.dll": {
             "related": ".xml"
           }
         },
@@ -11152,7 +11197,7 @@
       "System.Threading.Channels/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/System.Threading.Channels.dll": {
             "related": ".xml"
           }
         },
@@ -11583,7 +11628,7 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "KJ.Domain": "1.0.0",
-          "MassTransit": "9.1.0",
+          "MassTransit": "8.5.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
           "Microsoft.Extensions.Configuration.Binder": "8.0.1",
@@ -11599,6 +11644,21 @@
         },
         "runtime": {
           "bin/placeholder/KJ.Infrastructure.dll": {}
+        }
+      },
+      "KJ.Infrastructure.Migrations.SqlServer/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "KJ.Infrastructure": "1.0.0",
+          "Microsoft.EntityFrameworkCore.Design": "8.0.26",
+          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26"
+        },
+        "compile": {
+          "bin/placeholder/KJ.Infrastructure.Migrations.SqlServer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KJ.Infrastructure.Migrations.SqlServer.dll": {}
         }
       },
       "KJ.Modules.Alarm/1.0.0": {
@@ -11806,10 +11866,10 @@
         "logo.png"
       ]
     },
-    "MassTransit/9.1.0": {
-      "sha512": "2hdJGw92qSFhvu+12qsX16NPDKbpAZMiOjsxxHFjwR3MjiacNmyOh2+nE5PK5rDky67OHHwbxLqt68qTaL3Plg==",
+    "MassTransit/8.5.8": {
+      "sha512": "O5bx+rziwwjLnar/9R6HTSL3Q++SOX20sufGIuXCKh7aowQ+4XGbhpVdaSYuTV7H0ndIomK24d2/vX3rlsSHng==",
       "type": "package",
-      "path": "masstransit/9.1.0",
+      "path": "masstransit/8.5.8",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -11824,15 +11884,15 @@
         "lib/net9.0/MassTransit.xml",
         "lib/netstandard2.0/MassTransit.dll",
         "lib/netstandard2.0/MassTransit.xml",
-        "masstransit.9.1.0.nupkg.sha512",
+        "masstransit.8.5.8.nupkg.sha512",
         "masstransit.nuspec",
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.Abstractions/9.1.0": {
-      "sha512": "yesigAI5/J+YhCvnxxvMjRpH3qcH776h1Zq2xPhAJJwwVT+FilcE66yox9gPk8gsck+cjmfWUlOwEMg363cmOQ==",
+    "MassTransit.Abstractions/8.5.8": {
+      "sha512": "f1XJz88+JZNLl1iHWSGNoD91ownowoP4Vl+2DmVM7ljAxQebvolVKdlyY+iZBSdODCeyLGCcM9jrfZXWkDHtow==",
       "type": "package",
-      "path": "masstransit.abstractions/9.1.0",
+      "path": "masstransit.abstractions/8.5.8",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -11847,7 +11907,7 @@
         "lib/net9.0/MassTransit.Abstractions.xml",
         "lib/netstandard2.0/MassTransit.Abstractions.dll",
         "lib/netstandard2.0/MassTransit.Abstractions.xml",
-        "masstransit.abstractions.9.1.0.nupkg.sha512",
+        "masstransit.abstractions.8.5.8.nupkg.sha512",
         "masstransit.abstractions.nuspec",
         "mt-logo-small.png"
       ]
@@ -17098,6 +17158,11 @@
       "path": "../KJ.Infrastructure/KJ.Infrastructure.csproj",
       "msbuildProject": "../KJ.Infrastructure/KJ.Infrastructure.csproj"
     },
+    "KJ.Infrastructure.Migrations.SqlServer/1.0.0": {
+      "type": "project",
+      "path": "../KJ.Infrastructure.Migrations.SqlServer/KJ.Infrastructure.Migrations.SqlServer.csproj",
+      "msbuildProject": "../KJ.Infrastructure.Migrations.SqlServer/KJ.Infrastructure.Migrations.SqlServer.csproj"
+    },
     "KJ.Modules.Alarm/1.0.0": {
       "type": "project",
       "path": "../KJ.Modules.Alarm/KJ.Modules.Alarm.csproj",
@@ -17134,6 +17199,7 @@
       "KJ.Domain >= 1.0.0",
       "KJ.Drivers >= 1.0.0",
       "KJ.Infrastructure >= 1.0.0",
+      "KJ.Infrastructure.Migrations.SqlServer >= 1.0.0",
       "KJ.Modules.Alarm >= 1.0.0",
       "KJ.Modules.Auth >= 1.0.0",
       "KJ.Modules.Config >= 1.0.0",
@@ -17189,6 +17255,9 @@
             },
             "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Drivers\\KJ.Drivers.csproj": {
               "projectPath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Drivers\\KJ.Drivers.csproj"
+            },
+            "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Infrastructure.Migrations.SqlServer\\KJ.Infrastructure.Migrations.SqlServer.csproj": {
+              "projectPath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Infrastructure.Migrations.SqlServer\\KJ.Infrastructure.Migrations.SqlServer.csproj"
             },
             "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Infrastructure\\KJ.Infrastructure.csproj": {
               "projectPath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Infrastructure\\KJ.Infrastructure.csproj"

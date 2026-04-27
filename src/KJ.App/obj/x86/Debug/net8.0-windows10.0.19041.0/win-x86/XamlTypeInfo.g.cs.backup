@@ -226,7 +226,7 @@ namespace KJ.App.KJ_App_XamlTypeInfo
         
         private void InitTypeTables()
         {
-            _typeNameTable = new string[19];
+            _typeNameTable = new string[28];
             _typeNameTable[0] = "Prism.DryIoc.PrismApplication";
             _typeNameTable[1] = "Prism.PrismApplicationBase";
             _typeNameTable[2] = "Microsoft.UI.Xaml.Application";
@@ -239,15 +239,24 @@ namespace KJ.App.KJ_App_XamlTypeInfo
             _typeNameTable[9] = "Windows.UI.Color";
             _typeNameTable[10] = "System.ValueType";
             _typeNameTable[11] = "Byte";
-            _typeNameTable[12] = "KJ.App.Views.MainPage";
-            _typeNameTable[13] = "Microsoft.UI.Xaml.Controls.Page";
-            _typeNameTable[14] = "Microsoft.UI.Xaml.Controls.UserControl";
-            _typeNameTable[15] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
-            _typeNameTable[16] = "Microsoft.UI.Xaml.DependencyObject";
-            _typeNameTable[17] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
-            _typeNameTable[18] = "Int32";
+            _typeNameTable[12] = "KJ.App.Dialogs.AboutDialog";
+            _typeNameTable[13] = "Microsoft.UI.Xaml.Controls.UserControl";
+            _typeNameTable[14] = "KJ.App.Views.HomeOverviewPage";
+            _typeNameTable[15] = "Microsoft.UI.Xaml.Controls.Page";
+            _typeNameTable[16] = "KJ.App.Views.LoginPage";
+            _typeNameTable[17] = "Prism.Navigation.Regions.RegionManager";
+            _typeNameTable[18] = "Prism.Navigation.Regions.IRegionCollection";
+            _typeNameTable[19] = "String";
+            _typeNameTable[20] = "Microsoft.UI.Xaml.DependencyObject";
+            _typeNameTable[21] = "Prism.Navigation.Regions.IRegionManager";
+            _typeNameTable[22] = "KJ.App.Views.MainPage";
+            _typeNameTable[23] = "KJ.App.Views.Navigation.HomeNavigationView";
+            _typeNameTable[24] = "KJ.App.Views.ShellPage";
+            _typeNameTable[25] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
+            _typeNameTable[26] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
+            _typeNameTable[27] = "Int32";
 
-            _typeTable = new global::System.Type[19];
+            _typeTable = new global::System.Type[28];
             _typeTable[0] = typeof(global::Prism.DryIoc.PrismApplication);
             _typeTable[1] = typeof(global::Prism.PrismApplicationBase);
             _typeTable[2] = typeof(global::Microsoft.UI.Xaml.Application);
@@ -260,13 +269,22 @@ namespace KJ.App.KJ_App_XamlTypeInfo
             _typeTable[9] = typeof(global::Windows.UI.Color);
             _typeTable[10] = typeof(global::System.ValueType);
             _typeTable[11] = typeof(global::System.Byte);
-            _typeTable[12] = typeof(global::KJ.App.Views.MainPage);
-            _typeTable[13] = typeof(global::Microsoft.UI.Xaml.Controls.Page);
-            _typeTable[14] = typeof(global::Microsoft.UI.Xaml.Controls.UserControl);
-            _typeTable[15] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
-            _typeTable[16] = typeof(global::Microsoft.UI.Xaml.DependencyObject);
-            _typeTable[17] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
-            _typeTable[18] = typeof(global::System.Int32);
+            _typeTable[12] = typeof(global::KJ.App.Dialogs.AboutDialog);
+            _typeTable[13] = typeof(global::Microsoft.UI.Xaml.Controls.UserControl);
+            _typeTable[14] = typeof(global::KJ.App.Views.HomeOverviewPage);
+            _typeTable[15] = typeof(global::Microsoft.UI.Xaml.Controls.Page);
+            _typeTable[16] = typeof(global::KJ.App.Views.LoginPage);
+            _typeTable[17] = typeof(global::Prism.Navigation.Regions.RegionManager);
+            _typeTable[18] = typeof(global::Prism.Navigation.Regions.IRegionCollection);
+            _typeTable[19] = typeof(global::System.String);
+            _typeTable[20] = typeof(global::Microsoft.UI.Xaml.DependencyObject);
+            _typeTable[21] = typeof(global::Prism.Navigation.Regions.IRegionManager);
+            _typeTable[22] = typeof(global::KJ.App.Views.MainPage);
+            _typeTable[23] = typeof(global::KJ.App.Views.Navigation.HomeNavigationView);
+            _typeTable[24] = typeof(global::KJ.App.Views.ShellPage);
+            _typeTable[25] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
+            _typeTable[26] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
+            _typeTable[27] = typeof(global::System.Int32);
         }
 
         private int LookupTypeIndexByName(string typeName)
@@ -302,7 +320,9 @@ namespace KJ.App.KJ_App_XamlTypeInfo
         }
 
         private object Activate_5_XamlControlsResources() { return new global::Microsoft.UI.Xaml.Controls.XamlControlsResources(); }
-        private object Activate_15_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
+        private object Activate_12_AboutDialog() { return new global::KJ.App.Dialogs.AboutDialog(); }
+        private object Activate_17_RegionManager() { return new global::Prism.Navigation.Regions.RegionManager(); }
+        private object Activate_25_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
         private void StaticInitializer_0_PrismApplication() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.DryIoc.PrismApplication).TypeHandle);
         private void StaticInitializer_1_PrismApplicationBase() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.PrismApplicationBase).TypeHandle);
         private void StaticInitializer_3_IContainerProvider() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.Ioc.IContainerProvider).TypeHandle);
@@ -311,9 +331,17 @@ namespace KJ.App.KJ_App_XamlTypeInfo
         private void StaticInitializer_9_Color() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Windows.UI.Color).TypeHandle);
         private void StaticInitializer_10_ValueType() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.ValueType).TypeHandle);
         private void StaticInitializer_11_Byte() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Byte).TypeHandle);
-        private void StaticInitializer_12_MainPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Views.MainPage).TypeHandle);
-        private void StaticInitializer_15_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
-        private void StaticInitializer_17_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
+        private void StaticInitializer_12_AboutDialog() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Dialogs.AboutDialog).TypeHandle);
+        private void StaticInitializer_14_HomeOverviewPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Views.HomeOverviewPage).TypeHandle);
+        private void StaticInitializer_16_LoginPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Views.LoginPage).TypeHandle);
+        private void StaticInitializer_17_RegionManager() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.Navigation.Regions.RegionManager).TypeHandle);
+        private void StaticInitializer_18_IRegionCollection() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.Navigation.Regions.IRegionCollection).TypeHandle);
+        private void StaticInitializer_21_IRegionManager() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Prism.Navigation.Regions.IRegionManager).TypeHandle);
+        private void StaticInitializer_22_MainPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Views.MainPage).TypeHandle);
+        private void StaticInitializer_23_HomeNavigationView() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Views.Navigation.HomeNavigationView).TypeHandle);
+        private void StaticInitializer_24_ShellPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.App.Views.ShellPage).TypeHandle);
+        private void StaticInitializer_25_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
+        private void StaticInitializer_26_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
         private void MapAdd_5_XamlControlsResources(object instance, object key, object item)
         {
             var collection = (global::System.Collections.Generic.IDictionary<global::System.Object, global::System.Object>)instance;
@@ -321,7 +349,7 @@ namespace KJ.App.KJ_App_XamlTypeInfo
             var newItem = (global::System.Object)item;
             collection.Add(newKey, newItem);
         }
-        private void VectorAdd_17_IList(object instance, object item)
+        private void VectorAdd_26_IList(object instance, object item)
         {
             var collection = (global::System.Collections.Generic.ICollection<global::Microsoft.UI.Xaml.Controls.TreeViewNode>)instance;
             var newItem = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)item;
@@ -414,25 +442,94 @@ namespace KJ.App.KJ_App_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 12:   //  KJ.App.Views.MainPage
-                userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Page"));
-                userType.StaticInitializer = StaticInitializer_12_MainPage;
+            case 12:   //  KJ.App.Dialogs.AboutDialog
+                userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.UserControl"));
+                userType.Activator = Activate_12_AboutDialog;
+                userType.StaticInitializer = StaticInitializer_12_AboutDialog;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 13:   //  Microsoft.UI.Xaml.Controls.Page
+            case 13:   //  Microsoft.UI.Xaml.Controls.UserControl
                 xamlType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 14:   //  Microsoft.UI.Xaml.Controls.UserControl
+            case 14:   //  KJ.App.Views.HomeOverviewPage
+                userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Page"));
+                userType.StaticInitializer = StaticInitializer_14_HomeOverviewPage;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 15:   //  Microsoft.UI.Xaml.Controls.Page
                 xamlType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 15:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
+            case 16:   //  KJ.App.Views.LoginPage
+                userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Page"));
+                userType.StaticInitializer = StaticInitializer_16_LoginPage;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 17:   //  Prism.Navigation.Regions.RegionManager
+                userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Object"));
+                userType.Activator = Activate_17_RegionManager;
+                userType.StaticInitializer = StaticInitializer_17_RegionManager;
+                userType.AddMemberName("Regions");
+                userType.AddMemberName("RegionName");
+                userType.AddMemberName("RegionManager");
+                userType.AddMemberName("RegionContext");
+                xamlType = userType;
+                break;
+
+            case 18:   //  Prism.Navigation.Regions.IRegionCollection
+                userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, null);
+                userType.StaticInitializer = StaticInitializer_18_IRegionCollection;
+                userType.SetIsReturnTypeStub();
+                xamlType = userType;
+                break;
+
+            case 19:   //  String
+                xamlType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 20:   //  Microsoft.UI.Xaml.DependencyObject
+                xamlType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 21:   //  Prism.Navigation.Regions.IRegionManager
+                userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, null);
+                userType.StaticInitializer = StaticInitializer_21_IRegionManager;
+                userType.SetIsReturnTypeStub();
+                xamlType = userType;
+                break;
+
+            case 22:   //  KJ.App.Views.MainPage
+                userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Page"));
+                userType.StaticInitializer = StaticInitializer_22_MainPage;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 23:   //  KJ.App.Views.Navigation.HomeNavigationView
+                userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.UserControl"));
+                userType.StaticInitializer = StaticInitializer_23_HomeNavigationView;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 24:   //  KJ.App.Views.ShellPage
+                userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Page"));
+                userType.StaticInitializer = StaticInitializer_24_ShellPage;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 25:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
                 userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
-                userType.Activator = Activate_15_TreeViewNode;
-                userType.StaticInitializer = StaticInitializer_15_TreeViewNode;
+                userType.Activator = Activate_25_TreeViewNode;
+                userType.StaticInitializer = StaticInitializer_25_TreeViewNode;
                 userType.AddMemberName("Children");
                 userType.AddMemberName("Content");
                 userType.AddMemberName("Depth");
@@ -444,19 +541,15 @@ namespace KJ.App.KJ_App_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 16:   //  Microsoft.UI.Xaml.DependencyObject
-                xamlType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
-                break;
-
-            case 17:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
+            case 26:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
                 userType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType(this, typeName, type, null);
-                userType.StaticInitializer = StaticInitializer_17_IList;
-                userType.CollectionAdd = VectorAdd_17_IList;
+                userType.StaticInitializer = StaticInitializer_26_IList;
+                userType.CollectionAdd = VectorAdd_26_IList;
                 userType.SetIsReturnTypeStub();
                 xamlType = userType;
                 break;
 
-            case 18:   //  Int32
+            case 27:   //  Int32
                 xamlType = new global::KJ.App.KJ_App_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
             }
@@ -473,6 +566,16 @@ namespace KJ.App.KJ_App_XamlTypeInfo
                     var otherProviders = new global::System.Collections.Generic.List<global::Microsoft.UI.Xaml.Markup.IXamlMetadataProvider>();
                     global::Microsoft.UI.Xaml.Markup.IXamlMetadataProvider provider;
                     provider = new global::Microsoft.UI.Xaml.XamlTypeInfo.XamlControlsXamlMetaDataProvider() as global::Microsoft.UI.Xaml.Markup.IXamlMetadataProvider;
+                    otherProviders.Add(provider); 
+                    provider = new global::KJ.Modules.Alarm.KJ_Modules_Alarm_XamlTypeInfo.XamlMetaDataProvider() as global::Microsoft.UI.Xaml.Markup.IXamlMetadataProvider;
+                    otherProviders.Add(provider); 
+                    provider = new global::KJ.Modules.Auth.KJ_Modules_Auth_XamlTypeInfo.XamlMetaDataProvider() as global::Microsoft.UI.Xaml.Markup.IXamlMetadataProvider;
+                    otherProviders.Add(provider); 
+                    provider = new global::KJ.Modules.Config.KJ_Modules_Config_XamlTypeInfo.XamlMetaDataProvider() as global::Microsoft.UI.Xaml.Markup.IXamlMetadataProvider;
+                    otherProviders.Add(provider); 
+                    provider = new global::KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo.XamlMetaDataProvider() as global::Microsoft.UI.Xaml.Markup.IXamlMetadataProvider;
+                    otherProviders.Add(provider); 
+                    provider = new global::KJ.Modules.Reporting.KJ_Modules_Reporting_XamlTypeInfo.XamlMetaDataProvider() as global::Microsoft.UI.Xaml.Markup.IXamlMetadataProvider;
                     otherProviders.Add(provider); 
                     provider = new global::Prism.Prism_Uno_WinUI_XamlTypeInfo.XamlMetaDataProvider() as global::Microsoft.UI.Xaml.Markup.IXamlMetadataProvider;
                     otherProviders.Add(provider); 
@@ -582,52 +685,81 @@ namespace KJ.App.KJ_App_XamlTypeInfo
             var that = (global::Windows.UI.Color)instance;
             that.B = (global::System.Byte)Value;
         }
-        private object get_7_TreeViewNode_Children(object instance)
+        private object get_7_RegionManager_Regions(object instance)
+        {
+            var that = (global::Prism.Navigation.Regions.RegionManager)instance;
+            return that.Regions;
+        }
+        private object get_8_RegionManager_RegionName(object instance)
+        {
+            return global::Prism.Navigation.Regions.RegionManager.GetRegionName((global::Microsoft.UI.Xaml.DependencyObject)instance);
+        }
+        private void set_8_RegionManager_RegionName(object instance, object Value)
+        {
+            global::Prism.Navigation.Regions.RegionManager.SetRegionName((global::Microsoft.UI.Xaml.DependencyObject)instance, (global::System.String)Value);
+        }
+        private object get_9_RegionManager_RegionManager(object instance)
+        {
+            return global::Prism.Navigation.Regions.RegionManager.GetRegionManager((global::Microsoft.UI.Xaml.DependencyObject)instance);
+        }
+        private void set_9_RegionManager_RegionManager(object instance, object Value)
+        {
+            global::Prism.Navigation.Regions.RegionManager.SetRegionManager((global::Microsoft.UI.Xaml.DependencyObject)instance, (global::Prism.Navigation.Regions.IRegionManager)Value);
+        }
+        private object get_10_RegionManager_RegionContext(object instance)
+        {
+            return global::Prism.Navigation.Regions.RegionManager.GetRegionContext((global::Microsoft.UI.Xaml.DependencyObject)instance);
+        }
+        private void set_10_RegionManager_RegionContext(object instance, object Value)
+        {
+            global::Prism.Navigation.Regions.RegionManager.SetRegionContext((global::Microsoft.UI.Xaml.DependencyObject)instance, (global::System.Object)Value);
+        }
+        private object get_11_TreeViewNode_Children(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Children;
         }
-        private object get_8_TreeViewNode_Content(object instance)
+        private object get_12_TreeViewNode_Content(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Content;
         }
-        private void set_8_TreeViewNode_Content(object instance, object Value)
+        private void set_12_TreeViewNode_Content(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             that.Content = (global::System.Object)Value;
         }
-        private object get_9_TreeViewNode_Depth(object instance)
+        private object get_13_TreeViewNode_Depth(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Depth;
         }
-        private object get_10_TreeViewNode_HasChildren(object instance)
+        private object get_14_TreeViewNode_HasChildren(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.HasChildren;
         }
-        private object get_11_TreeViewNode_HasUnrealizedChildren(object instance)
+        private object get_15_TreeViewNode_HasUnrealizedChildren(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.HasUnrealizedChildren;
         }
-        private void set_11_TreeViewNode_HasUnrealizedChildren(object instance, object Value)
+        private void set_15_TreeViewNode_HasUnrealizedChildren(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             that.HasUnrealizedChildren = (global::System.Boolean)Value;
         }
-        private object get_12_TreeViewNode_IsExpanded(object instance)
+        private object get_16_TreeViewNode_IsExpanded(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.IsExpanded;
         }
-        private void set_12_TreeViewNode_IsExpanded(object instance, object Value)
+        private void set_16_TreeViewNode_IsExpanded(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             that.IsExpanded = (global::System.Boolean)Value;
         }
-        private object get_13_TreeViewNode_Parent(object instance)
+        private object get_17_TreeViewNode_Parent(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Parent;
@@ -683,50 +815,80 @@ namespace KJ.App.KJ_App_XamlTypeInfo
                 xamlMember.Getter = get_6_Color_B;
                 xamlMember.Setter = set_6_Color_B;
                 break;
+            case "Prism.Navigation.Regions.RegionManager.Regions":
+                userType = (global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Prism.Navigation.Regions.RegionManager");
+                xamlMember = new global::KJ.App.KJ_App_XamlTypeInfo.XamlMember(this, "Regions", "Prism.Navigation.Regions.IRegionCollection");
+                xamlMember.Getter = get_7_RegionManager_Regions;
+                xamlMember.SetIsReadOnly();
+                break;
+            case "Prism.Navigation.Regions.RegionManager.RegionName":
+                userType = (global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Prism.Navigation.Regions.RegionManager");
+                xamlMember = new global::KJ.App.KJ_App_XamlTypeInfo.XamlMember(this, "RegionName", "String");
+                xamlMember.SetTargetTypeName("Microsoft.UI.Xaml.DependencyObject");
+                xamlMember.SetIsAttachable();
+                xamlMember.Getter = get_8_RegionManager_RegionName;
+                xamlMember.Setter = set_8_RegionManager_RegionName;
+                break;
+            case "Prism.Navigation.Regions.RegionManager.RegionManager":
+                userType = (global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Prism.Navigation.Regions.RegionManager");
+                xamlMember = new global::KJ.App.KJ_App_XamlTypeInfo.XamlMember(this, "RegionManager", "Prism.Navigation.Regions.IRegionManager");
+                xamlMember.SetTargetTypeName("Microsoft.UI.Xaml.DependencyObject");
+                xamlMember.SetIsAttachable();
+                xamlMember.Getter = get_9_RegionManager_RegionManager;
+                xamlMember.Setter = set_9_RegionManager_RegionManager;
+                break;
+            case "Prism.Navigation.Regions.RegionManager.RegionContext":
+                userType = (global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Prism.Navigation.Regions.RegionManager");
+                xamlMember = new global::KJ.App.KJ_App_XamlTypeInfo.XamlMember(this, "RegionContext", "Object");
+                xamlMember.SetTargetTypeName("Microsoft.UI.Xaml.DependencyObject");
+                xamlMember.SetIsAttachable();
+                xamlMember.Getter = get_10_RegionManager_RegionContext;
+                xamlMember.Setter = set_10_RegionManager_RegionContext;
+                break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Children":
                 userType = (global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KJ.App.KJ_App_XamlTypeInfo.XamlMember(this, "Children", "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>");
-                xamlMember.Getter = get_7_TreeViewNode_Children;
+                xamlMember.Getter = get_11_TreeViewNode_Children;
                 xamlMember.SetIsReadOnly();
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Content":
                 userType = (global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KJ.App.KJ_App_XamlTypeInfo.XamlMember(this, "Content", "Object");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_8_TreeViewNode_Content;
-                xamlMember.Setter = set_8_TreeViewNode_Content;
+                xamlMember.Getter = get_12_TreeViewNode_Content;
+                xamlMember.Setter = set_12_TreeViewNode_Content;
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Depth":
                 userType = (global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KJ.App.KJ_App_XamlTypeInfo.XamlMember(this, "Depth", "Int32");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_9_TreeViewNode_Depth;
+                xamlMember.Getter = get_13_TreeViewNode_Depth;
                 xamlMember.SetIsReadOnly();
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.HasChildren":
                 userType = (global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KJ.App.KJ_App_XamlTypeInfo.XamlMember(this, "HasChildren", "Boolean");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_10_TreeViewNode_HasChildren;
+                xamlMember.Getter = get_14_TreeViewNode_HasChildren;
                 xamlMember.SetIsReadOnly();
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.HasUnrealizedChildren":
                 userType = (global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KJ.App.KJ_App_XamlTypeInfo.XamlMember(this, "HasUnrealizedChildren", "Boolean");
-                xamlMember.Getter = get_11_TreeViewNode_HasUnrealizedChildren;
-                xamlMember.Setter = set_11_TreeViewNode_HasUnrealizedChildren;
+                xamlMember.Getter = get_15_TreeViewNode_HasUnrealizedChildren;
+                xamlMember.Setter = set_15_TreeViewNode_HasUnrealizedChildren;
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.IsExpanded":
                 userType = (global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KJ.App.KJ_App_XamlTypeInfo.XamlMember(this, "IsExpanded", "Boolean");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_12_TreeViewNode_IsExpanded;
-                xamlMember.Setter = set_12_TreeViewNode_IsExpanded;
+                xamlMember.Getter = get_16_TreeViewNode_IsExpanded;
+                xamlMember.Setter = set_16_TreeViewNode_IsExpanded;
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Parent":
                 userType = (global::KJ.App.KJ_App_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::KJ.App.KJ_App_XamlTypeInfo.XamlMember(this, "Parent", "Microsoft.UI.Xaml.Controls.TreeViewNode");
-                xamlMember.Getter = get_13_TreeViewNode_Parent;
+                xamlMember.Getter = get_17_TreeViewNode_Parent;
                 xamlMember.SetIsReadOnly();
                 break;
             }
