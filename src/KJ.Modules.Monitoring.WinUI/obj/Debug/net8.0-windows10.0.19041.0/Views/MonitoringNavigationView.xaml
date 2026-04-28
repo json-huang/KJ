@@ -21,7 +21,7 @@
                 Foreground="{StaticResource KjTextMutedBrush}"
                 Text="概览" />
 
-            <ToggleButton x:ConnectionId='5' x:Name="DashboardBtn" Tag="Dashboard"                                                                                             Style="{StaticResource KjNavToggle}">
+            <ToggleButton x:ConnectionId='8' x:Name="DashboardBtn" Tag="Dashboard"                                                                                             Style="{StaticResource KjNavToggle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3" />
@@ -42,7 +42,7 @@
                 Foreground="{StaticResource KjTextMutedBrush}"
                 Text="设备" />
 
-            <ToggleButton x:ConnectionId='3' x:Name="DeviceListBtn" Tag="DeviceList"                                                                                             Style="{StaticResource KjNavToggle}">
+            <ToggleButton x:ConnectionId='6' x:Name="DeviceListBtn" Tag="DeviceList"                                                                                             Style="{StaticResource KjNavToggle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3" />
@@ -54,7 +54,7 @@
                 </Grid>
             </ToggleButton>
 
-            <ToggleButton x:ConnectionId='4' x:Name="TagMonitorBtn" Tag="TagMonitor"                                                                                             Style="{StaticResource KjNavToggle}">
+            <ToggleButton x:ConnectionId='7' x:Name="TagMonitorBtn" Tag="TagMonitor"                                                                                             Style="{StaticResource KjNavToggle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3" />
@@ -86,7 +86,7 @@
                 Foreground="{StaticResource KjTextMutedBrush}"
                 Text="分析" />
 
-            <ToggleButton x:ConnectionId='2' x:Name="TrendBtn" Tag="TrendChart"                                                                                             Style="{StaticResource KjNavToggle}">
+            <ToggleButton x:ConnectionId='5' x:Name="TrendBtn" Tag="TrendChart"                                                                                             Style="{StaticResource KjNavToggle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3" />
@@ -95,6 +95,51 @@
                     </Grid.ColumnDefinitions>
                     <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=TrendBtn, Converter={StaticResource BoolToVisibility}}" />
                     <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="趋势图" />
+                </Grid>
+            </ToggleButton>
+        </StackPanel>
+
+        <!-- 流程 -->
+        <StackPanel Spacing="6">
+            <TextBlock
+                FontSize="12"
+                Opacity="0.75"
+                Foreground="{StaticResource KjTextMutedBrush}"
+                Text="流程" />
+
+            <ToggleButton x:ConnectionId='2' x:Name="WorkflowListBtn" Tag="WorkflowList"                                                                                             Style="{StaticResource KjNavToggle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=WorkflowListBtn, Converter={StaticResource BoolToVisibility}}" />
+                    <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="流程列表" />
+                </Grid>
+            </ToggleButton>
+
+            <ToggleButton x:ConnectionId='3' x:Name="WorkflowEditorBtn" Tag="WorkflowEditor"                                                                                             Style="{StaticResource KjNavToggle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=WorkflowEditorBtn, Converter={StaticResource BoolToVisibility}}" />
+                    <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="流程编辑" />
+                </Grid>
+            </ToggleButton>
+
+            <ToggleButton x:ConnectionId='4' x:Name="WorkflowRunsBtn" Tag="WorkflowRuns"                                                                                             Style="{StaticResource KjNavToggle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=WorkflowRunsBtn, Converter={StaticResource BoolToVisibility}}" />
+                    <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="运行记录" />
                 </Grid>
             </ToggleButton>
         </StackPanel>

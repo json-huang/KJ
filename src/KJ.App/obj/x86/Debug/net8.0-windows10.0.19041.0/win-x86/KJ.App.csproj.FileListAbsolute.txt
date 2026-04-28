@@ -738,3 +738,6 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\x86\Debug\net8.0-windows10.0.1904
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\x86\Debug\net8.0-windows10.0.19041.0\win-x86\KJ.Infrastructure.Migrations.SqlServer.pdb
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\x86\Debug\net8.0-windows10.0.19041.0\win-x86\Microsoft.UI.pri
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\x86\Debug\net8.0-windows10.0.19041.0\win-x86\Microsoft.UI.Xaml.Controls.pri
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\x86\Debug\net8.0-windows10.0.19041.0\win-x86\KJ.Modules.Monitoring\Views\WorkflowEditorPage.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\x86\Debug\net8.0-windows10.0.19041.0\win-x86\KJ.Modules.Monitoring\Views\WorkflowListPage.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\x86\Debug\net8.0-windows10.0.19041.0\win-x86\KJ.Modules.Monitoring\Views\WorkflowRunsPage.xaml

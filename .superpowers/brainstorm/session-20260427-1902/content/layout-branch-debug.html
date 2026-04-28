@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KJ 流程编辑：分支/调试方案</title>
+  <style>
+    :root{
+      --bg:#0b1020;--panel:#111a2e;--panel2:#0f172a;--text:#e5e7eb;--muted:#9ca3af;
+      --accent:#f59e0b;--stroke:#23304a;
+    }
+    html,body{height:100%;}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,"Microsoft YaHei",sans-serif;background:radial-gradient(1200px 800px at 10% 0%, #111a2e 0%, var(--bg) 55%) fixed;color:var(--text);}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px 20px 40px;}
+    h1{margin:0 0 6px;font-size:22px;font-weight:700;}
+    .sub{margin:0 0 18px;color:var(--muted);line-height:1.5}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+    .card{border:1px solid var(--stroke);background:linear-gradient(180deg,var(--panel) 0%, var(--panel2) 100%);border-radius:14px;padding:14px 14px 12px;cursor:pointer;position:relative;overflow:hidden}
+    .card:hover{border-color:#2f4062}
+    .badge{position:absolute;top:12px;right:12px;border:1px solid #2f4062;color:var(--muted);padding:4px 8px;border-radius:999px;font-size:12px}
+    .pick{position:absolute;inset:-2px;border:2px solid transparent;border-radius:16px;pointer-events:none}
+    .card.selected .pick{border-color:var(--accent);box-shadow:0 0 0 4px rgba(245,158,11,.12)}
+    h2{margin:0 0 6px;font-size:16px}
+    ul{margin:8px 0 0 18px;color:var(--muted);line-height:1.55}
+    .mock{margin-top:10px;border:1px dashed #2f4062;border-radius:12px;padding:10px;color:#cbd5e1;background:rgba(0,0,0,.18)}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+    .footer{margin-top:16px;color:var(--muted);font-size:13px}
+    .hint{color:#cbd5e1}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>分支/合流 + 运行调试（C + D）你想先做哪种？</h1>
+    <p class="sub">点选一个方案后，在聊天里回复：<span class="mono hint">选 A</span> / <span class="mono hint">选 B</span> / <span class="mono hint">选 C</span> / <span class="mono hint">选 D</span>。我会按你选的落到代码里。</p>
+
+    <div class="grid" id="grid">
+      <div class="card" data-choice="A">
+        <div class="badge">推荐</div>
+        <div class="pick"></div>
+        <h2>A. 最小可用：If/Else + 合流 + 单步调试</h2>
+        <ul>
+          <li>节点：Start / Action(ADS读写) / If / Merge / End</li>
+          <li>连线：True/False 两条边；Merge 合并回主线</li>
+          <li>调试：运行/暂停/单步，当前节点高亮；右侧显示最近一次执行结果</li>
+        </ul>
+        <div class="mock mono">Start → If (cond) ─True→ ADS.Read → Merge → ADS.Write → End
+                └False→ ADS.Write ──────────────┘</div>
+      </div>
+
+      <div class="card" data-choice="B">
+        <div class="badge">更灵活</div>
+        <div class="pick"></div>
+        <h2>B. 图结构：多出口节点 + 多合流节点</h2>
+        <ul>
+          <li>任意节点可定义多个“出口”(Ports)，每条边带标签</li>
+          <li>合流节点支持等待多个输入（可选 AND/OR）</li>
+          <li>调试：每条边可显示“走过次数/最后一次条件值”</li>
+        </ul>
+        <div class="mock mono">Node has ports: out1/out2/out3; edges labeled “ok/err/timeout”</div>
+      </div>
+
+      <div class="card" data-choice="C">
+        <div class="badge">偏工程化</div>
+        <div class="pick"></div>
+        <h2>C. DSL/规则优先：条件写成表达式</h2>
+        <ul>
+          <li>If 条件写成表达式（如 Tag/变量/常量）</li>
+          <li>运行时可查看表达式求值过程（trace）</li>
+          <li>适合后续接入脚本（Lua/JS）</li>
+        </ul>
+        <div class="mock mono">If: (Tag("MAIN.nSpeed") &gt; 1000) &amp;&amp; (Var("retry") &lt; 3)</div>
+      </div>
+
+      <div class="card" data-choice="D">
+        <div class="badge">先把调试做强</div>
+        <div class="pick"></div>
+        <h2>D. 调试先行：运行记录 + 回放</h2>
+        <ul>
+          <li>先把执行引擎/运行日志/回放做完整</li>
+          <li>分支先用“单 NextStepId”占位，后续再扩展 If/Else</li>
+          <li>适合你马上要接真 PLC/现场调试</li>
+        </ul>
+        <div class="mock mono">Run #42: stepId=... duration=12ms result=OK value=1234</div>
+      </div>
+    </div>
+
+    <p class="footer">提示：这个页面只是帮我们快速对齐方向。你选定后，我会写一份简短设计（模型/存储/运行态/UI交互）给你确认，再开始写代码。</p>
+  </div>
+  <script>
+    const grid = document.getElementById('grid');
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.card');
+      if (!card) return;
+      [...grid.querySelectorAll('.card')].forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      console.log('choice', card.dataset.choice);
+    });
+  </script>
+</body>
+</html>

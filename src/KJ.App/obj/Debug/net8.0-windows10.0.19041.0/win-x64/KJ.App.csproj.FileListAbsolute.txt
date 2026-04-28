@@ -590,3 +590,6 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Debug\net8.0-windows10.0.19041.0\
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Debug\net8.0-windows10.0.19041.0\win-x64\Pomelo.EntityFrameworkCore.MySql.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Debug\net8.0-windows10.0.19041.0\win-x64\KJ.Infrastructure.Migrations.SqlServer.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Debug\net8.0-windows10.0.19041.0\win-x64\KJ.Infrastructure.Migrations.SqlServer.pdb
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Debug\net8.0-windows10.0.19041.0\win-x64\KJ.Modules.Monitoring\Views\WorkflowEditorPage.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Debug\net8.0-windows10.0.19041.0\win-x64\KJ.Modules.Monitoring\Views\WorkflowListPage.xaml
+D:\Users\DBA126\source\repos\KJ\src\KJ.App\bin\Debug\net8.0-windows10.0.19041.0\win-x64\KJ.Modules.Monitoring\Views\WorkflowRunsPage.xaml

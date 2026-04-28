@@ -174,7 +174,7 @@ namespace KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo
         
         private void InitTypeTables()
         {
-            _typeNameTable = new string[22];
+            _typeNameTable = new string[25];
             _typeNameTable[0] = "KJ.Modules.Monitoring.Views.DashboardView";
             _typeNameTable[1] = "Microsoft.UI.Xaml.Controls.Page";
             _typeNameTable[2] = "Microsoft.UI.Xaml.Controls.UserControl";
@@ -194,11 +194,14 @@ namespace KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo
             _typeNameTable[16] = "KJ.Modules.Monitoring.Views.MonitoringNavigationView";
             _typeNameTable[17] = "KJ.Modules.Monitoring.Views.TagMonitorView";
             _typeNameTable[18] = "KJ.Modules.Monitoring.Views.TrendChartView";
-            _typeNameTable[19] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
-            _typeNameTable[20] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
-            _typeNameTable[21] = "Int32";
+            _typeNameTable[19] = "KJ.Modules.Monitoring.Views.WorkflowEditorPage";
+            _typeNameTable[20] = "KJ.Modules.Monitoring.Views.WorkflowListPage";
+            _typeNameTable[21] = "KJ.Modules.Monitoring.Views.WorkflowRunsPage";
+            _typeNameTable[22] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
+            _typeNameTable[23] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
+            _typeNameTable[24] = "Int32";
 
-            _typeTable = new global::System.Type[22];
+            _typeTable = new global::System.Type[25];
             _typeTable[0] = typeof(global::KJ.Modules.Monitoring.Views.DashboardView);
             _typeTable[1] = typeof(global::Microsoft.UI.Xaml.Controls.Page);
             _typeTable[2] = typeof(global::Microsoft.UI.Xaml.Controls.UserControl);
@@ -218,9 +221,12 @@ namespace KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo
             _typeTable[16] = typeof(global::KJ.Modules.Monitoring.Views.MonitoringNavigationView);
             _typeTable[17] = typeof(global::KJ.Modules.Monitoring.Views.TagMonitorView);
             _typeTable[18] = typeof(global::KJ.Modules.Monitoring.Views.TrendChartView);
-            _typeTable[19] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
-            _typeTable[20] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
-            _typeTable[21] = typeof(global::System.Int32);
+            _typeTable[19] = typeof(global::KJ.Modules.Monitoring.Views.WorkflowEditorPage);
+            _typeTable[20] = typeof(global::KJ.Modules.Monitoring.Views.WorkflowListPage);
+            _typeTable[21] = typeof(global::KJ.Modules.Monitoring.Views.WorkflowRunsPage);
+            _typeTable[22] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
+            _typeTable[23] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
+            _typeTable[24] = typeof(global::System.Int32);
         }
 
         private int LookupTypeIndexByName(string typeName)
@@ -263,7 +269,10 @@ namespace KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo
         private object Activate_15_MonitoringHomePage() { return new global::KJ.Modules.Monitoring.Views.MonitoringHomePage(); }
         private object Activate_17_TagMonitorView() { return new global::KJ.Modules.Monitoring.Views.TagMonitorView(); }
         private object Activate_18_TrendChartView() { return new global::KJ.Modules.Monitoring.Views.TrendChartView(); }
-        private object Activate_19_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
+        private object Activate_19_WorkflowEditorPage() { return new global::KJ.Modules.Monitoring.Views.WorkflowEditorPage(); }
+        private object Activate_20_WorkflowListPage() { return new global::KJ.Modules.Monitoring.Views.WorkflowListPage(); }
+        private object Activate_21_WorkflowRunsPage() { return new global::KJ.Modules.Monitoring.Views.WorkflowRunsPage(); }
+        private object Activate_22_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
         private void StaticInitializer_0_DashboardView() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.Modules.Monitoring.Views.DashboardView).TypeHandle);
         private void StaticInitializer_3_BoolToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.Modules.Monitoring.Converters.BoolToVisibilityConverter).TypeHandle);
         private void StaticInitializer_5_StringNotEmptyToVisibilityConverter() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.Modules.Monitoring.Converters.StringNotEmptyToVisibilityConverter).TypeHandle);
@@ -276,9 +285,12 @@ namespace KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo
         private void StaticInitializer_16_MonitoringNavigationView() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.Modules.Monitoring.Views.MonitoringNavigationView).TypeHandle);
         private void StaticInitializer_17_TagMonitorView() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.Modules.Monitoring.Views.TagMonitorView).TypeHandle);
         private void StaticInitializer_18_TrendChartView() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.Modules.Monitoring.Views.TrendChartView).TypeHandle);
-        private void StaticInitializer_19_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
-        private void StaticInitializer_20_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
-        private void VectorAdd_20_IList(object instance, object item)
+        private void StaticInitializer_19_WorkflowEditorPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.Modules.Monitoring.Views.WorkflowEditorPage).TypeHandle);
+        private void StaticInitializer_20_WorkflowListPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.Modules.Monitoring.Views.WorkflowListPage).TypeHandle);
+        private void StaticInitializer_21_WorkflowRunsPage() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::KJ.Modules.Monitoring.Views.WorkflowRunsPage).TypeHandle);
+        private void StaticInitializer_22_TreeViewNode() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode).TypeHandle);
+        private void StaticInitializer_23_IList() => global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>).TypeHandle);
+        private void VectorAdd_23_IList(object instance, object item)
         {
             var collection = (global::System.Collections.Generic.ICollection<global::Microsoft.UI.Xaml.Controls.TreeViewNode>)instance;
             var newItem = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)item;
@@ -421,10 +433,34 @@ namespace KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 19:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
+            case 19:   //  KJ.Modules.Monitoring.Views.WorkflowEditorPage
+                userType = new global::KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Page"));
+                userType.Activator = Activate_19_WorkflowEditorPage;
+                userType.StaticInitializer = StaticInitializer_19_WorkflowEditorPage;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 20:   //  KJ.Modules.Monitoring.Views.WorkflowListPage
+                userType = new global::KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Page"));
+                userType.Activator = Activate_20_WorkflowListPage;
+                userType.StaticInitializer = StaticInitializer_20_WorkflowListPage;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 21:   //  KJ.Modules.Monitoring.Views.WorkflowRunsPage
+                userType = new global::KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Page"));
+                userType.Activator = Activate_21_WorkflowRunsPage;
+                userType.StaticInitializer = StaticInitializer_21_WorkflowRunsPage;
+                userType.SetIsLocalType();
+                xamlType = userType;
+                break;
+
+            case 22:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
                 userType = new global::KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
-                userType.Activator = Activate_19_TreeViewNode;
-                userType.StaticInitializer = StaticInitializer_19_TreeViewNode;
+                userType.Activator = Activate_22_TreeViewNode;
+                userType.StaticInitializer = StaticInitializer_22_TreeViewNode;
                 userType.AddMemberName("Children");
                 userType.AddMemberName("Content");
                 userType.AddMemberName("Depth");
@@ -436,15 +472,15 @@ namespace KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 20:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
+            case 23:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
                 userType = new global::KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo.XamlUserType(this, typeName, type, null);
-                userType.StaticInitializer = StaticInitializer_20_IList;
-                userType.CollectionAdd = VectorAdd_20_IList;
+                userType.StaticInitializer = StaticInitializer_23_IList;
+                userType.CollectionAdd = VectorAdd_23_IList;
                 userType.SetIsReturnTypeStub();
                 xamlType = userType;
                 break;
 
-            case 21:   //  Int32
+            case 24:   //  Int32
                 xamlType = new global::KJ.Modules.Monitoring.KJ_Modules_Monitoring_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
             }

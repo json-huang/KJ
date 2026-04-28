@@ -57,7 +57,7 @@ namespace KJ.Modules.Monitoring.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/KJ.Modules.Monitoring;component/views/monitoringview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/KJ.Modules.Monitoring;V1.0.0.0;component/views/monitoringview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\MonitoringView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

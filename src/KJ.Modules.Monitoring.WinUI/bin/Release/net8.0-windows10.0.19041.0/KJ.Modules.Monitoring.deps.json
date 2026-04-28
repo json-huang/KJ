@@ -11,7 +11,7 @@
           "KJ.Infrastructure": "1.0.0",
           "KJ.Modules.Core": "1.0.0",
           "Microsoft.Web.WebView2": "1.0.3912.50",
-          "Microsoft.WindowsAppSDK": "1.8.260416003",
+          "Microsoft.WindowsAppSDK": "1.7.260224002",
           "Prism.Uno.WinUI": "9.0.537",
           "Microsoft.Web.WebView2.Core.Projection": "1.0.3912.50",
           "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.19041.57"
@@ -67,9 +67,9 @@
           }
         }
       },
-      "MassTransit/9.1.0": {
+      "MassTransit/8.5.8": {
         "dependencies": {
-          "MassTransit.Abstractions": "9.1.0",
+          "MassTransit.Abstractions": "8.5.8",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.2",
           "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
@@ -78,16 +78,16 @@
         },
         "runtime": {
           "lib/net8.0/MassTransit.dll": {
-            "assemblyVersion": "9.1.0.0",
-            "fileVersion": "9.1.0.0"
+            "assemblyVersion": "8.5.8.0",
+            "fileVersion": "8.5.8.0"
           }
         }
       },
-      "MassTransit.Abstractions/9.1.0": {
+      "MassTransit.Abstractions/8.5.8": {
         "runtime": {
           "lib/net8.0/MassTransit.Abstractions.dll": {
-            "assemblyVersion": "9.1.0.0",
-            "fileVersion": "9.1.0.0"
+            "assemblyVersion": "8.5.8.0",
+            "fileVersion": "8.5.8.0"
           }
         }
       },
@@ -135,7 +135,7 @@
           "Azure.Identity": "1.11.4",
           "Microsoft.Data.SqlClient.SNI.runtime": "5.1.2",
           "Microsoft.Identity.Client": "4.61.3",
-          "Microsoft.IdentityModel.JsonWebTokens": "6.35.0",
+          "Microsoft.IdentityModel.JsonWebTokens": "8.12.0",
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.35.0",
           "Microsoft.SqlServer.Server": "1.0.0",
           "System.Configuration.ConfigurationManager": "6.0.1",
@@ -666,7 +666,7 @@
       },
       "Microsoft.Identity.Client/4.61.3": {
         "dependencies": {
-          "Microsoft.IdentityModel.Abstractions": "6.35.0"
+          "Microsoft.IdentityModel.Abstractions": "8.12.0"
         },
         "runtime": {
           "lib/net6.0/Microsoft.Identity.Client.dll": {
@@ -687,40 +687,40 @@
           }
         }
       },
-      "Microsoft.IdentityModel.Abstractions/6.35.0": {
+      "Microsoft.IdentityModel.Abstractions/8.12.0": {
         "runtime": {
-          "lib/net6.0/Microsoft.IdentityModel.Abstractions.dll": {
-            "assemblyVersion": "6.35.0.0",
-            "fileVersion": "6.35.0.41201"
+          "lib/net8.0/Microsoft.IdentityModel.Abstractions.dll": {
+            "assemblyVersion": "8.12.0.0",
+            "fileVersion": "8.12.0.60603"
           }
         }
       },
-      "Microsoft.IdentityModel.JsonWebTokens/6.35.0": {
+      "Microsoft.IdentityModel.JsonWebTokens/8.12.0": {
         "dependencies": {
-          "Microsoft.IdentityModel.Tokens": "6.35.0"
+          "Microsoft.IdentityModel.Tokens": "8.12.0"
         },
         "runtime": {
-          "lib/net6.0/Microsoft.IdentityModel.JsonWebTokens.dll": {
-            "assemblyVersion": "6.35.0.0",
-            "fileVersion": "6.35.0.41201"
+          "lib/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll": {
+            "assemblyVersion": "8.12.0.0",
+            "fileVersion": "8.12.0.60603"
           }
         }
       },
-      "Microsoft.IdentityModel.Logging/6.35.0": {
+      "Microsoft.IdentityModel.Logging/8.12.0": {
         "dependencies": {
-          "Microsoft.IdentityModel.Abstractions": "6.35.0"
+          "Microsoft.IdentityModel.Abstractions": "8.12.0"
         },
         "runtime": {
-          "lib/net6.0/Microsoft.IdentityModel.Logging.dll": {
-            "assemblyVersion": "6.35.0.0",
-            "fileVersion": "6.35.0.41201"
+          "lib/net8.0/Microsoft.IdentityModel.Logging.dll": {
+            "assemblyVersion": "8.12.0.0",
+            "fileVersion": "8.12.0.60603"
           }
         }
       },
       "Microsoft.IdentityModel.Protocols/6.35.0": {
         "dependencies": {
-          "Microsoft.IdentityModel.Logging": "6.35.0",
-          "Microsoft.IdentityModel.Tokens": "6.35.0"
+          "Microsoft.IdentityModel.Logging": "8.12.0",
+          "Microsoft.IdentityModel.Tokens": "8.12.0"
         },
         "runtime": {
           "lib/net6.0/Microsoft.IdentityModel.Protocols.dll": {
@@ -732,7 +732,7 @@
       "Microsoft.IdentityModel.Protocols.OpenIdConnect/6.35.0": {
         "dependencies": {
           "Microsoft.IdentityModel.Protocols": "6.35.0",
-          "System.IdentityModel.Tokens.Jwt": "6.35.0"
+          "System.IdentityModel.Tokens.Jwt": "8.12.0"
         },
         "runtime": {
           "lib/net6.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll": {
@@ -741,14 +741,15 @@
           }
         }
       },
-      "Microsoft.IdentityModel.Tokens/6.35.0": {
+      "Microsoft.IdentityModel.Tokens/8.12.0": {
         "dependencies": {
-          "Microsoft.IdentityModel.Logging": "6.35.0"
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.2",
+          "Microsoft.IdentityModel.Logging": "8.12.0"
         },
         "runtime": {
-          "lib/net6.0/Microsoft.IdentityModel.Tokens.dll": {
-            "assemblyVersion": "6.35.0.0",
-            "fileVersion": "6.35.0.41201"
+          "lib/net8.0/Microsoft.IdentityModel.Tokens.dll": {
+            "assemblyVersion": "8.12.0.0",
+            "fileVersion": "8.12.0.60603"
           }
         }
       },
@@ -795,220 +796,158 @@
           }
         }
       },
-      "Microsoft.WindowsAppSDK/1.8.260416003": {
+      "Microsoft.WindowsAppSDK/1.7.260224002": {
         "dependencies": {
-          "Microsoft.WindowsAppSDK.AI": "1.8.70",
-          "Microsoft.WindowsAppSDK.Foundation": "1.8.260415000",
-          "Microsoft.WindowsAppSDK.InteractiveExperiences": "1.8.260415001",
-          "Microsoft.WindowsAppSDK.ML": "1.8.2192",
-          "Microsoft.WindowsAppSDK.Widgets": "1.8.251231004",
-          "Microsoft.WindowsAppSDK.WinUI": "1.8.260415005"
-        }
-      },
-      "Microsoft.WindowsAppSDK.AI/1.8.70": {
-        "dependencies": {
-          "Microsoft.WindowsAppSDK.Foundation": "1.8.260415000"
+          "Microsoft.Web.WebView2": "1.0.3912.50"
         },
         "runtime": {
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Graphics.Imaging.Projection.dll": {
-            "assemblyVersion": "1.8.69.10005",
-            "fileVersion": "1.8.69.10005"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Graphics.Imaging.Projection.dll": {
+            "assemblyVersion": "1.7.1501.35359",
+            "fileVersion": "1.7.1501.35359"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.AI.ContentSafety.Projection.dll": {
-            "assemblyVersion": "1.8.69.10005",
-            "fileVersion": "1.8.69.10005"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.InteractiveExperiences.Projection.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.27107.1034"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.AI.Foundation.Projection.dll": {
-            "assemblyVersion": "1.8.69.10005",
-            "fileVersion": "1.8.69.10005"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Security.Authentication.OAuth.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.AI.Imaging.Projection.dll": {
-            "assemblyVersion": "1.8.69.10005",
-            "fileVersion": "1.8.69.10005"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.WinUI.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.0.2602"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.AI.Projection.dll": {
-            "assemblyVersion": "1.8.69.10005",
-            "fileVersion": "1.8.69.10005"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.ContentSafety.Projection.dll": {
+            "assemblyVersion": "1.7.1501.35359",
+            "fileVersion": "1.7.1501.35359"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.AI.Text.Projection.dll": {
-            "assemblyVersion": "1.8.69.10005",
-            "fileVersion": "1.8.69.10005"
-          }
-        }
-      },
-      "Microsoft.WindowsAppSDK.Foundation/1.8.260415000": {
-        "dependencies": {
-          "Microsoft.WindowsAppSDK.InteractiveExperiences": "1.8.260415001"
-        },
-        "runtime": {
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Security.Authentication.OAuth.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.Imaging.Projection.dll": {
+            "assemblyVersion": "1.7.1501.35359",
+            "fileVersion": "1.7.1501.35359"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.AppLifecycle.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.Projection.dll": {
+            "assemblyVersion": "1.7.1501.35359",
+            "fileVersion": "1.7.1501.35359"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.AppNotifications.Builder.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AI.Text.Projection.dll": {
+            "assemblyVersion": "1.7.1501.35359",
+            "fileVersion": "1.7.1501.35359"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.AppNotifications.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AppLifecycle.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.ApplicationModel.Background.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AppNotifications.Builder.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.ApplicationModel.DynamicDependency.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.AppNotifications.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.ApplicationModel.Resources.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.Background.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.ApplicationModel.WindowsAppRuntime.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.DynamicDependency.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.BadgeNotifications.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.Resources.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.Foundation.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.ApplicationModel.WindowsAppRuntime.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.Management.Deployment.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.BadgeNotifications.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.Media.Capture.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Management.Deployment.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.PushNotifications.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Media.Capture.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.Security.AccessControl.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.PushNotifications.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.Storage.Pickers.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Security.AccessControl.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.Storage.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Storage.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.System.Power.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.System.Power.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.System.Projection.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.System.Projection.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           },
-          "lib/net6.0-windows10.0.17763.0/Microsoft.WindowsAppRuntime.Bootstrap.Net.dll": {
-            "assemblyVersion": "1.8.0.0",
-            "fileVersion": "1.8.0.0"
+          "lib/net6.0-windows10.0.18362.0/Microsoft.Windows.Widgets.Projection.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          },
+          "lib/net6.0-windows10.0.18362.0/Microsoft.WindowsAppRuntime.Bootstrap.Net.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "1.7.0.0"
           }
         },
         "runtimeTargets": {
           "runtimes/win-arm64/native/Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.dll": {
             "rid": "win-arm64",
             "assetType": "native",
-            "fileVersion": "1.8.0.0"
+            "fileVersion": "1.7.0.0"
           },
           "runtimes/win-arm64/native/Microsoft.WindowsAppRuntime.Bootstrap.dll": {
             "rid": "win-arm64",
             "assetType": "native",
-            "fileVersion": "1.8.0.0"
+            "fileVersion": "1.7.0.0"
           },
           "runtimes/win-arm64ec/native/Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.dll": {
             "rid": "win-arm64ec",
             "assetType": "native",
-            "fileVersion": "1.8.0.0"
+            "fileVersion": "1.7.0.0"
           },
           "runtimes/win-arm64ec/native/Microsoft.WindowsAppRuntime.Bootstrap.dll": {
             "rid": "win-arm64ec",
             "assetType": "native",
-            "fileVersion": "1.8.0.0"
+            "fileVersion": "1.7.0.0"
           },
           "runtimes/win-x64/native/Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "1.8.0.0"
+            "fileVersion": "1.7.0.0"
           },
           "runtimes/win-x64/native/Microsoft.WindowsAppRuntime.Bootstrap.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "1.8.0.0"
+            "fileVersion": "1.7.0.0"
           },
           "runtimes/win-x86/native/Microsoft.Windows.ApplicationModel.Background.UniversalBGTask.dll": {
             "rid": "win-x86",
             "assetType": "native",
-            "fileVersion": "1.8.0.0"
+            "fileVersion": "1.7.0.0"
           },
           "runtimes/win-x86/native/Microsoft.WindowsAppRuntime.Bootstrap.dll": {
             "rid": "win-x86",
             "assetType": "native",
-            "fileVersion": "1.8.0.0"
-          }
-        }
-      },
-      "Microsoft.WindowsAppSDK.InteractiveExperiences/1.8.260415001": {
-        "runtime": {
-          "lib/net6.0-windows10.0.18362.0/Microsoft.InteractiveExperiences.Projection.dll": {
-            "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.27108.1043"
-          }
-        }
-      },
-      "Microsoft.WindowsAppSDK.ML/1.8.2192": {
-        "dependencies": {
-          "Microsoft.WindowsAppSDK.Foundation": "1.8.260415000",
-          "System.Numerics.Tensors": "9.0.0"
-        },
-        "runtime": {
-          "lib/net8.0-windows10.0.17763.0/Microsoft.ML.OnnxRuntime.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          },
-          "lib/net8.0-windows10.0.17763.0/Microsoft.Windows.AI.MachineLearning.Projection.dll": {
-            "assemblyVersion": "1.8.2192.29894",
-            "fileVersion": "1.8.2192.29894"
-          }
-        }
-      },
-      "Microsoft.WindowsAppSDK.Widgets/1.8.251231004": {
-        "runtime": {
-          "lib/net6.0-windows10.0.17763.0/Microsoft.Windows.Widgets.Projection.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "Microsoft.WindowsAppSDK.WinUI/1.8.260415005": {
-        "dependencies": {
-          "Microsoft.Web.WebView2": "1.0.3912.50",
-          "Microsoft.WindowsAppSDK.Foundation": "1.8.260415000",
-          "Microsoft.WindowsAppSDK.InteractiveExperiences": "1.8.260415001"
-        },
-        "runtime": {
-          "lib/net6.0-windows10.0.17763.0/Microsoft.WinUI.dll": {
-            "assemblyVersion": "3.0.0.0",
-            "fileVersion": "3.0.0.2604"
+            "fileVersion": "1.7.0.0"
           }
         }
       },
       "Microsoft.Xaml.Behaviors.WinUI.Managed/2.0.9": {
         "dependencies": {
-          "Microsoft.WindowsAppSDK": "1.8.260416003"
+          "Microsoft.WindowsAppSDK": "1.7.260224002"
         },
         "runtime": {
           "lib/net5.0-windows10.0.17763.0/Microsoft.Xaml.Interactions.dll": {
@@ -1018,6 +957,29 @@
           "lib/net5.0-windows10.0.17763.0/Microsoft.Xaml.Interactivity.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "MySqlConnector/2.3.5": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.2"
+        },
+        "runtime": {
+          "lib/net8.0/MySqlConnector.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.3.5.0"
+          }
+        }
+      },
+      "Pomelo.EntityFrameworkCore.MySql/8.0.3": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "8.0.26",
+          "MySqlConnector": "2.3.5"
+        },
+        "runtime": {
+          "lib/net8.0/Pomelo.EntityFrameworkCore.MySql.dll": {
+            "assemblyVersion": "8.0.3.0",
+            "fileVersion": "8.0.3.0"
           }
         }
       },
@@ -1054,7 +1016,7 @@
       },
       "Prism.Uno.WinUI/9.0.537": {
         "dependencies": {
-          "Microsoft.WindowsAppSDK": "1.8.260416003",
+          "Microsoft.WindowsAppSDK": "1.7.260224002",
           "Microsoft.Xaml.Behaviors.WinUI.Managed": "2.0.9",
           "Prism.Core": "9.0.537",
           "Uno.Extensions.Hosting.WinUI": "4.2.2",
@@ -1168,15 +1130,15 @@
           }
         }
       },
-      "System.IdentityModel.Tokens.Jwt/6.35.0": {
+      "System.IdentityModel.Tokens.Jwt/8.12.0": {
         "dependencies": {
-          "Microsoft.IdentityModel.JsonWebTokens": "6.35.0",
-          "Microsoft.IdentityModel.Tokens": "6.35.0"
+          "Microsoft.IdentityModel.JsonWebTokens": "8.12.0",
+          "Microsoft.IdentityModel.Tokens": "8.12.0"
         },
         "runtime": {
-          "lib/net6.0/System.IdentityModel.Tokens.Jwt.dll": {
-            "assemblyVersion": "6.35.0.0",
-            "fileVersion": "6.35.0.41201"
+          "lib/net8.0/System.IdentityModel.Tokens.Jwt.dll": {
+            "assemblyVersion": "8.12.0.0",
+            "fileVersion": "8.12.0.60603"
           }
         }
       },
@@ -1185,14 +1147,6 @@
           "lib/netstandard2.0/System.Memory.Data.dll": {
             "assemblyVersion": "1.0.2.0",
             "fileVersion": "1.0.221.20802"
-          }
-        }
-      },
-      "System.Numerics.Tensors/9.0.0": {
-        "runtime": {
-          "lib/net8.0/System.Numerics.Tensors.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.52809"
           }
         }
       },
@@ -1401,7 +1355,7 @@
       },
       "Uno.Extensions.Core.WinUI/4.2.2": {
         "dependencies": {
-          "Microsoft.WindowsAppSDK": "1.8.260416003",
+          "Microsoft.WindowsAppSDK": "1.7.260224002",
           "Uno.Extensions.Core": "4.2.2",
           "Uno.WinUI": "5.3.90"
         },
@@ -1428,7 +1382,7 @@
       "Uno.Extensions.Hosting.WinUI/4.2.2": {
         "dependencies": {
           "Microsoft.Extensions.Hosting": "8.0.0",
-          "Microsoft.WindowsAppSDK": "1.8.260416003",
+          "Microsoft.WindowsAppSDK": "1.7.260224002",
           "Uno.Extensions.Core": "4.2.2",
           "Uno.Extensions.Core.WinUI": "4.2.2",
           "Uno.Extensions.Hosting": "4.2.2",
@@ -1473,7 +1427,7 @@
       },
       "Uno.Extensions.Storage.WinUI/4.2.2": {
         "dependencies": {
-          "Microsoft.WindowsAppSDK": "1.8.260416003",
+          "Microsoft.WindowsAppSDK": "1.7.260224002",
           "Uno.Core": "4.1.1",
           "Uno.Extensions.Configuration": "4.2.2",
           "Uno.Extensions.Core": "4.2.2",
@@ -1490,7 +1444,7 @@
       },
       "Uno.WinUI/5.3.90": {
         "dependencies": {
-          "Microsoft.WindowsAppSDK": "1.8.260416003"
+          "Microsoft.WindowsAppSDK": "1.7.260224002"
         },
         "runtime": {
           "lib/net8.0-windows10.0.19041.0/Uno.UI.Toolkit.dll": {
@@ -1510,13 +1464,16 @@
       "KJ.Infrastructure/1.0.0": {
         "dependencies": {
           "KJ.Domain": "1.0.0",
-          "MassTransit": "9.1.0",
+          "MassTransit": "8.5.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
           "Microsoft.Extensions.Configuration.Binder": "8.0.1",
+          "Microsoft.IdentityModel.Tokens": "8.12.0",
+          "Pomelo.EntityFrameworkCore.MySql": "8.0.3",
           "Serilog": "4.3.1",
           "Serilog.Extensions.Logging": "8.0.0",
-          "Serilog.Sinks.File": "7.0.0"
+          "Serilog.Sinks.File": "7.0.0",
+          "System.IdentityModel.Tokens.Jwt": "8.12.0"
         },
         "runtime": {
           "KJ.Infrastructure.dll": {
@@ -1578,19 +1535,19 @@
       "path": "commonservicelocator/2.0.5",
       "hashPath": "commonservicelocator.2.0.5.nupkg.sha512"
     },
-    "MassTransit/9.1.0": {
+    "MassTransit/8.5.8": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-2hdJGw92qSFhvu+12qsX16NPDKbpAZMiOjsxxHFjwR3MjiacNmyOh2+nE5PK5rDky67OHHwbxLqt68qTaL3Plg==",
-      "path": "masstransit/9.1.0",
-      "hashPath": "masstransit.9.1.0.nupkg.sha512"
+      "sha512": "sha512-O5bx+rziwwjLnar/9R6HTSL3Q++SOX20sufGIuXCKh7aowQ+4XGbhpVdaSYuTV7H0ndIomK24d2/vX3rlsSHng==",
+      "path": "masstransit/8.5.8",
+      "hashPath": "masstransit.8.5.8.nupkg.sha512"
     },
-    "MassTransit.Abstractions/9.1.0": {
+    "MassTransit.Abstractions/8.5.8": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-yesigAI5/J+YhCvnxxvMjRpH3qcH776h1Zq2xPhAJJwwVT+FilcE66yox9gPk8gsck+cjmfWUlOwEMg363cmOQ==",
-      "path": "masstransit.abstractions/9.1.0",
-      "hashPath": "masstransit.abstractions.9.1.0.nupkg.sha512"
+      "sha512": "sha512-f1XJz88+JZNLl1iHWSGNoD91ownowoP4Vl+2DmVM7ljAxQebvolVKdlyY+iZBSdODCeyLGCcM9jrfZXWkDHtow==",
+      "path": "masstransit.abstractions/8.5.8",
+      "hashPath": "masstransit.abstractions.8.5.8.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Cryptography.Internal/8.0.26": {
       "type": "package",
@@ -1907,26 +1864,26 @@
       "path": "microsoft.identity.client.extensions.msal/4.61.3",
       "hashPath": "microsoft.identity.client.extensions.msal.4.61.3.nupkg.sha512"
     },
-    "Microsoft.IdentityModel.Abstractions/6.35.0": {
+    "Microsoft.IdentityModel.Abstractions/8.12.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-xuR8E4Rd96M41CnUSCiOJ2DBh+z+zQSmyrYHdYhD6K4fXBcQGVnRCFQ0efROUYpP+p0zC1BLKr0JRpVuujTZSg==",
-      "path": "microsoft.identitymodel.abstractions/6.35.0",
-      "hashPath": "microsoft.identitymodel.abstractions.6.35.0.nupkg.sha512"
+      "sha512": "sha512-V7fHMFpfzvx7twWMV3jrf3OFVmYn3QhUYtvfMRD9yUPs9gxnQSaRMZh5NzCsnW3ZZ80J09EE7yyjM71y9JC6hQ==",
+      "path": "microsoft.identitymodel.abstractions/8.12.0",
+      "hashPath": "microsoft.identitymodel.abstractions.8.12.0.nupkg.sha512"
     },
-    "Microsoft.IdentityModel.JsonWebTokens/6.35.0": {
+    "Microsoft.IdentityModel.JsonWebTokens/8.12.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-9wxai3hKgZUb4/NjdRKfQd0QJvtXKDlvmGMYACbEC8DFaicMFCFhQFZq9ZET1kJLwZahf2lfY5Gtcpsx8zYzbg==",
-      "path": "microsoft.identitymodel.jsonwebtokens/6.35.0",
-      "hashPath": "microsoft.identitymodel.jsonwebtokens.6.35.0.nupkg.sha512"
+      "sha512": "sha512-gOup2SmdwaXooLR0POKfrkyrw+R+G8nc8Nk80TL0196kFQK7Bg7Qr4x3jvOCm3TR8QLqU8cVpSVqBLtUaosPEg==",
+      "path": "microsoft.identitymodel.jsonwebtokens/8.12.0",
+      "hashPath": "microsoft.identitymodel.jsonwebtokens.8.12.0.nupkg.sha512"
     },
-    "Microsoft.IdentityModel.Logging/6.35.0": {
+    "Microsoft.IdentityModel.Logging/8.12.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-jePrSfGAmqT81JDCNSY+fxVWoGuJKt9e6eJ+vT7+quVS55nWl//jGjUQn4eFtVKt4rt5dXaleZdHRB9J9AJZ7Q==",
-      "path": "microsoft.identitymodel.logging/6.35.0",
-      "hashPath": "microsoft.identitymodel.logging.6.35.0.nupkg.sha512"
+      "sha512": "sha512-IakwNWUTy5RlcDcKwtL5TyfDLZmA8FFnSDhfr+wfGGPMON9GkpkUY8NakIJjdy6mv6C1lM/Jkn3IuaeS9MXesA==",
+      "path": "microsoft.identitymodel.logging/8.12.0",
+      "hashPath": "microsoft.identitymodel.logging.8.12.0.nupkg.sha512"
     },
     "Microsoft.IdentityModel.Protocols/6.35.0": {
       "type": "package",
@@ -1942,12 +1899,12 @@
       "path": "microsoft.identitymodel.protocols.openidconnect/6.35.0",
       "hashPath": "microsoft.identitymodel.protocols.openidconnect.6.35.0.nupkg.sha512"
     },
-    "Microsoft.IdentityModel.Tokens/6.35.0": {
+    "Microsoft.IdentityModel.Tokens/8.12.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-RN7lvp7s3Boucg1NaNAbqDbxtlLj5Qeb+4uSS1TeK5FSBVM40P4DKaTKChT43sHyKfh7V0zkrMph6DdHvyA4bg==",
-      "path": "microsoft.identitymodel.tokens/6.35.0",
-      "hashPath": "microsoft.identitymodel.tokens.6.35.0.nupkg.sha512"
+      "sha512": "sha512-WCU3wv5sioX5hhp3oHw8sCdygnfZJtRKJGCg+AckP6nbp0QGKK3VohTrxIF0dpuziLAPg57CPfS9X8UERroKxA==",
+      "path": "microsoft.identitymodel.tokens/8.12.0",
+      "hashPath": "microsoft.identitymodel.tokens.8.12.0.nupkg.sha512"
     },
     "Microsoft.SqlServer.Server/1.0.0": {
       "type": "package",
@@ -1970,54 +1927,12 @@
       "path": "microsoft.win32.systemevents/6.0.0",
       "hashPath": "microsoft.win32.systemevents.6.0.0.nupkg.sha512"
     },
-    "Microsoft.WindowsAppSDK/1.8.260416003": {
+    "Microsoft.WindowsAppSDK/1.7.260224002": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-AYhNBgKNGij8FgJs2JRwOPwkSaDBxdc449qadcWRloG1/UmN/V6ZF1XhxqUJm7biBhTL3tNfGZSkxoeKtHpPPA==",
-      "path": "microsoft.windowsappsdk/1.8.260416003",
-      "hashPath": "microsoft.windowsappsdk.1.8.260416003.nupkg.sha512"
-    },
-    "Microsoft.WindowsAppSDK.AI/1.8.70": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-mQoRRpYeeb57xPmShYOLkTIO7nfpxHFFJunH48QqpTjqcBnfNSmZRCt+9vN8RqghdA+NW81W5ERv9/cQU+VxdA==",
-      "path": "microsoft.windowsappsdk.ai/1.8.70",
-      "hashPath": "microsoft.windowsappsdk.ai.1.8.70.nupkg.sha512"
-    },
-    "Microsoft.WindowsAppSDK.Foundation/1.8.260415000": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-4bIloiECRf6qY0MeAmXXo+j8xv78Q7zsSIOIctX7dcbU5WPWQKIWA9xhRpy3cNBmoZ+o8XAR9GK2JMLxHtN4gg==",
-      "path": "microsoft.windowsappsdk.foundation/1.8.260415000",
-      "hashPath": "microsoft.windowsappsdk.foundation.1.8.260415000.nupkg.sha512"
-    },
-    "Microsoft.WindowsAppSDK.InteractiveExperiences/1.8.260415001": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-qedPRdo90uJPF8NzKvHw0RIxcVU7C2MkHiEfHer/tZjgw2F2umhEvQ/3b+cXlbbSGBqH3olkRmCJiSaRLhXyUA==",
-      "path": "microsoft.windowsappsdk.interactiveexperiences/1.8.260415001",
-      "hashPath": "microsoft.windowsappsdk.interactiveexperiences.1.8.260415001.nupkg.sha512"
-    },
-    "Microsoft.WindowsAppSDK.ML/1.8.2192": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-KA+iVs6LxpHO3u3q9OFfFscBNegh1db5aPkDfYlXqxq/nOClSrfVytPi6Q9aAv6f+eu2t5i+Do6rNjmijlrHnQ==",
-      "path": "microsoft.windowsappsdk.ml/1.8.2192",
-      "hashPath": "microsoft.windowsappsdk.ml.1.8.2192.nupkg.sha512"
-    },
-    "Microsoft.WindowsAppSDK.Widgets/1.8.251231004": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-bIWqQYR8DCoB1SoPOMil5AtgtkTn438wJTdpsHgyO/6o7Eh7PMP5BzrR0KbDsFqy+4LhPWQ4vtwko5k93fECcA==",
-      "path": "microsoft.windowsappsdk.widgets/1.8.251231004",
-      "hashPath": "microsoft.windowsappsdk.widgets.1.8.251231004.nupkg.sha512"
-    },
-    "Microsoft.WindowsAppSDK.WinUI/1.8.260415005": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Yz6ErxcJcAvNjpOZjDAoI7hfS7ZCCA/3DgNYPz+rRtM3C2GQOpYL5ZQwI3dv29hLvwGn6eip0nmv3KiOSG1nKw==",
-      "path": "microsoft.windowsappsdk.winui/1.8.260415005",
-      "hashPath": "microsoft.windowsappsdk.winui.1.8.260415005.nupkg.sha512"
+      "sha512": "sha512-0lLlJHbK/qFVnciJHr6xw3c/tQ6b6mtQYJs5Rvk5J5IhpxHzuWL+b63tvQxfSKDgLCPl0o2o8d2ynMoln2PDHw==",
+      "path": "microsoft.windowsappsdk/1.7.260224002",
+      "hashPath": "microsoft.windowsappsdk.1.7.260224002.nupkg.sha512"
     },
     "Microsoft.Xaml.Behaviors.WinUI.Managed/2.0.9": {
       "type": "package",
@@ -2025,6 +1940,20 @@
       "sha512": "sha512-rGIUCwQZB1degP2+Cc7hBbGOwuokyUxMh97umT+dpqJ8X71y2DKsXrKzDDQc8lKdWbloJbVDpzB9X42yZiS8tA==",
       "path": "microsoft.xaml.behaviors.winui.managed/2.0.9",
       "hashPath": "microsoft.xaml.behaviors.winui.managed.2.0.9.nupkg.sha512"
+    },
+    "MySqlConnector/2.3.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AmEfUPkFl+Ev6jJ8Dhns3CYHBfD12RHzGYWuLt6DfG6/af6YvOMyPz74ZPPjBYQGRJkumD2Z48Kqm8s5DJuhLA==",
+      "path": "mysqlconnector/2.3.5",
+      "hashPath": "mysqlconnector.2.3.5.nupkg.sha512"
+    },
+    "Pomelo.EntityFrameworkCore.MySql/8.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gOHP6v/nFp5V/FgHqv9mZocGqCLGofihEX9dTbLhiXX3H7SJHmGX70GIPUpiqLT+1jIfDxg1PZh9MTUKuk7Kig==",
+      "path": "pomelo.entityframeworkcore.mysql/8.0.3",
+      "hashPath": "pomelo.entityframeworkcore.mysql.8.0.3.nupkg.sha512"
     },
     "Prism.Container.Abstractions/9.0.106": {
       "type": "package",
@@ -2103,12 +2032,12 @@
       "path": "system.drawing.common/6.0.0",
       "hashPath": "system.drawing.common.6.0.0.nupkg.sha512"
     },
-    "System.IdentityModel.Tokens.Jwt/6.35.0": {
+    "System.IdentityModel.Tokens.Jwt/8.12.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-yxGIQd3BFK7F6S62/7RdZk3C/mfwyVxvh6ngd1VYMBmbJ1YZZA9+Ku6suylVtso0FjI0wbElpJ0d27CdsyLpBQ==",
-      "path": "system.identitymodel.tokens.jwt/6.35.0",
-      "hashPath": "system.identitymodel.tokens.jwt.6.35.0.nupkg.sha512"
+      "sha512": "sha512-JpkST6AQlxrXXQ05jVNqoPsU9fjIfERJdCWMxIBWzGhuNH4q/TkP5suPdlNFtHhIN+ngWQ8rmaCNY35EhACHwg==",
+      "path": "system.identitymodel.tokens.jwt/8.12.0",
+      "hashPath": "system.identitymodel.tokens.jwt.8.12.0.nupkg.sha512"
     },
     "System.Memory.Data/1.0.2": {
       "type": "package",
@@ -2116,13 +2045,6 @@
       "sha512": "sha512-JGkzeqgBsiZwKJZ1IxPNsDFZDhUvuEdX8L8BDC8N3KOj+6zMcNU28CNN59TpZE/VJYy9cP+5M+sbxtWJx3/xtw==",
       "path": "system.memory.data/1.0.2",
       "hashPath": "system.memory.data.1.0.2.nupkg.sha512"
-    },
-    "System.Numerics.Tensors/9.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-hyJB4UlpAi19Xr9AXzu2NuagKC4lPfHObNMEAA0HmqFz2rX7wKgzeYzO/jM/eBHDhnUGFFEjk5cOoJaxqg5J4A==",
-      "path": "system.numerics.tensors/9.0.0",
-      "hashPath": "system.numerics.tensors.9.0.0.nupkg.sha512"
     },
     "System.Runtime.Caching/6.0.0": {
       "type": "package",

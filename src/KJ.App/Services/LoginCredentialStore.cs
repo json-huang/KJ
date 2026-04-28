@@ -11,27 +11,60 @@ public sealed class LoginCredentialStore : ILoginCredentialStore
 
     public string? LoadRememberedEmail()
     {
-        if (ApplicationData.Current.LocalSettings.Values.TryGetValue(RememberedEmailKey, out var v) && v is string s && !string.IsNullOrWhiteSpace(s))
-            return s;
-        return null;
+        try
+        {
+            if (ApplicationData.Current.LocalSettings.Values.TryGetValue(RememberedEmailKey, out var v) &&
+                v is string s &&
+                !string.IsNullOrWhiteSpace(s))
+            {
+                return s;
+            }
+
+            return null;
+        }
+        catch
+        {
+            // Unpackaged/early-startup scenarios may not have ApplicationData available.
+            return null;
+        }
     }
 
-    public void SaveRememberedEmail(string email) =>
-        ApplicationData.Current.LocalSettings.Values[RememberedEmailKey] = email;
+    public void SaveRememberedEmail(string email)
+    {
+        try
+        {
+            ApplicationData.Current.LocalSettings.Values[RememberedEmailKey] = email;
+        }
+        catch
+        {
+        }
+    }
 
     public void ClearRememberedEmail()
     {
-        if (ApplicationData.Current.LocalSettings.Values.ContainsKey(RememberedEmailKey))
-            ApplicationData.Current.LocalSettings.Values.Remove(RememberedEmailKey);
+        try
+        {
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(RememberedEmailKey))
+                ApplicationData.Current.LocalSettings.Values.Remove(RememberedEmailKey);
+        }
+        catch
+        {
+        }
     }
 
     public void SaveStaySignedIn(string email, string password)
     {
-        var folder = ApplicationData.Current.LocalFolder.Path;
-        var path = Path.Combine(folder, StaySignedInFileName);
-        var plain = Encoding.UTF8.GetBytes($"{email}\n{password}");
-        var blob = ProtectedData.Protect(plain, optionalEntropy: null, scope: DataProtectionScope.CurrentUser);
-        File.WriteAllBytes(path, blob);
+        try
+        {
+            var folder = ApplicationData.Current.LocalFolder.Path;
+            var path = Path.Combine(folder, StaySignedInFileName);
+            var plain = Encoding.UTF8.GetBytes($"{email}\n{password}");
+            var blob = ProtectedData.Protect(plain, optionalEntropy: null, scope: DataProtectionScope.CurrentUser);
+            File.WriteAllBytes(path, blob);
+        }
+        catch
+        {
+        }
     }
 
     public (string? Email, string? Password) TryLoadStaySignedIn()

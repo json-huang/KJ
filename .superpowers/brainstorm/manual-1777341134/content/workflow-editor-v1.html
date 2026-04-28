@@ -1,0 +1,75 @@
+<h2>流程编辑：继续完善的方向</h2>
+<p class="subtitle">我已定位到现有实现：<code>WorkflowEditorPage</code>（Canvas 拖拽 + 连接下一步）+ <code>WorkflowEditorViewModel</code> + <code>WorkflowJsonStore</code>（LocalAppData JSON 持久化）。下面请你选一个“优先成熟目标”。</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">A · 交互与稳定性优先（推荐先做）</div>
+        <div class="mockup-body">
+          <ul>
+            <li>拖拽/选中/对齐/缩放更顺手</li>
+            <li>自动保存、撤销重做、脏数据提示</li>
+            <li>校验：孤儿节点/循环/缺参数</li>
+            <li>节点类型选择器（读/写/等待/条件…）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>把“编辑器体验”做成熟</h3>
+      <p>目标是：日常编辑不崩、好用、可回滚；保存出来的 JSON 结构稳定可演进。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">B · 流程表达能力优先</div>
+        <div class="mockup-body">
+          <ul>
+            <li>分支/条件（True/False）</li>
+            <li>多出口连线（不是只支持 NextStepId）</li>
+            <li>子流程/复用</li>
+            <li>版本管理与迁移</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>让流程“能表达现场逻辑”</h3>
+      <p>目标是：先把模型做对，UI 跟上；后续运行引擎更容易落地。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-header">C · 运行与调试优先</div>
+        <div class="mockup-body">
+          <ul>
+            <li>一键运行 / 单步 / 暂停 / 继续</li>
+            <li>运行日志与当前节点高亮</li>
+            <li>参数面板：运行时值、读写结果</li>
+            <li>失败重试/超时/告警联动</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>从“可编辑”到“可运行可追溯”</h3>
+      <p>目标是：先做一条最小可用的运行闭环，再逐步增强节点类型与可靠性。</p>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top: 16px">
+  <h3>已观察到的“不成熟点”（现状）</h3>
+  <ul>
+    <li>目前连线仅支持 <code>NextStepId</code>；缺少分支/多出口模型</li>
+    <li>画布节点是“命令式渲染”，交互扩展（框选/对齐/缩放）需要补齐</li>
+    <li>保存是手动按钮；缺少脏状态、自动保存、撤销重做</li>
+    <li>缺少结构校验与错误提示（例如循环、断链、缺参数）</li>
+  </ul>
+  <p class="subtitle">请在浏览器里点选 A/B/C，然后在聊天里回复你选了哪个（以及你认为“成熟”的验收标准：例如必须支持分支？必须支持单步调试？）。</p>
+</div>
