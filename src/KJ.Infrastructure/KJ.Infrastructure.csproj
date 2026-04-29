@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KJ.Domain\KJ.Domain.csproj" />
+    <ProjectReference Include="..\KJ.Workflows\KJ.Workflows.csproj" />
   </ItemGroup>
 
   <ItemGroup>

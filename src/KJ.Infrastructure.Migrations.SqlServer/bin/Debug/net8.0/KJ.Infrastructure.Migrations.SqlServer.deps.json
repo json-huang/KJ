@@ -1045,6 +1045,7 @@
       "KJ.Infrastructure/1.0.0": {
         "dependencies": {
           "KJ.Domain": "1.0.0",
+          "KJ.Workflows": "1.0.0",
           "MassTransit": "8.5.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
@@ -1058,6 +1059,14 @@
         },
         "runtime": {
           "KJ.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "KJ.Workflows/1.0.0": {
+        "runtime": {
+          "KJ.Workflows.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1574,6 +1583,11 @@
       "sha512": ""
     },
     "KJ.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KJ.Workflows/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

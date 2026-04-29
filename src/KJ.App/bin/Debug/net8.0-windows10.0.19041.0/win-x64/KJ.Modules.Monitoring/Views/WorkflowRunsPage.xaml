@@ -6,13 +6,39 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <ScrollViewer Padding="24">
-        <StackPanel Spacing="12" MaxWidth="720">
-            <TextBlock FontSize="22" Text="运行记录" />
-            <TextBlock Opacity="0.85" TextWrapping="WrapWholeWords"
-                       Text="占位：后续会把流程运行日志与诊断（抓包/TraceId）接到这里，支持按流程/设备筛选与导出。"/>
-        </StackPanel>
-    </ScrollViewer>
+    <Grid Padding="24" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Spacing="2">
+                <TextBlock FontSize="22" Text="运行记录" />
+                <TextBlock Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="最近运行日志（内存）。" />
+            </StackPanel>
+            <Button Grid.Column="1" Command="{Binding RefreshCommand}" Content="刷新" Style="{StaticResource Action}" />
+        </Grid>
+
+        <ListView Grid.Row="1" ItemsSource="{Binding Items}" BorderThickness="0" HorizontalContentAlignment="Stretch">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10,8" Background="{StaticResource KjPanel2Brush}" BorderBrush="{StaticResource KjStrokeSubtleBrush}" BorderThickness="0,0,0,1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Line1}" FontSize="13" />
+                        <TextBlock Grid.Row="1" Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="{Binding Line2}" TextWrapping="WrapWholeWords" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
 </Page>
 
 

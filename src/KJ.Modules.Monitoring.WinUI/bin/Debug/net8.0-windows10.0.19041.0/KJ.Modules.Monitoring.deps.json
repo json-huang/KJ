@@ -10,6 +10,7 @@
         "dependencies": {
           "KJ.Infrastructure": "1.0.0",
           "KJ.Modules.Core": "1.0.0",
+          "KJ.Workflows": "1.0.0",
           "Microsoft.Web.WebView2": "1.0.3912.50",
           "Microsoft.WindowsAppSDK": "1.7.260224002",
           "Prism.Uno.WinUI": "9.0.537",
@@ -1464,6 +1465,7 @@
       "KJ.Infrastructure/1.0.0": {
         "dependencies": {
           "KJ.Domain": "1.0.0",
+          "KJ.Workflows": "1.0.0",
           "MassTransit": "8.5.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
@@ -1488,6 +1490,14 @@
         },
         "runtime": {
           "KJ.Modules.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "KJ.Workflows/1.0.0": {
+        "runtime": {
+          "KJ.Workflows.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -2211,6 +2221,11 @@
       "sha512": ""
     },
     "KJ.Modules.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "KJ.Workflows/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

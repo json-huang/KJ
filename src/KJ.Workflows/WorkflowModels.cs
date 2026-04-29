@@ -1,7 +1,8 @@
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
-using Prism.Mvvm;
 
-namespace KJ.Modules.Monitoring.Workflows;
+namespace KJ.Workflows;
 
 public sealed class WorkflowDefinition
 {
@@ -13,7 +14,7 @@ public sealed class WorkflowDefinition
     public List<WorkflowStep> Steps { get; set; } = [];
 }
 
-public sealed class WorkflowStep : BindableBase
+public sealed class WorkflowStep : INotifyPropertyChanged
 {
     private Guid _id = Guid.NewGuid();
     public Guid Id
@@ -65,5 +66,15 @@ public sealed class WorkflowStep : BindableBase
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Notes { get; set; }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void SetProperty<T>(ref T backing, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(backing, value))
+            return;
+        backing = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }
 

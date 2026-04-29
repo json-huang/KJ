@@ -26,6 +26,10 @@ public sealed class KjDbContext : IdentityDbContext
 
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
+    public DbSet<WorkflowRun> WorkflowRuns => Set<WorkflowRun>();
+
+    public DbSet<WorkflowRunStep> WorkflowRunSteps => Set<WorkflowRunStep>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -113,6 +117,27 @@ public sealed class KjDbContext : IdentityDbContext
             entity.Property(e => e.Timestamp).HasColumnType("datetime2(3)");
             entity.Property(e => e.Action).IsRequired().HasMaxLength(200);
             entity.Property(e => e.Details).HasColumnType("nvarchar(max)");
+        });
+
+        modelBuilder.Entity<WorkflowRun>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.StartedAtUtc);
+            entity.Property(e => e.WorkflowName).HasMaxLength(200);
+            entity.Property(e => e.Error).HasMaxLength(2000);
+            entity.HasMany(e => e.Steps)
+                .WithOne(s => s.Run)
+                .HasForeignKey(s => s.RunId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<WorkflowRunStep>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.RunId, e.TimestampUtc });
+            entity.Property(e => e.Kind).HasMaxLength(200);
+            entity.Property(e => e.Message).HasMaxLength(2000);
+            entity.Property(e => e.Error).HasMaxLength(2000);
         });
     }
 }

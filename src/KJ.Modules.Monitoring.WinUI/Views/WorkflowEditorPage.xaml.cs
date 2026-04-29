@@ -1,8 +1,9 @@
-using KJ.Modules.Monitoring.Workflows;
+using KJ.Workflows;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
+using Microsoft.UI;
 
 namespace KJ.Modules.Monitoring.Views;
 
@@ -57,10 +58,20 @@ public sealed partial class WorkflowEditorPage : Page
             return;
 
         if (_hookedVm is not null)
+        {
             _hookedVm.Steps.CollectionChanged -= Steps_CollectionChanged;
+            _hookedVm.PropertyChanged -= Vm_PropertyChanged;
+        }
 
         _hookedVm = vm;
         _hookedVm.Steps.CollectionChanged += Steps_CollectionChanged;
+        _hookedVm.PropertyChanged += Vm_PropertyChanged;
+    }
+
+    private void Vm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ViewModels.WorkflowEditorViewModel.RuntimeCurrentStepId))
+            UpdateNodeStyles();
     }
 
     private void Steps_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -133,6 +144,9 @@ public sealed partial class WorkflowEditorPage : Page
             NodesLayer.Children.Add(b);
             _nodeById[step.Id] = b;
         }
+
+        UpdateCanvasExtent(vm);
+        UpdateNodeStyles();
     }
 
     private Border CreateNode(WorkflowStep step)
@@ -142,7 +156,7 @@ public sealed partial class WorkflowEditorPage : Page
             Width = 220,
             Height = 68,
             Background = (Brush)Application.Current.Resources["KjPanel2Brush"],
-            BorderBrush = (Brush)Application.Current.Resources["KjAccentBrush"],
+            BorderBrush = (Brush)Application.Current.Resources["KjStrokeBrush"],
             BorderThickness = new Microsoft.UI.Xaml.Thickness(1.5),
             CornerRadius = new Microsoft.UI.Xaml.CornerRadius(10),
             Padding = new Microsoft.UI.Xaml.Thickness(12),
@@ -177,6 +191,8 @@ public sealed partial class WorkflowEditorPage : Page
                 t2.Text = step.Kind;
             else if (args.PropertyName == nameof(WorkflowStep.NextStepId))
                 QueueRedrawLinks();
+            else if (args.PropertyName is nameof(WorkflowStep.X) or nameof(WorkflowStep.Y))
+                UpdateCanvasExtent(_hookedVm);
         };
 
         border.PointerPressed += Node_PointerPressed;
@@ -184,6 +200,47 @@ public sealed partial class WorkflowEditorPage : Page
         border.PointerReleased += Node_PointerReleased;
 
         return border;
+    }
+
+    private void UpdateNodeStyles()
+    {
+        if (_hookedVm is null)
+            return;
+
+        var activeId = _hookedVm.RuntimeCurrentStepId;
+        foreach (var kv in _nodeById)
+        {
+            var border = kv.Value;
+            var isActive = activeId is not null && kv.Key == activeId.Value;
+
+            // Default: keep all nodes orange (accent) for consistent visual language.
+            // Active (running/stepping): turn the current node green.
+            border.BorderBrush = isActive
+                ? new SolidColorBrush(Colors.LimeGreen)
+                : (Brush)Application.Current.Resources["KjAccentBrush"];
+
+            border.BorderThickness = isActive
+                ? new Microsoft.UI.Xaml.Thickness(3)
+                : new Microsoft.UI.Xaml.Thickness(2);
+        }
+    }
+
+    private void UpdateCanvasExtent(ViewModels.WorkflowEditorViewModel? vm)
+    {
+        if (vm is null || vm.Steps.Count == 0)
+            return;
+
+        var maxX = vm.Steps.Max(s => s.X);
+        var maxY = vm.Steps.Max(s => s.Y);
+
+        // Node size (CreateNode) + padding
+        var width = Math.Max(900, maxX + 220 + 120);
+        var height = Math.Max(520, maxY + 68 + 120);
+
+        NodesLayer.Width = width;
+        NodesLayer.Height = height;
+        LinkLayer.Width = width;
+        LinkLayer.Height = height;
     }
 
     private void QueueRedrawLinks()

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "KJ.Workflows/1.0.0": {
+        "runtime": {
+          "KJ.Workflows.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "KJ.Workflows/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

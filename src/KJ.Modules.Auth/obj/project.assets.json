@@ -2689,6 +2689,7 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "KJ.Domain": "1.0.0",
+          "KJ.Workflows": "1.0.0",
           "MassTransit": "8.5.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
@@ -2718,6 +2719,16 @@
         },
         "runtime": {
           "bin/placeholder/KJ.Modules.Core.dll": {}
+        }
+      },
+      "KJ.Workflows/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/KJ.Workflows.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KJ.Workflows.dll": {}
         }
       }
     },
@@ -5395,6 +5406,7 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "KJ.Domain": "1.0.0",
+          "KJ.Workflows": "1.0.0",
           "MassTransit": "8.5.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
@@ -5424,6 +5436,16 @@
         },
         "runtime": {
           "bin/placeholder/KJ.Modules.Core.dll": {}
+        }
+      },
+      "KJ.Workflows/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/KJ.Workflows.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KJ.Workflows.dll": {}
         }
       }
     },
@@ -8101,6 +8123,7 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "KJ.Domain": "1.0.0",
+          "KJ.Workflows": "1.0.0",
           "MassTransit": "8.5.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
@@ -8130,6 +8153,16 @@
         },
         "runtime": {
           "bin/placeholder/KJ.Modules.Core.dll": {}
+        }
+      },
+      "KJ.Workflows/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/KJ.Workflows.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KJ.Workflows.dll": {}
         }
       }
     },
@@ -10807,6 +10840,7 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "KJ.Domain": "1.0.0",
+          "KJ.Workflows": "1.0.0",
           "MassTransit": "8.5.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.26",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.26",
@@ -10836,6 +10870,16 @@
         },
         "runtime": {
           "bin/placeholder/KJ.Modules.Core.dll": {}
+        }
+      },
+      "KJ.Workflows/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/KJ.Workflows.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KJ.Workflows.dll": {}
         }
       }
     }
@@ -17639,6 +17683,11 @@
       "type": "project",
       "path": "../KJ.Modules.Core/KJ.Modules.Core.csproj",
       "msbuildProject": "../KJ.Modules.Core/KJ.Modules.Core.csproj"
+    },
+    "KJ.Workflows/1.0.0": {
+      "type": "project",
+      "path": "../KJ.Workflows/KJ.Workflows.csproj",
+      "msbuildProject": "../KJ.Workflows/KJ.Workflows.csproj"
     }
   },
   "projectFileDependencyGroups": {

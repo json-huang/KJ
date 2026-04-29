@@ -16,3 +16,5 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure\obj\Debug\net8.0\KJ.Infras
 D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure\obj\Debug\net8.0\KJ.Infrastructure.genruntimeconfig.cache
 D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure\obj\Debug\net8.0\ref\KJ.Infrastructure.dll
 D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure\obj\Debug\net8.0\KJ.Infrastructure.sourcelink.json
+D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure\bin\Debug\net8.0\KJ.Workflows.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure\bin\Debug\net8.0\KJ.Workflows.pdb

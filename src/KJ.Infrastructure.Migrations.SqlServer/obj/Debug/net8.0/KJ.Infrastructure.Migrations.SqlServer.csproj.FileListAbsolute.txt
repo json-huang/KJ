@@ -18,3 +18,5 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure.Migrations.SqlServer\obj\D
 D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure.Migrations.SqlServer\obj\Debug\net8.0\KJ.Infrastructure.Migrations.SqlServer.pdb
 D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure.Migrations.SqlServer\obj\Debug\net8.0\KJ.Infrastructure.Migrations.SqlServer.genruntimeconfig.cache
 D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure.Migrations.SqlServer\obj\Debug\net8.0\ref\KJ.Infrastructure.Migrations.SqlServer.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure.Migrations.SqlServer\bin\Debug\net8.0\KJ.Workflows.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Infrastructure.Migrations.SqlServer\bin\Debug\net8.0\KJ.Workflows.pdb

@@ -15,6 +15,7 @@ using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Prism.Ioc;
 using Prism.Modularity;
+using KJ.Workflows;
 
 namespace KJ.App;
 
@@ -58,6 +59,13 @@ public partial class App : PrismApplication
         services.AddSingleton<KJ.Domain.IAlarmService, KJ.Domain.Services.AlarmService>();
         services.AddSingleton<KJ.Domain.IRecipeEngine, KJ.Domain.Services.RecipeEngine>();
         services.AddSingleton<KJ.Domain.IDeviceManager, KJ.Domain.Services.DeviceManager>();
+
+        // Workflow runtime (minimal closure)
+        services.AddSingleton<IWorkflowRunLogStore, KJ.Infrastructure.Workflows.EfWorkflowRunLogStore>();
+        services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.StartStepHandler>();
+        services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.SimAdsReadStepHandler>();
+        services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.SimAdsWriteStepHandler>();
+        services.AddSingleton<IWorkflowRuntime, WorkflowRuntimeService>();
     }
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)

@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using KJ.Workflows;
 using KJ.Modules.Monitoring.Workflows;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -12,6 +13,7 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
 {
     private readonly IWorkflowStore _store;
     private readonly IRegionManager _regionManager;
+    private readonly IWorkflowRuntime _runtime;
 
     private WorkflowDefinition _workflow = new();
     private readonly ObservableCollection<WorkflowStep> _steps = new();
@@ -49,6 +51,22 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
 
     public string CanvasDebugText
         => $"Steps={_steps.Count} | WF={_workflow.Id:N} | First=({(_steps.FirstOrDefault()?.X ?? -1):0},{(_steps.FirstOrDefault()?.Y ?? -1):0})";
+
+    public Guid? RuntimeCurrentStepId => _runtime.CurrentStepId;
+
+    public string RuntimeHint
+    {
+        get
+        {
+            var state = _runtime.State;
+            if (state == WorkflowRunState.Idle)
+                return "未运行";
+
+            var stepId = _runtime.CurrentStepId;
+            var stepTitle = stepId is null ? "" : _steps.FirstOrDefault(s => s.Id == stepId)?.Title;
+            return stepTitle is null ? $"状态：{state}" : $"状态：{state} · 当前：{stepTitle}";
+        }
+    }
 
     private WorkflowStep? _selectedStep;
     public WorkflowStep? SelectedStep
@@ -143,18 +161,29 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
 
     public DelegateCommand AddStepCommand { get; }
     public DelegateCommand SaveCommand { get; }
+    public DelegateCommand RunCommand { get; }
+    public DelegateCommand StepCommand { get; }
+    public DelegateCommand PauseCommand { get; }
+    public DelegateCommand ResumeCommand { get; }
+    public DelegateCommand CancelCommand { get; }
     public DelegateCommand ConnectToSelectedCommand { get; }
 
     private WorkflowStep? _linkFrom;
     public string LinkHint => _linkFrom is null ? "连线：选中起点后点“设为起点”→再选终点点“连接”" : $"连线起点：{_linkFrom.Title}";
     public DelegateCommand SetLinkFromCommand { get; }
 
-    public WorkflowEditorViewModel(IWorkflowStore store, IRegionManager regionManager)
+    public WorkflowEditorViewModel(IWorkflowStore store, IRegionManager regionManager, IWorkflowRuntime runtime)
     {
         _store = store;
         _regionManager = regionManager;
+        _runtime = runtime;
         AddStepCommand = new DelegateCommand(AddStep);
         SaveCommand = new DelegateCommand(async () => await SaveAsync());
+        RunCommand = new DelegateCommand(async () => await RunContinuousAsync(), () => CanStartContinuous());
+        StepCommand = new DelegateCommand(async () => await StepAsync(), () => CanStep());
+        PauseCommand = new DelegateCommand(Pause, () => _runtime.State == WorkflowRunState.Running);
+        ResumeCommand = new DelegateCommand(Resume, () => _runtime.State == WorkflowRunState.Paused);
+        CancelCommand = new DelegateCommand(Cancel, () => _runtime.State is WorkflowRunState.Running or WorkflowRunState.Paused);
         SetLinkFromCommand = new DelegateCommand(SetLinkFrom);
         ConnectToSelectedCommand = new DelegateCommand(ConnectToSelected);
 
@@ -165,6 +194,8 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         // journals/URIs are unavailable in some region setups.
         if (_steps.Count == 0)
             CreateDefaultWorkflow();
+
+        _runtime.Changed += OnRuntimeChanged;
     }
 
     public async Task TryLoadFromNavigationAsync()
@@ -306,7 +337,123 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         finally
         {
             IsSaving = false;
+            RefreshRunCommands();
         }
+    }
+
+    private bool CanStartContinuous()
+    {
+        if (IsSaving)
+            return false;
+
+        return _runtime.State is WorkflowRunState.Idle or WorkflowRunState.Completed or WorkflowRunState.Failed or WorkflowRunState.Canceled;
+    }
+
+    private bool CanStep()
+    {
+        if (IsSaving)
+            return false;
+
+        return _runtime.State is WorkflowRunState.Paused
+            or WorkflowRunState.Idle
+            or WorkflowRunState.Completed
+            or WorkflowRunState.Failed
+            or WorkflowRunState.Canceled;
+    }
+
+    private WorkflowDefinition CreateSnapshot() => new()
+    {
+        Id = _workflow.Id,
+        Name = _workflow.Name,
+        Version = _workflow.Version,
+        UpdatedAt = _workflow.UpdatedAt,
+        Steps = _steps.ToList(),
+    };
+
+    private async Task RunContinuousAsync()
+    {
+        try
+        {
+            IsSaving = true;
+            RefreshRunCommands();
+            SaveStatusText = "运行中…";
+            await _runtime.StartContinuousAsync(CreateSnapshot()).ConfigureAwait(true);
+        }
+        catch (Exception ex)
+        {
+            SaveStatusText = $"运行失败：{ex.Message}";
+        }
+        finally
+        {
+            IsSaving = false;
+            RefreshRunCommands();
+        }
+    }
+
+    private async Task StepAsync()
+    {
+        try
+        {
+            IsSaving = true;
+            RefreshRunCommands();
+
+            if (_runtime.State is WorkflowRunState.Idle or WorkflowRunState.Completed or WorkflowRunState.Failed or WorkflowRunState.Canceled)
+            {
+                SaveStatusText = "单步中…";
+                await _runtime.StartStepAsync(CreateSnapshot()).ConfigureAwait(true);
+            }
+            else
+            {
+                SaveStatusText = "单步中…";
+                await _runtime.StepOnceAsync().ConfigureAwait(true);
+            }
+        }
+        catch (Exception ex)
+        {
+            SaveStatusText = $"单步失败：{ex.Message}";
+        }
+        finally
+        {
+            IsSaving = false;
+            RefreshRunCommands();
+        }
+    }
+
+    private void Pause()
+    {
+        _runtime.Pause();
+        SaveStatusText = "已暂停";
+        RefreshRunCommands();
+    }
+
+    private void Resume()
+    {
+        _runtime.Resume();
+        SaveStatusText = "运行中…";
+        RefreshRunCommands();
+    }
+
+    private void Cancel()
+    {
+        _runtime.Cancel();
+        SaveStatusText = "已取消";
+        RefreshRunCommands();
+    }
+
+    private void OnRuntimeChanged()
+    {
+        RaisePropertyChanged(nameof(RuntimeCurrentStepId));
+        RaisePropertyChanged(nameof(RuntimeHint));
+        RefreshRunCommands();
+    }
+
+    private void RefreshRunCommands()
+    {
+        RunCommand.RaiseCanExecuteChanged();
+        StepCommand.RaiseCanExecuteChanged();
+        PauseCommand.RaiseCanExecuteChanged();
+        ResumeCommand.RaiseCanExecuteChanged();
+        CancelCommand.RaiseCanExecuteChanged();
     }
 
     private string GetParam(string key)

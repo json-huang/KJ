@@ -34,5 +34,6 @@
   <ItemGroup>
     <ProjectReference Include="..\KJ.Modules.Core\KJ.Modules.Core.csproj" />
     <ProjectReference Include="..\KJ.Infrastructure\KJ.Infrastructure.csproj" />
+    <ProjectReference Include="..\KJ.Workflows\KJ.Workflows.csproj" />
   </ItemGroup>
 </Project>

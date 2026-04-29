@@ -97,3 +97,5 @@ D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring.WinUI\obj\Debug\net8.0
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring.WinUI\obj\Debug\net8.0-windows10.0.19041.0\qualifiers.txt
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring.WinUI\obj\Debug\net8.0-windows10.0.19041.0\qualifiers.txt.intermediate
 D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring.WinUI\obj\Debug\net8.0-windows10.0.19041.0\MultipleQualifiersPerDimensionFound.txt
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring.WinUI\bin\Debug\net8.0-windows10.0.19041.0\KJ.Workflows.dll
+D:\Users\DBA126\source\repos\KJ\src\KJ.Modules.Monitoring.WinUI\bin\Debug\net8.0-windows10.0.19041.0\KJ.Workflows.pdb
