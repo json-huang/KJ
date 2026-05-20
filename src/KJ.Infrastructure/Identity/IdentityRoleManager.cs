@@ -23,8 +23,12 @@ public sealed class IdentityRoleManager : IRoleManager
         return role is null ? null : new AppRole(role.Id, role.Name ?? string.Empty);
     }
 
-    public Task<IReadOnlyList<AppRole>> GetRolesAsync(CancellationToken cancellationToken = default) =>
-        Task.FromResult<IReadOnlyList<AppRole>>(Array.Empty<AppRole>());
+    public Task<IReadOnlyList<AppRole>> GetRolesAsync(CancellationToken cancellationToken = default)
+    {
+        var roles = _roleManager.Roles.ToList();
+        return Task.FromResult<IReadOnlyList<AppRole>>(
+            roles.Select(r => new AppRole(r.Id, r.Name ?? string.Empty)).ToList().AsReadOnly());
+    }
 
     public async Task<AppRole> CreateRoleAsync(AppRole role, CancellationToken cancellationToken = default)
     {

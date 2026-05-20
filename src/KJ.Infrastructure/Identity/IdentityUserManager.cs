@@ -21,8 +21,13 @@ public sealed class IdentityUserManager : IUserManager
         return user is null ? null : ToAppUser(user);
     }
 
-    public Task<IReadOnlyList<AppUser>> GetUsersAsync(CancellationToken cancellationToken = default) =>
-        Task.FromResult<IReadOnlyList<AppUser>>(Array.Empty<AppUser>());
+    public Task<IReadOnlyList<AppUser>> GetUsersAsync(CancellationToken cancellationToken = default)
+    {
+        var users = _userManager.Users.ToList();
+        return Task.FromResult<IReadOnlyList<AppUser>>(
+            users.Select(u => new AppUser(u.Id, u.UserName ?? u.Email ?? string.Empty, u.Email ?? string.Empty))
+                .ToList().AsReadOnly());
+    }
 
     public async Task<AppUser> CreateUserAsync(AppUser user, string password, CancellationToken cancellationToken = default)
     {
