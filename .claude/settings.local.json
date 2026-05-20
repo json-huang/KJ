@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"d:\\\\Users\\\\DBA126\\\\source\\\\repos\\\\KJ\\\\docs\\\\superpowers\\\\plans\")",
+      "Bash(git add *)"
+    ],
+    "additionalDirectories": [
+      "d:\\Users\\DBA126\\source\\repos\\KJ\\docs\\superpowers\\plans"
+    ]
+  }
+}
