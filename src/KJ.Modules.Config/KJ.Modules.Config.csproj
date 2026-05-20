@@ -33,5 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KJ.Modules.Core\KJ.Modules.Core.csproj" />
+    <ProjectReference Include="..\KJ.Domain\KJ.Domain.csproj" />
+    <ProjectReference Include="..\KJ.Infrastructure\KJ.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

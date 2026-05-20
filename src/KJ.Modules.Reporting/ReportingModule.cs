@@ -11,7 +11,7 @@ public sealed class ReportingModule : ModuleBase
 
     protected override void RegisterViews(IContainerRegistry containerRegistry)
     {
-        containerRegistry.RegisterForNavigation<Views.ReportingHomePage>("ReportingHome");
+        containerRegistry.RegisterForNavigation<Views.ReportingHomePage, ViewModels.ReportingHomeViewModel>("ReportingHome");
         containerRegistry.Register<Views.ReportingNavigationView>();
     }
 

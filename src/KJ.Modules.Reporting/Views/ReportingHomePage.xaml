@@ -5,14 +5,53 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:KJ.Modules.Reporting.ViewModels"
     mc:Ignorable="d">
-    <ScrollViewer Padding="24">
-        <StackPanel Spacing="12" MaxWidth="720">
-            <TextBlock FontSize="22" Text="报表" />
-            <TextBlock
-                Opacity="0.85"
-                Text="模块占位：历史趋势、导出、打印与计划任务等。"
-                TextWrapping="WrapWholeWords" />
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" FontSize="22" Text="历史报表" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12">
+            <TextBox PlaceholderText="标签 Key" Width="250"
+                     Text="{x:Bind ViewModel.SelectedTagKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Content="查询" Command="{x:Bind ViewModel.QueryCommand}" />
         </StackPanel>
-    </ScrollViewer>
+
+        <TextBlock Grid.Row="2" Text="{x:Bind ViewModel.StatusText}" Opacity="0.7" />
+
+        <ListView Grid.Row="3" ItemsSource="{x:Bind ViewModel.HistoryRows}" SelectionMode="None">
+            <ListView.Header>
+                <Grid Padding="8,4" ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="100" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="时间戳" FontWeight="Bold" />
+                    <TextBlock Grid.Column="1" Text="值" FontWeight="Bold" />
+                    <TextBlock Grid.Column="2" Text="质量" FontWeight="Bold" />
+                </Grid>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:HistoryRow">
+                    <Grid Padding="8,4" ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{x:Bind Timestamp}" />
+                        <TextBlock Grid.Column="1" Text="{x:Bind Value}" FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="2" Text="{x:Bind Quality}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
 </Page>

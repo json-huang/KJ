@@ -5,14 +5,72 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:KJ.Modules.Config.ViewModels"
     mc:Ignorable="d">
-    <ScrollViewer Padding="24">
-        <StackPanel Spacing="12" MaxWidth="720">
-            <TextBlock FontSize="22" Text="配置" />
-            <TextBlock
-                Opacity="0.85"
-                Text="模块占位：设备参数、连接字符串、系统选项等。"
-                TextWrapping="WrapWholeWords" />
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" FontSize="22" Text="设备配置" />
+
+        <Grid Grid.Row="1" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" PlaceholderText="设备 ID"
+                     Text="{x:Bind ViewModel.NewDeviceId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Column="1" PlaceholderText="显示名称"
+                     Text="{x:Bind ViewModel.NewDeviceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <ComboBox Grid.Column="2" SelectedValue="{x:Bind ViewModel.NewDriverType, Mode=TwoWay}">
+                <ComboBoxItem Content="Tcp" IsSelected="True" />
+                <ComboBoxItem Content="ModbusTcp" />
+                <ComboBoxItem Content="OpcUa" />
+            </ComboBox>
+            <Button Grid.Column="3" Content="添加" Command="{x:Bind ViewModel.AddDeviceCommand}" />
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="12">
+            <Button Content="刷新" Command="{x:Bind ViewModel.RefreshCommand}" />
         </StackPanel>
-    </ScrollViewer>
+
+        <ListView Grid.Row="3" ItemsSource="{x:Bind ViewModel.Devices}" SelectionMode="None">
+            <ListView.Header>
+                <Grid Padding="8,4" ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="设备 ID" FontWeight="Bold" />
+                    <TextBlock Grid.Column="1" Text="名称" FontWeight="Bold" />
+                    <TextBlock Grid.Column="2" Text="驱动类型" FontWeight="Bold" />
+                    <TextBlock Grid.Column="3" Text="状态" FontWeight="Bold" />
+                </Grid>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:DeviceDisplayItem">
+                    <Grid Padding="8,4" ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{x:Bind DeviceId}" FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="1" Text="{x:Bind DisplayName}" />
+                        <TextBlock Grid.Column="2" Text="{x:Bind DriverType}" />
+                        <TextBlock Grid.Column="3" Text="{x:Bind State}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
 </Page>

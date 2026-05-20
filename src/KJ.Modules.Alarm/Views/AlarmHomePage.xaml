@@ -5,14 +5,53 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:KJ.Modules.Alarm.ViewModels"
     mc:Ignorable="d">
-    <ScrollViewer Padding="24">
-        <StackPanel Spacing="12" MaxWidth="720">
-            <TextBlock FontSize="22" Text="报警" />
-            <TextBlock
-                Opacity="0.85"
-                Text="模块占位：活动报警、确认历史、报警规则配置等。"
-                TextWrapping="WrapWholeWords" />
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" FontSize="22" Text="活动报警" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12">
+            <Button Content="刷新" Command="{x:Bind ViewModel.RefreshCommand}" />
+            <TextBlock Text="{x:Bind ViewModel.StatusText}" VerticalAlignment="Center" Opacity="0.7" />
         </StackPanel>
-    </ScrollViewer>
+
+        <ListView Grid.Row="2" ItemsSource="{x:Bind ViewModel.ActiveAlarms}" SelectionMode="None">
+            <ListView.Header>
+                <Grid Padding="8,4" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="180" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="级别" FontWeight="Bold" />
+                    <TextBlock Grid.Column="1" Text="标签" FontWeight="Bold" />
+                    <TextBlock Grid.Column="2" Text="消息" FontWeight="Bold" />
+                    <TextBlock Grid.Column="3" Text="触发时间" FontWeight="Bold" />
+                </Grid>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:ActiveAlarmDisplay">
+                    <Grid Padding="8,4" ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="180" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{x:Bind Severity}" FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="1" Text="{x:Bind TagKey}" />
+                        <TextBlock Grid.Column="2" Text="{x:Bind Message}" TextTrimming="CharacterEllipsis" />
+                        <TextBlock Grid.Column="3" Text="{x:Bind TriggeredAt}" Opacity="0.7" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
 </Page>

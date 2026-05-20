@@ -11,7 +11,7 @@ public sealed class ConfigModule : ModuleBase
 
     protected override void RegisterViews(IContainerRegistry containerRegistry)
     {
-        containerRegistry.RegisterForNavigation<Views.ConfigHomePage>("ConfigHome");
+        containerRegistry.RegisterForNavigation<Views.ConfigHomePage, ViewModels.ConfigHomeViewModel>("ConfigHome");
         containerRegistry.Register<Views.ConfigNavigationView>();
     }
 

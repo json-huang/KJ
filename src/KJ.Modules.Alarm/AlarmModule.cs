@@ -11,7 +11,7 @@ public sealed class AlarmModule : ModuleBase
 
     protected override void RegisterViews(IContainerRegistry containerRegistry)
     {
-        containerRegistry.RegisterForNavigation<Views.AlarmHomePage>("AlarmHome");
+        containerRegistry.RegisterForNavigation<Views.AlarmHomePage, ViewModels.AlarmHomeViewModel>("AlarmHome");
         containerRegistry.Register<Views.AlarmNavigationView>();
     }
 
