@@ -5,15 +5,52 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:KJ.Modules.Monitoring.ViewModels"
     mc:Ignorable="d">
-    <ScrollViewer Padding="24">
-        <StackPanel Spacing="12" MaxWidth="900">
-            <TextBlock FontSize="22" Text="Tag 监视" />
-            <TextBlock
-                Opacity="0.85"
-                Text="占位页：后续接入实时 Tag 列表（订阅消息/轮询）、质量码、读写等。"
-                TextWrapping="WrapWholeWords" />
-        </StackPanel>
-    </ScrollViewer>
-</Page>
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <TextBlock Grid.Row="0" FontSize="22" Text="Tag 实时监控" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12">
+            <Button Content="清空" Command="{x:Bind ViewModel.ClearCommand}" />
+        </StackPanel>
+
+        <ListView Grid.Row="2" ItemsSource="{x:Bind ViewModel.Tags}" SelectionMode="None">
+            <ListView.Header>
+                <Grid Padding="8,4" ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Tag Key" FontWeight="Bold" />
+                    <TextBlock Grid.Column="1" Text="值" FontWeight="Bold" />
+                    <TextBlock Grid.Column="2" Text="质量" FontWeight="Bold" />
+                    <TextBlock Grid.Column="3" Text="时间戳" FontWeight="Bold" />
+                </Grid>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:TagDisplayItem">
+                    <Grid Padding="8,4" ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{x:Bind Key}" FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="1" Text="{x:Bind Value}" />
+                        <TextBlock Grid.Column="2" Text="{x:Bind Quality}" />
+                        <TextBlock Grid.Column="3" Text="{x:Bind Timestamp}" Opacity="0.7" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>

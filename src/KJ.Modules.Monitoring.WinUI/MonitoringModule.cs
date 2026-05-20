@@ -19,9 +19,9 @@ public sealed class MonitoringModule : ModuleBase
     {
         containerRegistry.RegisterForNavigation<Views.MonitoringHomePage>("MonitoringHome");
         containerRegistry.RegisterForNavigation<Views.DeviceListView, ViewModels.DeviceListViewModel>("DeviceList");
-        containerRegistry.RegisterForNavigation<Views.TagMonitorView>("TagMonitor");
-        containerRegistry.RegisterForNavigation<Views.TrendChartView>("TrendChart");
-        containerRegistry.RegisterForNavigation<Views.DashboardView>("Dashboard");
+        containerRegistry.RegisterForNavigation<Views.TagMonitorView, ViewModels.TagMonitorViewModel>("TagMonitor");
+        containerRegistry.RegisterForNavigation<Views.TrendChartView, ViewModels.TrendChartViewModel>("TrendChart");
+        containerRegistry.RegisterForNavigation<Views.DashboardView, ViewModels.DashboardViewModel>("Dashboard");
         containerRegistry.RegisterForNavigation<Views.WorkflowListPage, ViewModels.WorkflowListViewModel>("WorkflowList");
         containerRegistry.RegisterForNavigation<Views.WorkflowEditorPage, ViewModels.WorkflowEditorViewModel>("WorkflowEditor");
         containerRegistry.RegisterForNavigation<Views.WorkflowRunsPage, ViewModels.WorkflowRunsViewModel>("WorkflowRuns");

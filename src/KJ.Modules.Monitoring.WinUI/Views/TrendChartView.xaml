@@ -5,15 +5,37 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:KJ.Modules.Monitoring.ViewModels"
     mc:Ignorable="d">
-    <ScrollViewer Padding="24">
-        <StackPanel Spacing="12" MaxWidth="900">
-            <TextBlock FontSize="22" Text="趋势图" />
-            <TextBlock
-                Opacity="0.85"
-                Text="占位页：后续接入 TagHistory（EF Core）与实时曲线绘制。"
-                TextWrapping="WrapWholeWords" />
-        </StackPanel>
-    </ScrollViewer>
-</Page>
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <TextBlock Grid.Row="0" FontSize="22" Text="趋势图" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12">
+            <TextBox PlaceholderText="输入标签 Key" Width="250"
+                     Text="{x:Bind ViewModel.SelectedTagKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Content="查询历史" Command="{x:Bind ViewModel.LoadCommand}" />
+        </StackPanel>
+
+        <TextBlock Grid.Row="2" Text="{x:Bind ViewModel.StatusText}" Opacity="0.7" />
+
+        <ScrollViewer Grid.Row="3">
+            <ItemsControl ItemsSource="{x:Bind ViewModel.Points}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:TrendPoint">
+                        <StackPanel Orientation="Horizontal" Spacing="16" Padding="4,2">
+                            <TextBlock Text="{x:Bind Timestamp}" Width="100" />
+                            <TextBlock Text="{x:Bind Value}" FontWeight="SemiBold" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Page>

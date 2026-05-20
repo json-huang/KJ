@@ -40,15 +40,15 @@
                 <Border Background="{StaticResource KjPanel2Brush}" BorderBrush="{StaticResource KjStrokeBrush}" BorderThickness="1" CornerRadius="12" Padding="14,12">
                     <StackPanel Spacing="6">
                         <TextBlock Foreground="{StaticResource KjTextMutedBrush}" FontSize="12" Text="设备总数" />
-                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="42" />
-                        <TextBlock Foreground="{StaticResource KjTextSecondaryBrush}" FontSize="12" Text="在线 39 · 离线 3" />
+                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="{x:Bind ViewModel.DeviceCount}" />
+                        <TextBlock Foreground="{StaticResource KjTextSecondaryBrush}" FontSize="12" Text="{x:Bind ViewModel.SystemStatus}" />
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="1" Background="{StaticResource KjPanel2Brush}" BorderBrush="{StaticResource KjStrokeBrush}" BorderThickness="1" CornerRadius="12" Padding="14,12">
                     <StackPanel Spacing="6">
                         <TextBlock Foreground="{StaticResource KjTextMutedBrush}" FontSize="12" Text="告警（24h）" />
-                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="3" />
+                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="{x:Bind ViewModel.ActiveAlarmCount}" />
                         <TextBlock Foreground="{StaticResource KjTextSecondaryBrush}" FontSize="12" Text="高 1 · 中 2 · 低 0" />
                     </StackPanel>
                 </Border>
@@ -154,7 +154,7 @@
                 <Border Background="{StaticResource KjPanel2Brush}" BorderBrush="{StaticResource KjStrokeBrush}" BorderThickness="1" CornerRadius="12" Padding="14,12">
                     <StackPanel Spacing="10">
                         <TextBlock FontWeight="SemiBold" Text="快速操作" />
-                        <Button Style="{StaticResource PrimaryAction}" Content="刷新全量状态" />
+                        <Button Style="{StaticResource PrimaryAction}" Content="刷新全量状态" Command="{x:Bind ViewModel.RefreshCommand}" />
                         <Button Style="{StaticResource Action}" Content="查看告警" />
                         <Button Style="{StaticResource Action}" Content="打开设备列表" />
                     </StackPanel>
