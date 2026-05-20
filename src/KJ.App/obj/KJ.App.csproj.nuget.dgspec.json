@@ -25,9 +25,8 @@
           "net8.0-windows10.0.19041.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0-windows10.0.19041": {
@@ -219,9 +218,8 @@
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0": {
@@ -285,9 +283,8 @@
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0": {
@@ -365,9 +362,8 @@
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0": {
@@ -445,9 +441,8 @@
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0": {
@@ -566,9 +561,8 @@
           "net8.0-windows10.0.19041.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0-windows10.0.19041": {
@@ -710,9 +704,8 @@
           "net8.0-windows10.0.19041.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0-windows10.0.19041": {
@@ -857,9 +850,8 @@
           "net8.0-windows10.0.19041.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0-windows10.0.19041": {
@@ -1001,9 +993,8 @@
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0": {
@@ -1073,9 +1064,8 @@
           "net8.0-windows10.0.19041.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0-windows10.0.19041": {
@@ -1223,9 +1213,8 @@
           "net8.0-windows10.0.19041.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0-windows10.0.19041": {
@@ -1367,9 +1356,8 @@
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "D:\\dba\\中框\\深圳信维\\20260514\\MES_V001_08\\MES_V001\\offline_packages": {}
         },
         "frameworks": {
           "net8.0": {

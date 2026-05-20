@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "9EuBK9bx+VE=",
-  "success": true,
+  "dgSpecHash": "hiu1K+/l5kI=",
+  "success": false,
   "projectFilePath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Modules.Reporting\\KJ.Modules.Reporting.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DBA126\\.nuget\\packages\\commonservicelocator\\2.0.5\\commonservicelocator.2.0.5.nupkg.sha512",
@@ -35,19 +35,6 @@
     "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.web.webview2\\1.0.3912.50\\microsoft.web.webview2.1.0.3912.50.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windows.sdk.buildtools\\10.0.28000.1721\\microsoft.windows.sdk.buildtools.10.0.28000.1721.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windows.sdk.buildtools.msix\\1.7.20250829.1\\microsoft.windows.sdk.buildtools.msix.1.7.20250829.1.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windowsappsdk\\1.8.260416003\\microsoft.windowsappsdk.1.8.260416003.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windowsappsdk.ai\\1.8.70\\microsoft.windowsappsdk.ai.1.8.70.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windowsappsdk.base\\1.8.251216001\\microsoft.windowsappsdk.base.1.8.251216001.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windowsappsdk.dwrite\\1.8.25122902\\microsoft.windowsappsdk.dwrite.1.8.25122902.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windowsappsdk.foundation\\1.8.260415000\\microsoft.windowsappsdk.foundation.1.8.260415000.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windowsappsdk.interactiveexperiences\\1.8.260415001\\microsoft.windowsappsdk.interactiveexperiences.1.8.260415001.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windowsappsdk.ml\\1.8.2192\\microsoft.windowsappsdk.ml.1.8.2192.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windowsappsdk.runtime\\1.8.260416003\\microsoft.windowsappsdk.runtime.1.8.260416003.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windowsappsdk.widgets\\1.8.251231004\\microsoft.windowsappsdk.widgets.1.8.251231004.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windowsappsdk.winui\\1.8.260415005\\microsoft.windowsappsdk.winui.1.8.260415005.nupkg.sha512",
     "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.xaml.behaviors.winui.managed\\2.0.9\\microsoft.xaml.behaviors.winui.managed.2.0.9.nupkg.sha512",
     "C:\\Users\\DBA126\\.nuget\\packages\\prism.container.abstractions\\9.0.106\\prism.container.abstractions.9.0.106.nupkg.sha512",
     "C:\\Users\\DBA126\\.nuget\\packages\\prism.core\\9.0.537\\prism.core.9.0.537.nupkg.sha512",
@@ -72,7 +59,6 @@
     "C:\\Users\\DBA126\\.nuget\\packages\\system.globalization\\4.3.0\\system.globalization.4.3.0.nupkg.sha512",
     "C:\\Users\\DBA126\\.nuget\\packages\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
     "C:\\Users\\DBA126\\.nuget\\packages\\system.linq\\4.3.0\\system.linq.4.3.0.nupkg.sha512",
-    "C:\\Users\\DBA126\\.nuget\\packages\\system.numerics.tensors\\9.0.0\\system.numerics.tensors.9.0.0.nupkg.sha512",
     "C:\\Users\\DBA126\\.nuget\\packages\\system.private.uri\\4.3.0\\system.private.uri.4.3.0.nupkg.sha512",
     "C:\\Users\\DBA126\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
     "C:\\Users\\DBA126\\.nuget\\packages\\system.reflection.primitives\\4.3.0\\system.reflection.primitives.4.3.0.nupkg.sha512",
@@ -114,5 +100,48 @@
     "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-arm64\\8.0.26\\microsoft.aspnetcore.app.runtime.win-arm64.8.0.26.nupkg.sha512",
     "C:\\Users\\DBA126\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1101",
+      "level": "Error",
+      "message": "找不到包 Microsoft.WindowsAppSDK。源 C:\\Program Files\\dotnet\\library-packs, test 中不存在具有此 ID 的包",
+      "projectPath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Modules.Reporting\\KJ.Modules.Reporting.csproj",
+      "filePath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Modules.Reporting\\KJ.Modules.Reporting.csproj",
+      "libraryId": "Microsoft.WindowsAppSDK",
+      "targetGraphs": [
+        "net8.0-windows10.0.19041",
+        "net8.0-windows10.0.19041/win-arm64",
+        "net8.0-windows10.0.19041/win-x64",
+        "net8.0-windows10.0.19041/win-x86"
+      ]
+    },
+    {
+      "code": "NU1101",
+      "level": "Error",
+      "message": "找不到包 Microsoft.Web.WebView2。源 C:\\Program Files\\dotnet\\library-packs, test 中不存在具有此 ID 的包",
+      "projectPath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Modules.Reporting\\KJ.Modules.Reporting.csproj",
+      "filePath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Modules.Reporting\\KJ.Modules.Reporting.csproj",
+      "libraryId": "Microsoft.Web.WebView2",
+      "targetGraphs": [
+        "net8.0-windows10.0.19041",
+        "net8.0-windows10.0.19041/win-arm64",
+        "net8.0-windows10.0.19041/win-x64",
+        "net8.0-windows10.0.19041/win-x86"
+      ]
+    },
+    {
+      "code": "NU1101",
+      "level": "Error",
+      "message": "找不到包 Microsoft.Windows.SDK.BuildTools。源 C:\\Program Files\\dotnet\\library-packs, test 中不存在具有此 ID 的包",
+      "projectPath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Modules.Reporting\\KJ.Modules.Reporting.csproj",
+      "filePath": "D:\\Users\\DBA126\\source\\repos\\KJ\\src\\KJ.Modules.Reporting\\KJ.Modules.Reporting.csproj",
+      "libraryId": "Microsoft.Windows.SDK.BuildTools",
+      "targetGraphs": [
+        "net8.0-windows10.0.19041",
+        "net8.0-windows10.0.19041/win-arm64",
+        "net8.0-windows10.0.19041/win-x64",
+        "net8.0-windows10.0.19041/win-x86"
+      ]
+    }
+  ]
 }

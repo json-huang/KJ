@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KJ.Comms.Abstractions")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7308f7b8d3a84aebff11db1af22398ff272d8cfe")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd24c87a14e83587d8d7229ca062315cc87c3b1e")]
 [assembly: System.Reflection.AssemblyProductAttribute("KJ.Comms.Abstractions")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KJ.Comms.Abstractions")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
