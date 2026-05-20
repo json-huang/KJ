@@ -60,6 +60,12 @@ public partial class App : PrismApplication
         services.AddSingleton<KJ.Domain.IRecipeEngine, KJ.Domain.Services.RecipeEngine>();
         services.AddSingleton<KJ.Domain.IDeviceManager, KJ.Domain.Services.DeviceManager>();
 
+        // 设备驱动
+        services.AddSingleton<KJ.Drivers.TcpDeviceDriver>();
+        services.AddSingleton<KJ.Drivers.ModbusTcpDriver>();
+        services.AddSingleton<KJ.Drivers.OpcUaDriver>();
+        services.AddSingleton<KJ.Drivers.Abstractions.IDeviceDriverFactory, KJ.Drivers.DeviceDriverFactory>();
+
         // Workflow runtime (minimal closure)
         services.AddSingleton<IWorkflowRunLogStore, KJ.Infrastructure.Workflows.EfWorkflowRunLogStore>();
         services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.StartStepHandler>();
