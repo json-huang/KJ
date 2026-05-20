@@ -1,6 +1,8 @@
 using KJ.Infrastructure.Auth;
 using KJ.Infrastructure.Data;
 using KJ.Infrastructure.Identity;
+using KJ.Infrastructure.Logging;
+using KJ.Domain;
 using KJ.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +63,7 @@ public static class PersistenceExtensions
         services.AddScoped<IRoleManager, IdentityRoleManager>();
         services.AddSingleton<ITokenService, JwtTokenService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IAuditLogger, AuditLogger>();
 
         return services;
     }
