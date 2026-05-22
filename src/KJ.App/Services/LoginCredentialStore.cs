@@ -4,7 +4,7 @@ using Windows.Storage;
 
 namespace KJ.App.Services;
 
-public sealed class LoginCredentialStore : ILoginCredentialStore
+public sealed class LoginCredentialStore : KJ.Modules.Auth.ILoginCredentialStore
 {
     private const string RememberedEmailKey = "KJ_RememberedEmail";
     private const string StaySignedInFileName = "kj-stay-signed-in.dat";

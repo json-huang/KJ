@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -25,7 +26,40 @@
 
         <TextBlock Grid.Row="2" Text="{x:Bind ViewModel.StatusText}" Opacity="0.7" />
 
-        <ScrollViewer Grid.Row="3">
+        <!-- Chart area -->
+        <Grid Grid.Row="3" Height="300" Padding="0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Y-axis labels -->
+            <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Stretch" Spacing="0" Margin="0,0,8,0">
+                <TextBlock Text="{x:Bind ViewModel.MaxValue, Mode=OneWay}" FontSize="11"
+                           VerticalAlignment="Top" HorizontalAlignment="Right" />
+                <TextBlock Text="{x:Bind ViewModel.MinValue, Mode=OneWay}" FontSize="11"
+                           VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+            </StackPanel>
+
+            <!-- Canvas for the trend line -->
+            <Border Grid.Row="0" Grid.Column="1" BorderBrush="Gray" BorderThickness="1" CornerRadius="4">
+                <Canvas x:Name="ChartCanvas" Background="#08000000" />
+            </Border>
+
+            <!-- X-axis label -->
+            <TextBlock Grid.Row="1" Grid.Column="1" FontSize="11" Opacity="0.6"
+                       HorizontalAlignment="Center" Margin="0,4,0,0">
+                <Run Text="数据点: " />
+                <Run Text="{x:Bind ViewModel.PointCount, Mode=OneWay}" />
+            </TextBlock>
+        </Grid>
+
+        <!-- Data table -->
+        <ScrollViewer Grid.Row="4">
             <ItemsControl ItemsSource="{x:Bind ViewModel.Points}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="vm:TrendPoint">

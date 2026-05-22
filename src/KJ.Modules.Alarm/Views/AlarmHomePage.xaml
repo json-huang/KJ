@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Page
     x:Class="KJ.Modules.Alarm.Views.AlarmHomePage"
+    x:Name="PageRoot"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -29,11 +30,13 @@
                         <ColumnDefinition Width="150" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="180" />
+                        <ColumnDefinition Width="70" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="级别" FontWeight="Bold" />
                     <TextBlock Grid.Column="1" Text="标签" FontWeight="Bold" />
                     <TextBlock Grid.Column="2" Text="消息" FontWeight="Bold" />
                     <TextBlock Grid.Column="3" Text="触发时间" FontWeight="Bold" />
+                    <TextBlock Grid.Column="4" Text="操作" FontWeight="Bold" />
                 </Grid>
             </ListView.Header>
             <ListView.ItemTemplate>
@@ -44,11 +47,15 @@
                             <ColumnDefinition Width="150" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="180" />
+                            <ColumnDefinition Width="70" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{x:Bind Severity}" FontWeight="SemiBold" />
                         <TextBlock Grid.Column="1" Text="{x:Bind TagKey}" />
                         <TextBlock Grid.Column="2" Text="{x:Bind Message}" TextTrimming="CharacterEllipsis" />
                         <TextBlock Grid.Column="3" Text="{x:Bind TriggeredAt}" Opacity="0.7" />
+                        <Button Grid.Column="4" Content="确认" Style="{StaticResource Action}"
+                                Command="{Binding DataContext.AcknowledgeCommand, ElementName=PageRoot}"
+                                CommandParameter="{x:Bind Id}" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

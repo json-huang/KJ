@@ -18,22 +18,21 @@ public sealed class AuthModule : ModuleBase
     protected override void RegisterViews(IContainerRegistry containerRegistry)
     {
         containerRegistry.RegisterForNavigation<Views.LoginView, ViewModels.LoginViewModel>("AuthLogin");
+        containerRegistry.RegisterForNavigation<Views.UserManagementView, ViewModels.UserManagementViewModel>("UserManagement");
+        containerRegistry.RegisterForNavigation<Views.RoleManagementView, ViewModels.RoleManagementViewModel>("RoleManagement");
     }
 
-    protected override void RegisterRegions() { }
+    protected override void RegisterRegions() =>
+        ContainerProvider.Resolve<IRegionManager>()
+            .RegisterViewWithRegion(KJ.Modules.Core.Regions.RegionNames.MainNavigation, () => ContainerProvider.Resolve<Views.AuthNavigationView>());
 
     protected override void InitializeModule()
     {
-        // 启动时校验主工程已注册会话与只读认证上下文，避免模块与 Shell 脱节。
-        var session = ContainerProvider.Resolve<ISessionState>();
+        // Navigation is handled by ShellPage (GoLogin/GoMain) and MainPage.OnLoaded.
+        // Only validate that required services are registered.
+        _ = ContainerProvider.Resolve<ISessionState>();
         _ = ContainerProvider.Resolve<IAuthenticationContext>();
         _ = ContainerProvider.Resolve<IShellContentNavigation>();
-        var regionManager = ContainerProvider.Resolve<IRegionManager>();
         _ = ContainerProvider.Resolve<IPermissionService>();
-
-        if (!session.IsSignedIn)
-            regionManager.RequestNavigate(KJ.Modules.Core.Regions.RegionNames.MainContent, new Uri("AuthLogin", UriKind.Relative));
-        else
-            regionManager.RequestNavigate(KJ.Modules.Core.Regions.RegionNames.MainContent, new Uri("HomeOverview", UriKind.Relative));
     }
 }

@@ -2,7 +2,6 @@ using KJ.Infrastructure.Auth;
 using Microsoft.Extensions.DependencyInjection;
 using Prism.Commands;
 using Prism.Mvvm;
-using Prism.Navigation.Regions;
 
 namespace KJ.Modules.Auth.ViewModels;
 
@@ -10,7 +9,8 @@ public sealed class LoginViewModel : BindableBase
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ISessionState _sessionState;
-    private readonly IRegionManager _regionManager;
+    private readonly INavigator _navigator;
+    private readonly ILoginCredentialStore _credentialStore;
 
     private string _email = string.Empty;
     public string Email
@@ -28,13 +28,32 @@ public sealed class LoginViewModel : BindableBase
         set => SetProperty(ref _errorMessage, value);
     }
 
+    private bool _rememberEmail;
+    public bool RememberEmail
+    {
+        get => _rememberEmail;
+        set => SetProperty(ref _rememberEmail, value);
+    }
+
+    private bool _staySignedIn;
+    public bool StaySignedIn
+    {
+        get => _staySignedIn;
+        set => SetProperty(ref _staySignedIn, value);
+    }
+
     public DelegateCommand SignInCommand { get; }
 
-    public LoginViewModel(IServiceScopeFactory scopeFactory, ISessionState sessionState, IRegionManager regionManager)
+    public LoginViewModel(
+        IServiceScopeFactory scopeFactory,
+        ISessionState sessionState,
+        INavigator navigator,
+        ILoginCredentialStore credentialStore)
     {
         _scopeFactory = scopeFactory;
         _sessionState = sessionState;
-        _regionManager = regionManager;
+        _navigator = navigator;
+        _credentialStore = credentialStore;
         SignInCommand = new DelegateCommand(() => _ = ExecuteSignInAsync());
     }
 
@@ -51,7 +70,17 @@ public sealed class LoginViewModel : BindableBase
         }
 
         _sessionState.SetSignedIn(Email.Trim());
-        _regionManager.RequestNavigate(KJ.Modules.Core.Regions.RegionNames.MainContent, new Uri("HomeOverview", UriKind.Relative));
+
+        if (RememberEmail)
+            _credentialStore.SaveRememberedEmail(Email.Trim());
+        else
+            _credentialStore.ClearRememberedEmail();
+
+        if (StaySignedIn)
+            _credentialStore.SaveStaySignedIn(Email.Trim(), Password);
+        else
+            _credentialStore.ClearStaySignedIn();
+
+        _navigator.GoMain();
     }
 }
-

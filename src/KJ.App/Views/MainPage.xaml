@@ -37,9 +37,9 @@
             </StackPanel>
 
             <ScrollViewer Grid.Row="1" Padding="8,0,8,8">
-                <ContentControl
-                    x:Name="MainNavigationRegionHost"
-                    prism:RegionManager.RegionName="MainNavigation" />
+                <StackPanel
+                    x:Name="MainNavigationHost"
+                    Spacing="4" />
             </ScrollViewer>
 
             <StackPanel Grid.Row="2" Padding="16,12,16,16" Spacing="10">

@@ -21,12 +21,11 @@
                 Foreground="{StaticResource KjTextMutedBrush}"
                 Text="概览" />
 
-            <ToggleButton x:Name="DashboardBtn" Tag="Dashboard" Checked="Nav_Checked" PointerEntered="Nav_PointerEntered" PointerExited="Nav_PointerExited" Style="{StaticResource KjNavToggle}">
+            <ToggleButton x:Name="DashboardBtn" Tag="Dashboard" Checked="Nav_Checked" Style="{StaticResource KjNavToggle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=DashboardBtn, Converter={StaticResource BoolToVisibility}}" />
                     <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="Dashboard" />
@@ -42,19 +41,18 @@
                 Foreground="{StaticResource KjTextMutedBrush}"
                 Text="设备" />
 
-            <ToggleButton x:Name="DeviceListBtn" Tag="DeviceList" Checked="Nav_Checked" PointerEntered="Nav_PointerEntered" PointerExited="Nav_PointerExited" Style="{StaticResource KjNavToggle}">
+            <ToggleButton x:Name="DeviceListBtn" Tag="DeviceList" Checked="Nav_Checked" Style="{StaticResource KjNavToggle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=DeviceListBtn, Converter={StaticResource BoolToVisibility}}" />
                     <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="设备列表" />
                 </Grid>
             </ToggleButton>
 
-            <ToggleButton x:Name="TagMonitorBtn" Tag="TagMonitor" Checked="Nav_Checked" PointerEntered="Nav_PointerEntered" PointerExited="Nav_PointerExited" Style="{StaticResource KjNavToggle}">
+            <ToggleButton x:Name="TagMonitorBtn" Tag="TagMonitor" Checked="Nav_Checked" Style="{StaticResource KjNavToggle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3" />
@@ -63,7 +61,6 @@
                     </Grid.ColumnDefinitions>
                     <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=TagMonitorBtn, Converter={StaticResource BoolToVisibility}}" />
                     <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="Tag 监视" />
-                    <!-- 示例徽标：后续接入实时状态/告警数量 -->
                     <Border
                         Grid.Column="2"
                         Margin="8,0,0,0"
@@ -86,12 +83,11 @@
                 Foreground="{StaticResource KjTextMutedBrush}"
                 Text="分析" />
 
-            <ToggleButton x:Name="TrendBtn" Tag="TrendChart" Checked="Nav_Checked" PointerEntered="Nav_PointerEntered" PointerExited="Nav_PointerExited" Style="{StaticResource KjNavToggle}">
+            <ToggleButton x:Name="TrendBtn" Tag="TrendChart" Checked="Nav_Checked" Style="{StaticResource KjNavToggle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=TrendBtn, Converter={StaticResource BoolToVisibility}}" />
                     <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="趋势图" />
@@ -107,36 +103,33 @@
                 Foreground="{StaticResource KjTextMutedBrush}"
                 Text="流程" />
 
-            <ToggleButton x:Name="WorkflowListBtn" Tag="WorkflowList" Checked="Nav_Checked" PointerEntered="Nav_PointerEntered" PointerExited="Nav_PointerExited" Style="{StaticResource KjNavToggle}">
+            <ToggleButton x:Name="WorkflowListBtn" Tag="WorkflowList" Checked="Nav_Checked" Style="{StaticResource KjNavToggle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=WorkflowListBtn, Converter={StaticResource BoolToVisibility}}" />
                     <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="流程列表" />
                 </Grid>
             </ToggleButton>
 
-            <ToggleButton x:Name="WorkflowEditorBtn" Tag="WorkflowEditor" Checked="Nav_Checked" PointerEntered="Nav_PointerEntered" PointerExited="Nav_PointerExited" Style="{StaticResource KjNavToggle}">
+            <ToggleButton x:Name="WorkflowEditorBtn" Tag="WorkflowEditor" Checked="Nav_Checked" Style="{StaticResource KjNavToggle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=WorkflowEditorBtn, Converter={StaticResource BoolToVisibility}}" />
                     <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="流程编辑" />
                 </Grid>
             </ToggleButton>
 
-            <ToggleButton x:Name="WorkflowRunsBtn" Tag="WorkflowRuns" Checked="Nav_Checked" PointerEntered="Nav_PointerEntered" PointerExited="Nav_PointerExited" Style="{StaticResource KjNavToggle}">
+            <ToggleButton x:Name="WorkflowRunsBtn" Tag="WorkflowRuns" Checked="Nav_Checked" Style="{StaticResource KjNavToggle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=WorkflowRunsBtn, Converter={StaticResource BoolToVisibility}}" />
                     <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="运行记录" />
@@ -145,4 +138,3 @@
         </StackPanel>
     </StackPanel>
 </UserControl>
-

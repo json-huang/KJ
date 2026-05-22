@@ -22,7 +22,7 @@ public sealed class WorkflowRunsViewModel : BindableBase
     {
         _store = store;
         RefreshCommand = new DelegateCommand(Refresh);
-        Refresh();
+        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => Refresh());
     }
 
     private void Refresh()

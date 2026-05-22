@@ -17,6 +17,8 @@
         <TextBlock Grid.Row="0" FontSize="22" Text="Tag 实时监控" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12">
+            <TextBox PlaceholderText="搜索标签..." Width="250"
+                     Text="{x:Bind ViewModel.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button Content="清空" Command="{x:Bind ViewModel.ClearCommand}" />
         </StackPanel>
 

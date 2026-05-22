@@ -15,6 +15,8 @@ public sealed class TrendChartViewModel : BindableBase
 
     public ObservableCollection<TrendPoint> Points { get; } = new();
 
+    public event EventHandler? ChartReady;
+
     private string _selectedTagKey = string.Empty;
     public string SelectedTagKey
     {
@@ -27,6 +29,27 @@ public sealed class TrendChartViewModel : BindableBase
     {
         get => _statusText;
         set => SetProperty(ref _statusText, value);
+    }
+
+    private double _minValue;
+    public double MinValue
+    {
+        get => _minValue;
+        private set => SetProperty(ref _minValue, value);
+    }
+
+    private double _maxValue;
+    public double MaxValue
+    {
+        get => _maxValue;
+        private set => SetProperty(ref _maxValue, value);
+    }
+
+    private int _pointCount;
+    public int PointCount
+    {
+        get => _pointCount;
+        private set => SetProperty(ref _pointCount, value);
     }
 
     public DelegateCommand LoadCommand { get; }
@@ -64,11 +87,34 @@ public sealed class TrendChartViewModel : BindableBase
                 });
             }
 
+            UpdateChartMetrics();
             StatusText = $"已加载 {Points.Count} 个数据点";
+            ChartReady?.Invoke(this, EventArgs.Empty);
         }
         catch (Exception ex)
         {
             StatusText = $"加载失败: {ex.Message}";
+        }
+    }
+
+    private void UpdateChartMetrics()
+    {
+        PointCount = Points.Count;
+        if (PointCount == 0)
+        {
+            MinValue = 0;
+            MaxValue = 0;
+            return;
+        }
+
+        MinValue = Points.Min(p => p.Value);
+        MaxValue = Points.Max(p => p.Value);
+
+        // Ensure a visible range even when all values are equal
+        if (Math.Abs(MaxValue - MinValue) < 0.0001)
+        {
+            MinValue -= 1;
+            MaxValue += 1;
         }
     }
 }

@@ -21,6 +21,7 @@
             <TextBox PlaceholderText="标签 Key" Width="250"
                      Text="{x:Bind ViewModel.SelectedTagKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button Content="查询" Command="{x:Bind ViewModel.QueryCommand}" />
+            <Button Content="导出 CSV" Command="{x:Bind ViewModel.ExportCsvCommand}" />
         </StackPanel>
 
         <TextBlock Grid.Row="2" Text="{x:Bind ViewModel.StatusText}" Opacity="0.7" />

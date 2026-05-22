@@ -57,7 +57,9 @@ public sealed record AlarmRule(
     AlarmCondition Condition,
     AlarmSeverity Severity,
     string Message,
-    bool IsEnabled);
+    bool IsEnabled,
+    double HighThreshold = 0,
+    double LowThreshold = 0);
 
 public sealed record ActiveAlarm(
     string Id,

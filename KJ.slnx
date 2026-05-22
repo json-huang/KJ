@@ -22,4 +22,8 @@
   <Folder Name="/src/KJ.Modules.Monitoring.WinUI/">
     <Project Path="src/KJ.Modules.Monitoring.WinUI/KJ.Modules.Monitoring.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/KJ.Domain.Tests/KJ.Domain.Tests.csproj" />
+    <Project Path="tests/KJ.Infrastructure.Tests/KJ.Infrastructure.Tests.csproj" />
+  </Folder>
 </Solution>

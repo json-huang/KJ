@@ -12,7 +12,7 @@
     </UserControl.Resources>
     <StackPanel Padding="8,4,8,0" Spacing="8">
         <TextBlock Opacity="0.85" Foreground="{StaticResource KjTextSecondaryBrush}" Text="导航" />
-        <ToggleButton x:Name="HomeBtn" Tag="HomeOverview" Checked="Nav_Checked" PointerEntered="Nav_PointerEntered" PointerExited="Nav_PointerExited" Style="{StaticResource KjNavToggle}">
+        <ToggleButton x:Name="HomeBtn" Tag="HomeOverview" Checked="Nav_Checked" Style="{StaticResource KjNavToggle}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3" />
@@ -24,4 +24,3 @@
         </ToggleButton>
     </StackPanel>
 </UserControl>
-

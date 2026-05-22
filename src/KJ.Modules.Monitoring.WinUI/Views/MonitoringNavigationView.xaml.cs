@@ -15,8 +15,6 @@ public sealed partial class MonitoringNavigationView : UserControl
         InitializeComponent();
         _regionManager = regionManager;
 
-        // Some WinUI/Uno combinations crash when setting IsChecked in XAML.
-        // Set the default selection after load instead.
         Loaded += (_, _) =>
         {
             HookContentRegionNavigation();
@@ -45,28 +43,6 @@ public sealed partial class MonitoringNavigationView : UserControl
         SetSelected(tb);
     }
 
-    private void Nav_PointerEntered(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
-    {
-        if (sender is not ToggleButton tb)
-            return;
-
-        if (tb.IsChecked == true)
-            return;
-
-        tb.Background = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["KjNavHoverBrush"];
-    }
-
-    private void Nav_PointerExited(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
-    {
-        if (sender is not ToggleButton tb)
-            return;
-
-        if (tb.IsChecked == true)
-            return;
-
-        tb.Background = null;
-    }
-
     private void SetSelected(ToggleButton tb)
     {
         if (tb.Tag is not string route || string.IsNullOrWhiteSpace(route))
@@ -81,18 +57,13 @@ public sealed partial class MonitoringNavigationView : UserControl
 
     private void SetSelectedVisual(ToggleButton tb)
     {
-        // single-select behavior
         foreach (var b in new[] { DashboardBtn, DeviceListBtn, TagMonitorBtn, TrendBtn, WorkflowListBtn, WorkflowEditorBtn, WorkflowRunsBtn })
         {
             if (!ReferenceEquals(b, tb))
-            {
                 b.IsChecked = false;
-                b.Background = null;
-            }
         }
 
         tb.IsChecked = true;
-        tb.Background = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["KjNavSelectedBrush"];
     }
 
     private void HookContentRegionNavigation()
@@ -108,8 +79,6 @@ public sealed partial class MonitoringNavigationView : UserControl
         if (nav is null)
             return;
 
-        // Prism.Uno: rely on navigation events when ActiveViews isn't ready at Loaded.
-        // If the event isn't available in a given platform build, this will be a no-op.
         try
         {
             nav.Navigated += (_, __) => TrySyncSelectedFromCurrentContent();
@@ -117,7 +86,6 @@ public sealed partial class MonitoringNavigationView : UserControl
         }
         catch
         {
-            // fall back to one-shot sync only
         }
     }
 
@@ -158,4 +126,3 @@ public sealed partial class MonitoringNavigationView : UserControl
         }
     }
 }
-

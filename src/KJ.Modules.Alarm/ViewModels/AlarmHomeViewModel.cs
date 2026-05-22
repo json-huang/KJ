@@ -15,12 +15,21 @@ public sealed class AlarmHomeViewModel : BindableBase
     public string StatusText { get => _statusText; set => SetProperty(ref _statusText, value); }
 
     public DelegateCommand RefreshCommand { get; }
+    public DelegateCommand<string> AcknowledgeCommand { get; }
 
     public AlarmHomeViewModel(IAlarmService alarmService)
     {
         _alarmService = alarmService;
         _alarmService.AlarmRaised += (_, _) => Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(Refresh);
         RefreshCommand = new DelegateCommand(Refresh);
+        AcknowledgeCommand = new DelegateCommand<string>(Acknowledge);
+        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => Refresh());
+    }
+
+    private void Acknowledge(string? alarmId)
+    {
+        if (string.IsNullOrWhiteSpace(alarmId)) return;
+        _alarmService.AcknowledgeAlarm(alarmId, "current_user");
         Refresh();
     }
 

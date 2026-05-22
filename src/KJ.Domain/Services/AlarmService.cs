@@ -40,7 +40,7 @@ public sealed class AlarmService : IAlarmService
     {
         foreach (var rule in _rules.Values.Where(r => r.IsEnabled && r.TagKey == tagKey))
         {
-            if (IsTriggered(rule.Condition, value))
+            if (IsTriggered(rule.Condition, value, rule.HighThreshold, rule.LowThreshold))
             {
                 var alarmId = $"{rule.Id}_{DateTimeOffset.UtcNow.Ticks}";
                 var alarm = new ActiveAlarm(
@@ -53,7 +53,7 @@ public sealed class AlarmService : IAlarmService
         }
     }
 
-    private static bool IsTriggered(AlarmCondition condition, object? value)
+    private static bool IsTriggered(AlarmCondition condition, object? value, double highThreshold, double lowThreshold)
     {
         if (value is null) return false;
         try
@@ -61,16 +61,16 @@ public sealed class AlarmService : IAlarmService
             var numericValue = Convert.ToDouble(value);
             return condition switch
             {
-                AlarmCondition.GreaterThan => numericValue > 0,
-                AlarmCondition.LessThan => numericValue < 0,
-                AlarmCondition.Equals => true,
-                AlarmCondition.NotEquals => true,
+                AlarmCondition.GreaterThan => numericValue > highThreshold,
+                AlarmCondition.LessThan => numericValue < lowThreshold,
+                AlarmCondition.Equals => Math.Abs(numericValue - highThreshold) < 0.0001,
+                AlarmCondition.NotEquals => Math.Abs(numericValue - highThreshold) >= 0.0001,
                 _ => false,
             };
         }
         catch
         {
-            return condition == AlarmCondition.Equals;
+            return false;
         }
     }
 }

@@ -91,7 +91,6 @@
                 <Setter Property="FontSize" Value="{StaticResource AppFontSize}" />
                 <Setter Property="Padding" Value="12,10" />
                 <Setter Property="CornerRadius" Value="10" />
-                <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderBrush" Value="{StaticResource KjStrokeBrush}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="Foreground" Value="{StaticResource KjTextPrimaryBrush}" />

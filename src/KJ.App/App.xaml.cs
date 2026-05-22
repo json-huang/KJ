@@ -16,6 +16,7 @@ using Microsoft.UI.Xaml;
 using Prism.Ioc;
 using Prism.Modularity;
 using KJ.Workflows;
+using Microsoft.EntityFrameworkCore;
 
 namespace KJ.App;
 
@@ -25,6 +26,7 @@ public partial class App : PrismApplication
         new(TaskCreationOptions.RunContinuationsAsynchronously);
 
     public static DispatcherQueue? UiDispatcher { get; set; }
+    public static Window? MainWindow { get; private set; }
 
     public static Task WaitForDatabaseInitializationAsync() => DatabaseInitializationCompleted.Task;
 
@@ -37,6 +39,7 @@ public partial class App : PrismApplication
     protected override void ConfigureWindow(Window window)
     {
         base.ConfigureWindow(window);
+        MainWindow = window;
         window.Title = "KJ";
         window.Activate();
     }
@@ -55,14 +58,28 @@ public partial class App : PrismApplication
 
         // Shared domain singletons must live in the MS.DI container so that
         // MassTransit consumers and Prism viewmodels observe the same instance.
+        // Inner in-memory services are wrapped with EF Core persistence.
         services.AddSingleton<KJ.Domain.ITagStore, KJ.Domain.Services.InMemoryTagStore>();
-        services.AddSingleton<KJ.Domain.IAlarmService, KJ.Domain.Services.AlarmService>();
-        services.AddSingleton<KJ.Domain.IRecipeEngine, KJ.Domain.Services.RecipeEngine>();
-        services.AddSingleton<KJ.Domain.IDeviceManager, KJ.Domain.Services.DeviceManager>();
+        services.AddSingleton<KJ.Domain.Services.AlarmService>();
+        services.AddSingleton<KJ.Domain.Services.RecipeEngine>();
+        services.AddSingleton<KJ.Domain.Services.DeviceManager>();
+        services.AddSingleton<KJ.Domain.IAlarmService>(sp =>
+            new KJ.Infrastructure.Services.EfAlarmService(
+                sp.GetRequiredService<KJ.Domain.Services.AlarmService>(),
+                sp.GetRequiredService<IDbContextFactory<KJ.Infrastructure.Data.KjDbContext>>()));
+        services.AddSingleton<KJ.Domain.IRecipeEngine>(sp =>
+            new KJ.Infrastructure.Services.EfRecipeEngine(
+                sp.GetRequiredService<KJ.Domain.Services.RecipeEngine>(),
+                sp.GetRequiredService<IDbContextFactory<KJ.Infrastructure.Data.KjDbContext>>()));
+        services.AddSingleton<KJ.Domain.IDeviceManager>(sp =>
+            new KJ.Infrastructure.Services.EfDeviceManager(
+                sp.GetRequiredService<KJ.Domain.Services.DeviceManager>(),
+                sp.GetRequiredService<IDbContextFactory<KJ.Infrastructure.Data.KjDbContext>>()));
 
         // 设备驱动
         services.AddSingleton<KJ.Drivers.TcpDeviceDriver>();
         services.AddSingleton<KJ.Drivers.ModbusTcpDriver>();
+        services.AddSingleton<KJ.Drivers.ModbusRtuDriver>();
         services.AddSingleton<KJ.Drivers.OpcUaDriver>();
         services.AddSingleton<KJ.Drivers.Abstractions.IDeviceDriverFactory, KJ.Drivers.DeviceDriverFactory>();
 

@@ -22,12 +22,21 @@ public sealed class ConfigHomeViewModel : BindableBase
 
     public DelegateCommand RefreshCommand { get; }
     public DelegateCommand AddDeviceCommand { get; }
+    public DelegateCommand<string> RemoveDeviceCommand { get; }
 
     public ConfigHomeViewModel(IDeviceManager deviceManager)
     {
         _deviceManager = deviceManager;
         RefreshCommand = new DelegateCommand(Refresh);
         AddDeviceCommand = new DelegateCommand(AddDevice);
+        RemoveDeviceCommand = new DelegateCommand<string>(RemoveDevice);
+        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => Refresh());
+    }
+
+    private void RemoveDevice(string? deviceId)
+    {
+        if (string.IsNullOrWhiteSpace(deviceId)) return;
+        _deviceManager.RemoveDevice(deviceId);
         Refresh();
     }
 

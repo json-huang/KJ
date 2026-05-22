@@ -7,8 +7,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NModbus4" Version="2.1.0" />
+    <PackageReference Include="NModbus" Version="3.0.83" />
+    <PackageReference Include="NModbus.Serial" Version="3.0.83" />
     <PackageReference Include="Polly" Version="8.6.6" />
+    <PackageReference Include="System.IO.Ports" Version="8.*" />
   </ItemGroup>
 
   <PropertyGroup>
