@@ -21,6 +21,7 @@
                 x:Name="EmailBox"
                 Header="邮箱"
                 PlaceholderText="admin@local"
+                InputScope="EmailSmtpAddress"
                 Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <PasswordBox
                 x:Name="PasswordBox"

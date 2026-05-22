@@ -19,6 +19,7 @@
                 <TextBox
                     Header="邮箱"
                     PlaceholderText="admin@local"
+                    InputScope="EmailSmtpAddress"
                     Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <PasswordBox Header="密码" PasswordChanged="PasswordBox_OnPasswordChanged" />
                 <TextBlock

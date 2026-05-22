@@ -6,20 +6,17 @@ namespace KJ.App.Services;
 
 public sealed class SessionResumeService : ISessionResumeService
 {
-    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly IServiceProvider _serviceProvider;
     private readonly ISessionState _sessionState;
-    private readonly INavigator _navigator;
     private readonly ILoginCredentialStore _credentialStore;
 
     public SessionResumeService(
-        IServiceScopeFactory scopeFactory,
+        IServiceProvider serviceProvider,
         ISessionState sessionState,
-        INavigator navigator,
         ILoginCredentialStore credentialStore)
     {
-        _scopeFactory = scopeFactory;
+        _serviceProvider = serviceProvider;
         _sessionState = sessionState;
-        _navigator = navigator;
         _credentialStore = credentialStore;
     }
 
@@ -29,7 +26,7 @@ public sealed class SessionResumeService : ISessionResumeService
         if (string.IsNullOrWhiteSpace(email) || password is null)
             return false;
 
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        using var scope = _serviceProvider.CreateScope();
         var auth = scope.ServiceProvider.GetRequiredService<ILocalAuthService>();
         var (ok, _) = await auth.SignInAsync(email, password, cancellationToken).ConfigureAwait(true);
         if (!ok)
@@ -39,7 +36,6 @@ public sealed class SessionResumeService : ISessionResumeService
         }
 
         _sessionState.SetSignedIn(email);
-        _navigator.GoMain();
         return true;
     }
 }

@@ -52,22 +52,28 @@ public sealed class DashboardViewModel : BindableBase
         _auditLogger = auditLogger;
         _regionManager = regionManager;
 
-        _alarmService.AlarmRaised += (_, _) => Refresh();
+        _alarmService.AlarmRaised += (_, _) => Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => _ = RefreshAsync());
         _tagStore.TagUpdated += (_, _) => TagCount++;
 
-        RefreshCommand = new DelegateCommand(Refresh);
+        RefreshCommand = new DelegateCommand(() => _ = RefreshAsync());
         NavigateToAlarmsCommand = new DelegateCommand(() =>
             _regionManager.RequestNavigate(RegionNames.MainContent, new Uri("AlarmHome", UriKind.Relative)));
         NavigateToDevicesCommand = new DelegateCommand(() =>
             _regionManager.RequestNavigate(RegionNames.MainContent, new Uri("DeviceList", UriKind.Relative)));
 
-        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => Refresh());
+        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => _ = RefreshAsync());
     }
 
-    private void Refresh()
+    private async Task RefreshAsync()
     {
-        DeviceCount = _deviceManager.ListDevices().Count;
-        var activeAlarms = _alarmService.GetActiveAlarms();
+        var (devices, activeAlarms) = await Task.Run(() =>
+        {
+            var devs = _deviceManager.ListDevices();
+            var alarms = _alarmService.GetActiveAlarms();
+            return (devs, alarms);
+        }).ConfigureAwait(true);
+
+        DeviceCount = devices.Count;
         ActiveAlarmCount = activeAlarms.Count;
         SystemStatus = ActiveAlarmCount > 0 ? "有报警" : "正常";
 
@@ -76,7 +82,7 @@ public sealed class DashboardViewModel : BindableBase
         var info = activeAlarms.Count(a => a.Severity == AlarmSeverity.Info);
         AlarmSeverityText = $"高 {critical} · 中 {warning} · 低 {info}";
 
-        var connected = _deviceManager.ListDevices().Count(d => d.State == "Connected");
+        var connected = devices.Count(d => d.State == "Connected");
         ConnectionQuality = DeviceCount > 0 ? $"{connected}/{DeviceCount} 在线" : "无设备";
 
         _ = LoadRecentEventsAsync();

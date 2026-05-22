@@ -1,30 +1,35 @@
 using System.Security.Cryptography;
 using System.Text;
-using Windows.Storage;
 
 namespace KJ.App.Services;
 
 public sealed class LoginCredentialStore : KJ.Modules.Auth.ILoginCredentialStore
 {
-    private const string RememberedEmailKey = "KJ_RememberedEmail";
+    private const string RememberedEmailFileName = "kj-remembered-email.txt";
     private const string StaySignedInFileName = "kj-stay-signed-in.dat";
+
+    private static string GetAppDataFolder()
+    {
+        var folder = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "KJ");
+        Directory.CreateDirectory(folder);
+        return folder;
+    }
 
     public string? LoadRememberedEmail()
     {
         try
         {
-            if (ApplicationData.Current.LocalSettings.Values.TryGetValue(RememberedEmailKey, out var v) &&
-                v is string s &&
-                !string.IsNullOrWhiteSpace(s))
-            {
-                return s;
-            }
+            var path = Path.Combine(GetAppDataFolder(), RememberedEmailFileName);
+            if (!File.Exists(path))
+                return null;
 
-            return null;
+            var email = File.ReadAllText(path).Trim();
+            return string.IsNullOrWhiteSpace(email) ? null : email;
         }
         catch
         {
-            // Unpackaged/early-startup scenarios may not have ApplicationData available.
             return null;
         }
     }
@@ -33,7 +38,8 @@ public sealed class LoginCredentialStore : KJ.Modules.Auth.ILoginCredentialStore
     {
         try
         {
-            ApplicationData.Current.LocalSettings.Values[RememberedEmailKey] = email;
+            var path = Path.Combine(GetAppDataFolder(), RememberedEmailFileName);
+            File.WriteAllText(path, email);
         }
         catch
         {
@@ -44,8 +50,9 @@ public sealed class LoginCredentialStore : KJ.Modules.Auth.ILoginCredentialStore
     {
         try
         {
-            if (ApplicationData.Current.LocalSettings.Values.ContainsKey(RememberedEmailKey))
-                ApplicationData.Current.LocalSettings.Values.Remove(RememberedEmailKey);
+            var path = Path.Combine(GetAppDataFolder(), RememberedEmailFileName);
+            if (File.Exists(path))
+                File.Delete(path);
         }
         catch
         {
@@ -56,8 +63,7 @@ public sealed class LoginCredentialStore : KJ.Modules.Auth.ILoginCredentialStore
     {
         try
         {
-            var folder = ApplicationData.Current.LocalFolder.Path;
-            var path = Path.Combine(folder, StaySignedInFileName);
+            var path = Path.Combine(GetAppDataFolder(), StaySignedInFileName);
             var plain = Encoding.UTF8.GetBytes($"{email}\n{password}");
             var blob = ProtectedData.Protect(plain, optionalEntropy: null, scope: DataProtectionScope.CurrentUser);
             File.WriteAllBytes(path, blob);
@@ -71,8 +77,7 @@ public sealed class LoginCredentialStore : KJ.Modules.Auth.ILoginCredentialStore
     {
         try
         {
-            var folder = ApplicationData.Current.LocalFolder.Path;
-            var path = Path.Combine(folder, StaySignedInFileName);
+            var path = Path.Combine(GetAppDataFolder(), StaySignedInFileName);
             if (!File.Exists(path))
                 return (null, null);
 
@@ -98,14 +103,12 @@ public sealed class LoginCredentialStore : KJ.Modules.Auth.ILoginCredentialStore
     {
         try
         {
-            var folder = ApplicationData.Current.LocalFolder.Path;
-            var path = Path.Combine(folder, StaySignedInFileName);
+            var path = Path.Combine(GetAppDataFolder(), StaySignedInFileName);
             if (File.Exists(path))
                 File.Delete(path);
         }
         catch
         {
-            // 忽略删除失败
         }
     }
 }

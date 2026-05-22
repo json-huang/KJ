@@ -55,6 +55,17 @@ public sealed class LoginViewModel : BindableBase
         _navigator = navigator;
         _credentialStore = credentialStore;
         SignInCommand = new DelegateCommand(() => _ = ExecuteSignInAsync());
+
+        var remembered = _credentialStore.LoadRememberedEmail();
+        if (!string.IsNullOrWhiteSpace(remembered))
+        {
+            Email = remembered;
+            RememberEmail = true;
+        }
+        else
+        {
+            RememberEmail = false;
+        }
     }
 
     private async Task ExecuteSignInAsync()

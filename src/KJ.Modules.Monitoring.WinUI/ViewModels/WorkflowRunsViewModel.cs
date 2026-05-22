@@ -21,14 +21,15 @@ public sealed class WorkflowRunsViewModel : BindableBase
     public WorkflowRunsViewModel(IWorkflowRunLogStore store)
     {
         _store = store;
-        RefreshCommand = new DelegateCommand(Refresh);
-        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => Refresh());
+        RefreshCommand = new DelegateCommand(() => _ = RefreshAsync());
+        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => _ = RefreshAsync());
     }
 
-    private void Refresh()
+    private async Task RefreshAsync()
     {
+        var entries = await Task.Run(() => _store.GetRecent(200)).ConfigureAwait(true);
         Items.Clear();
-        foreach (var e in _store.GetRecent(200))
+        foreach (var e in entries)
         {
             Items.Add(new WorkflowRunLogItem
             {

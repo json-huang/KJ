@@ -27,23 +27,24 @@ public sealed class ConfigHomeViewModel : BindableBase
     public ConfigHomeViewModel(IDeviceManager deviceManager)
     {
         _deviceManager = deviceManager;
-        RefreshCommand = new DelegateCommand(Refresh);
-        AddDeviceCommand = new DelegateCommand(AddDevice);
-        RemoveDeviceCommand = new DelegateCommand<string>(RemoveDevice);
-        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => Refresh());
+        RefreshCommand = new DelegateCommand(() => _ = RefreshAsync());
+        AddDeviceCommand = new DelegateCommand(() => _ = AddDeviceAsync());
+        RemoveDeviceCommand = new DelegateCommand<string>(deviceId => _ = RemoveDeviceAsync(deviceId));
+        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => _ = RefreshAsync());
     }
 
-    private void RemoveDevice(string? deviceId)
+    private async Task RemoveDeviceAsync(string? deviceId)
     {
         if (string.IsNullOrWhiteSpace(deviceId)) return;
         _deviceManager.RemoveDevice(deviceId);
-        Refresh();
+        await RefreshAsync().ConfigureAwait(true);
     }
 
-    private void Refresh()
+    private async Task RefreshAsync()
     {
+        var devices = await Task.Run(() => _deviceManager.ListDevices()).ConfigureAwait(true);
         Devices.Clear();
-        foreach (var d in _deviceManager.ListDevices())
+        foreach (var d in devices)
         {
             Devices.Add(new DeviceDisplayItem
             {
@@ -55,7 +56,7 @@ public sealed class ConfigHomeViewModel : BindableBase
         }
     }
 
-    private void AddDevice()
+    private async Task AddDeviceAsync()
     {
         if (string.IsNullOrWhiteSpace(NewDeviceId) || string.IsNullOrWhiteSpace(NewDeviceName))
             return;
@@ -65,7 +66,7 @@ public sealed class ConfigHomeViewModel : BindableBase
             _deviceManager.AddDevice(new DeviceDescriptor(NewDeviceId, NewDeviceName, NewDriverType));
             NewDeviceId = string.Empty;
             NewDeviceName = string.Empty;
-            Refresh();
+            await RefreshAsync().ConfigureAwait(true);
         }
         catch (InvalidOperationException)
         {

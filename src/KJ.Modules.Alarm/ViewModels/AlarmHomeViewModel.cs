@@ -20,23 +20,24 @@ public sealed class AlarmHomeViewModel : BindableBase
     public AlarmHomeViewModel(IAlarmService alarmService)
     {
         _alarmService = alarmService;
-        _alarmService.AlarmRaised += (_, _) => Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(Refresh);
-        RefreshCommand = new DelegateCommand(Refresh);
-        AcknowledgeCommand = new DelegateCommand<string>(Acknowledge);
-        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => Refresh());
+        _alarmService.AlarmRaised += (_, _) => Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => _ = RefreshAsync());
+        RefreshCommand = new DelegateCommand(() => _ = RefreshAsync());
+        AcknowledgeCommand = new DelegateCommand<string>(alarmId => _ = AcknowledgeAsync(alarmId));
+        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => _ = RefreshAsync());
     }
 
-    private void Acknowledge(string? alarmId)
+    private async Task AcknowledgeAsync(string? alarmId)
     {
         if (string.IsNullOrWhiteSpace(alarmId)) return;
         _alarmService.AcknowledgeAlarm(alarmId, "current_user");
-        Refresh();
+        await RefreshAsync().ConfigureAwait(true);
     }
 
-    private void Refresh()
+    private async Task RefreshAsync()
     {
+        var alarms = await Task.Run(() => _alarmService.GetActiveAlarms()).ConfigureAwait(true);
         ActiveAlarms.Clear();
-        foreach (var alarm in _alarmService.GetActiveAlarms())
+        foreach (var alarm in alarms)
         {
             ActiveAlarms.Add(new ActiveAlarmDisplay
             {

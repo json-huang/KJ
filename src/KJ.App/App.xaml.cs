@@ -98,6 +98,7 @@ public partial class App : PrismApplication
         containerRegistry.RegisterSingleton<INavigator, FrameNavigator>();
         containerRegistry.RegisterSingleton<IAuthenticationContext, AuthenticationContext>();
         containerRegistry.RegisterSingleton<ILoginCredentialStore, LoginCredentialStore>();
+        containerRegistry.RegisterSingleton<ISessionResumeService, SessionResumeService>();
         containerRegistry.RegisterSingleton<IShellContentNavigation, ShellRegionNavigationAdapter>();
         containerRegistry.RegisterSingleton<IPermissionService, PermissionService>();
 
