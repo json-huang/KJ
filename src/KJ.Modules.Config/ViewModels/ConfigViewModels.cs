@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using KJ.Domain;
 using KJ.Domain.Services;
+using Prism.Commands;
 
 namespace KJ.Modules.Config.ViewModels;
 
@@ -21,9 +23,16 @@ public sealed class ConfigHomeViewModel
     public string NewHost { get; set; } = "";
     public int NewPort { get; set; }
 
+    public ICommand RefreshCommand { get; }
+    public ICommand AddDeviceCommand { get; }
+    public ICommand RemoveDeviceCommand { get; }
+
     public ConfigHomeViewModel(IDeviceManager deviceManager)
     {
         _deviceManager = deviceManager;
+        RefreshCommand = new DelegateCommand(Refresh);
+        AddDeviceCommand = new DelegateCommand(() => AddDevice());
+        RemoveDeviceCommand = new DelegateCommand<string>(RemoveDevice);
     }
 
     public void Refresh()
