@@ -12,5 +12,9 @@
     <ProjectReference Include="..\KJ.Diagnostics\KJ.Diagnostics.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Beckhoff.TwinCAT.Ads" Version="7.0.172" />
+  </ItemGroup>
+
 </Project>
 

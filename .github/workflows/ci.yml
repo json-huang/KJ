@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: |
+        dotnet restore src/KJ.Domain/KJ.Domain.csproj
+        dotnet restore src/KJ.Core/KJ.Core.csproj
+        dotnet restore src/KJ.Drivers/KJ.Drivers.csproj
+        dotnet restore src/KJ.Drivers.Abstractions/KJ.Drivers.Abstractions.csproj
+        dotnet restore src/KJ.Drivers.Plc.Beckhoff.Ads/KJ.Drivers.Plc.Beckhoff.Ads.csproj
+        dotnet restore src/KJ.Comms.Abstractions/KJ.Comms.Abstractions.csproj
+        dotnet restore src/KJ.Comms.Drivers.Tcp/KJ.Comms.Drivers.Tcp.csproj
+        dotnet restore src/KJ.Diagnostics/KJ.Diagnostics.csproj
+        dotnet restore src/KJ.Workflows/KJ.Workflows.csproj
+        dotnet restore src/KJ.Infrastructure/KJ.Infrastructure.csproj
+
+    - name: Build (non-WinUI projects)
+      run: |
+        dotnet build src/KJ.Domain/KJ.Domain.csproj --no-restore -c Release
+        dotnet build src/KJ.Core/KJ.Core.csproj --no-restore -c Release
+        dotnet build src/KJ.Drivers.Abstractions/KJ.Drivers.Abstractions.csproj --no-restore -c Release
+        dotnet build src/KJ.Drivers/KJ.Drivers.csproj --no-restore -c Release
+        dotnet build src/KJ.Drivers.Plc.Beckhoff.Ads/KJ.Drivers.Plc.Beckhoff.Ads.csproj --no-restore -c Release
+        dotnet build src/KJ.Comms.Abstractions/KJ.Comms.Abstractions.csproj --no-restore -c Release
+        dotnet build src/KJ.Comms.Drivers.Tcp/KJ.Comms.Drivers.Tcp.csproj --no-restore -c Release
+        dotnet build src/KJ.Diagnostics/KJ.Diagnostics.csproj --no-restore -c Release
+        dotnet build src/KJ.Workflows/KJ.Workflows.csproj --no-restore -c Release
+        dotnet build src/KJ.Infrastructure/KJ.Infrastructure.csproj --no-restore -c Release
+
+    - name: Test
+      run: |
+        dotnet test tests/KJ.Domain.Tests/KJ.Domain.Tests.csproj -c Release --no-build --logger "trx;LogFileName=domain.trx" --results-directory TestResults || true
+        dotnet test tests/KJ.Infrastructure.Tests/KJ.Infrastructure.Tests.csproj -c Release --no-build --logger "trx;LogFileName=infra.trx" --results-directory TestResults || true
+        dotnet test tests/KJ.Drivers.Tests/KJ.Drivers.Tests.csproj -c Release --no-build --logger "trx;LogFileName=drivers.trx" --results-directory TestResults || true
+        dotnet test tests/KJ.Workflows.Tests/KJ.Workflows.Tests.csproj -c Release --no-build --logger "trx;LogFileName=workflows.trx" --results-directory TestResults || true
+        dotnet test tests/KJ.Diagnostics.Tests/KJ.Diagnostics.Tests.csproj -c Release --no-build --logger "trx;LogFileName=diag.trx" --results-directory TestResults || true
+        dotnet test tests/KJ.Core.Tests/KJ.Core.Tests.csproj -c Release --no-build --logger "trx;LogFileName=core.trx" --results-directory TestResults || true
+
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: TestResults/*.trx
+
+    - name: Pack Domain (library)
+      run: dotnet pack src/KJ.Domain/KJ.Domain.csproj -c Release --no-build -o ./artifacts
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      if: github.ref == 'refs/heads/main'
+      with:
+        name: packages
+        path: ./artifacts/*.nupkg

@@ -81,13 +81,97 @@ public partial class App : PrismApplication
         services.AddSingleton<KJ.Drivers.ModbusTcpDriver>();
         services.AddSingleton<KJ.Drivers.ModbusRtuDriver>();
         services.AddSingleton<KJ.Drivers.OpcUaDriver>();
+        services.AddSingleton<KJ.Drivers.Plc.Beckhoff.Ads.BeckhoffAdsDriver>();
+        services.AddSingleton<KJ.Drivers.Abstractions.IDeviceDriver>(sp =>
+            sp.GetRequiredService<KJ.Drivers.Plc.Beckhoff.Ads.BeckhoffAdsDriver>());
         services.AddSingleton<KJ.Drivers.Abstractions.IDeviceDriverFactory, KJ.Drivers.DeviceDriverFactory>();
 
-        // Workflow runtime (minimal closure)
+        // 标签配置 & 设备采集
+        services.AddSingleton<KJ.Infrastructure.Services.EfTagConfigStore>();
+        services.AddSingleton<KJ.Domain.ITagConfigStore>(sp =>
+            sp.GetRequiredService<KJ.Infrastructure.Services.EfTagConfigStore>());
+        services.AddSingleton<KJ.Comms.Abstractions.ICommsService, KJ.Core.DevicePollingService>();
+        services.AddSingleton<KJ.Core.DevicePollingService>(sp =>
+            (KJ.Core.DevicePollingService)sp.GetRequiredService<KJ.Comms.Abstractions.ICommsService>());
+
+        // TagHistory 持久化（监听 TagUpdated 事件，异步写入 DB）
+        services.AddSingleton<KJ.Infrastructure.Services.TagHistoryWriter>();
+
+        // 数据保留策略（每天清理超过 30 天的历史数据）
+        services.AddSingleton<KJ.Infrastructure.Services.TagHistoryRetentionService>();
+
+        // 健康检查
+        services.AddSingleton<KJ.Infrastructure.Services.HealthCheckService>();
+
+        // OpenTelemetry 指标
+        services.AddSingleton<KJ.Infrastructure.Metrics.KjMetrics>();
+        services.AddSingleton<KJ.Infrastructure.Metrics.MetricsCollector>();
+
+        // 多语言
+        services.AddSingleton<KJ.Infrastructure.Localization.LocalizationService>();
+
+        // 告警历史查询
+        services.AddSingleton<KJ.Infrastructure.Services.AlarmHistoryService>();
+
+        // 工作流导入导出
+        services.AddSingleton<KJ.Infrastructure.Services.WorkflowImportExportService>();
+
+        // 标签搜索
+        services.AddSingleton<KJ.Domain.Services.TagSearchService>();
+
+        // 扩展认证（密码重置、注册）
+        services.AddSingleton<KJ.Infrastructure.Auth.ExtendedAuthService>();
+
+        // 工作流模板
+        services.AddSingleton<KJ.Infrastructure.Services.WorkflowTemplateService>();
+
+        // 设备详情
+        services.AddSingleton<KJ.Infrastructure.Services.DeviceDetailsService>();
+
+        // 操作审计查询
+        services.AddSingleton<KJ.Infrastructure.Services.AuditQueryService>();
+
+        // 数据保留策略管理
+        services.AddSingleton<KJ.Infrastructure.Services.DataRetentionManager>();
+
+        // 数据库备份
+        services.AddSingleton<KJ.Infrastructure.Services.DatabaseBackupService>();
+
+        // 配置导入导出
+        services.AddSingleton<KJ.Infrastructure.Services.ConfigImportExportService>();
+
+        // 会话管理
+        services.AddSingleton<KJ.Infrastructure.Auth.SessionManager>();
+
+        // 细粒度权限
+        services.AddSingleton<KJ.Infrastructure.Auth.FineGrainedPermissionService>();
+
+        // 配置变更审计
+        services.AddSingleton<KJ.Infrastructure.Services.ConfigChangeAuditService>();
+
+        // 工作流撤销重做
+        services.AddSingleton<KJ.Workflows.WorkflowUndoRedoService>();
+
+        // 工作流剪贴板
+        services.AddSingleton<KJ.Workflows.WorkflowClipboardService>();
+
+        // 定时报表
+        services.AddSingleton<KJ.Infrastructure.Services.ScheduledReportService>();
+
+        // 报表导出
+        services.AddSingleton<KJ.Infrastructure.Services.TagHistoryExportService>();
+
+        // 告警通知
+        services.AddSingleton<KJ.Domain.Services.TagManager>();
+        services.AddSingleton<KJ.Domain.Services.AlarmNotificationService>();
+
+        // Workflow runtime
+        services.AddSingleton<KJ.Workflows.PlcDataBridge>();
+        services.AddSingleton<KJ.Workflows.ScriptCompilationService>();
         services.AddSingleton<IWorkflowRunLogStore, KJ.Infrastructure.Workflows.EfWorkflowRunLogStore>();
         services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.StartStepHandler>();
-        services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.SimAdsReadStepHandler>();
-        services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.SimAdsWriteStepHandler>();
+        services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.ReadTagStepHandler>();
+        services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.WriteTagStepHandler>();
         services.AddSingleton<IWorkflowRuntime, WorkflowRuntimeService>();
     }
 

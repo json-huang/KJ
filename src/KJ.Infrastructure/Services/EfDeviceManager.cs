@@ -2,6 +2,7 @@ using KJ.Domain;
 using KJ.Infrastructure.Data;
 using KJ.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace KJ.Infrastructure.Services;
 
@@ -9,12 +10,17 @@ public sealed class EfDeviceManager : IDeviceManager
 {
     private readonly IDeviceManager _inner;
     private readonly IDbContextFactory<KjDbContext> _dbFactory;
+    private readonly ILogger<EfDeviceManager>? _logger;
     private bool _loaded;
 
-    public EfDeviceManager(IDeviceManager inner, IDbContextFactory<KjDbContext> dbFactory)
+    public EfDeviceManager(
+        IDeviceManager inner,
+        IDbContextFactory<KjDbContext> dbFactory,
+        ILogger<EfDeviceManager>? logger = null)
     {
         _inner = inner;
         _dbFactory = dbFactory;
+        _logger = logger;
     }
 
     private void EnsureLoaded()
@@ -30,12 +36,17 @@ public sealed class EfDeviceManager : IDeviceManager
                     device.Id.ToString(),
                     device.Name,
                     device.Type.ToString(),
-                    device.State.ToString());
+                    device.State.ToString(),
+                    Host: device.Address?.Host ?? "",
+                    Port: device.Address?.Port ?? 0);
                 try { _inner.AddDevice(descriptor); }
-                catch (InvalidOperationException) { }
+                catch (InvalidOperationException) { /* 设备已存在，跳过 */ }
             }
         }
-        catch { }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(ex, "Failed to load devices from database");
+        }
     }
 
     public IReadOnlyList<DeviceDescriptor> ListDevices()
@@ -53,58 +64,28 @@ public sealed class EfDeviceManager : IDeviceManager
     public void AddDevice(DeviceDescriptor device)
     {
         _inner.AddDevice(device);
-        _ = Task.Run(() => PersistDevice(device));
+        PersistDeviceAsync(device);
     }
 
     public void RemoveDevice(string deviceId)
     {
         _inner.RemoveDevice(deviceId);
-        _ = Task.Run(() =>
-        {
-            try
-            {
-                using var db = _dbFactory.CreateDbContext();
-                if (Guid.TryParse(deviceId, out var guid))
-                {
-                    var entity = db.Devices.Find(guid);
-                    if (entity is not null)
-                    {
-                        db.Devices.Remove(entity);
-                        db.SaveChanges();
-                    }
-                }
-            }
-            catch { }
-        });
+        RemoveDeviceAsync(deviceId);
     }
 
     public void UpdateDeviceState(string deviceId, string state)
     {
         _inner.UpdateDeviceState(deviceId, state);
-        _ = Task.Run(() =>
-        {
-            try
-            {
-                using var db = _dbFactory.CreateDbContext();
-                if (Guid.TryParse(deviceId, out var guid))
-                {
-                    var entity = db.Devices.Find(guid);
-                    if (entity is not null && Enum.TryParse<ConnectionState>(state, out var cs))
-                    {
-                        entity.State = cs;
-                        db.SaveChanges();
-                    }
-                }
-            }
-            catch { }
-        });
+        UpdateDeviceStateAsync(deviceId, state);
     }
 
-    private void PersistDevice(DeviceDescriptor device)
+    // 使用 async void + try-catch 做 fire-and-forget 写入
+    // 生产环境应改为后台队列服务
+    private async void PersistDeviceAsync(DeviceDescriptor device)
     {
         try
         {
-            using var db = _dbFactory.CreateDbContext();
+            await using var db = await _dbFactory.CreateDbContextAsync().ConfigureAwait(false);
             var entity = new Device
             {
                 Id = Guid.TryParse(device.DeviceId, out var g) ? g : Guid.NewGuid(),
@@ -113,8 +94,53 @@ public sealed class EfDeviceManager : IDeviceManager
                 State = Enum.TryParse<ConnectionState>(device.State, out var cs) ? cs : ConnectionState.Disconnected,
             };
             db.Devices.Add(entity);
-            db.SaveChanges();
+            await db.SaveChangesAsync().ConfigureAwait(false);
         }
-        catch { }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(ex, "Failed to persist device {DeviceId}", device.DeviceId);
+        }
+    }
+
+    private async void RemoveDeviceAsync(string deviceId)
+    {
+        try
+        {
+            await using var db = await _dbFactory.CreateDbContextAsync().ConfigureAwait(false);
+            if (Guid.TryParse(deviceId, out var guid))
+            {
+                var entity = await db.Devices.FindAsync(guid).ConfigureAwait(false);
+                if (entity is not null)
+                {
+                    db.Devices.Remove(entity);
+                    await db.SaveChangesAsync().ConfigureAwait(false);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(ex, "Failed to remove device {DeviceId} from database", deviceId);
+        }
+    }
+
+    private async void UpdateDeviceStateAsync(string deviceId, string state)
+    {
+        try
+        {
+            await using var db = await _dbFactory.CreateDbContextAsync().ConfigureAwait(false);
+            if (Guid.TryParse(deviceId, out var guid))
+            {
+                var entity = await db.Devices.FindAsync(guid).ConfigureAwait(false);
+                if (entity is not null && Enum.TryParse<ConnectionState>(state, out var cs))
+                {
+                    entity.State = cs;
+                    await db.SaveChangesAsync().ConfigureAwait(false);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogWarning(ex, "Failed to update device {DeviceId} state", deviceId);
+        }
     }
 }

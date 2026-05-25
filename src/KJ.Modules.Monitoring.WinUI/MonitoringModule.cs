@@ -11,7 +11,7 @@ public sealed class MonitoringModule : ModuleBase
 {
     protected override void RegisterServices(IContainerRegistry containerRegistry)
     {
-        containerRegistry.RegisterSingleton<IDeviceStatusProvider, NullDeviceStatusProvider>();
+        containerRegistry.RegisterSingleton<IDeviceStatusProvider, DeviceStatusProvider>();
         containerRegistry.RegisterSingleton<IWorkflowStore, WorkflowJsonStore>();
     }
 

@@ -3,8 +3,6 @@
     <Project Path="src/KJ.App/KJ.App.csproj">
       <Platform Project="x86" />
     </Project>
-    <Project Path="src/KJ.Comms.Abstractions/KJ.Comms.Abstractions.csproj" />
-    <Project Path="src/KJ.Comms.Drivers.Tcp/KJ.Comms.Drivers.Tcp.csproj" />
     <Project Path="src/KJ.Core/KJ.Core.csproj" />
     <Project Path="src/KJ.Diagnostics/KJ.Diagnostics.csproj" />
     <Project Path="src/KJ.Drivers.Abstractions/KJ.Drivers.Abstractions.csproj" />
@@ -18,12 +16,21 @@
     <Project Path="src/KJ.Modules.Config/KJ.Modules.Config.csproj" />
     <Project Path="src/KJ.Modules.Monitoring/KJ.Modules.Monitoring.csproj" />
     <Project Path="src/KJ.Modules.Reporting/KJ.Modules.Reporting.csproj" />
+    <Project Path="src/KJ.Modules.Core/KJ.Modules.Core.csproj" />
+    <Project Path="src/KJ.Workflows/KJ.Workflows.csproj" />
   </Folder>
   <Folder Name="/src/KJ.Modules.Monitoring.WinUI/">
     <Project Path="src/KJ.Modules.Monitoring.WinUI/KJ.Modules.Monitoring.csproj" />
   </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/SeedHistory/SeedHistory.csproj" />
+  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/KJ.Domain.Tests/KJ.Domain.Tests.csproj" />
     <Project Path="tests/KJ.Infrastructure.Tests/KJ.Infrastructure.Tests.csproj" />
+    <Project Path="tests/KJ.Workflows.Tests/KJ.Workflows.Tests.csproj" />
+    <Project Path="tests/KJ.Drivers.Tests/KJ.Drivers.Tests.csproj" />
+    <Project Path="tests/KJ.Diagnostics.Tests/KJ.Diagnostics.Tests.csproj" />
+    <Project Path="tests/KJ.Core.Tests/KJ.Core.Tests.csproj" />
   </Folder>
 </Solution>

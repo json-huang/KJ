@@ -1,5 +1,49 @@
+## Build output
 **/bin/
 **/obj/
+
+## Visual Studio
 *.user
 *.suo
 .vs/
+*.csproj.user
+*.sln.docstates
+
+## NuGet
+packages/
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+
+## Rider
+.idea/
+*.sln.iml
+
+## VS Code
+.vscode/
+
+## User-specific
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Publish output
+publish/
+
+## Test results
+TestResults/
+coverage/
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## App settings (local overrides)
+appsettings.Development.json
+appsettings.Local.json
+
+## Logs
+*.log
+logs/

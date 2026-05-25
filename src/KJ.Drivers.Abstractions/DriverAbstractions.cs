@@ -1,3 +1,5 @@
+using KJ.Domain;
+
 namespace KJ.Drivers.Abstractions;
 
 public enum DriverConnectionState
@@ -6,17 +8,6 @@ public enum DriverConnectionState
     Connecting = 1,
     Connected = 2,
     Faulted = 3,
-}
-
-public enum TagValueType
-{
-    Bool = 0,
-    Int32 = 1,
-    Int64 = 2,
-    Float = 3,
-    Double = 4,
-    String = 5,
-    Bytes = 6,
 }
 
 public sealed record DeviceEndpoint(string Host, int Port, string? Extra = null);

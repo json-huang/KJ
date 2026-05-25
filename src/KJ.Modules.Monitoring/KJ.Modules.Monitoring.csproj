@@ -2,7 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KJ.Core\KJ.Core.csproj" />
-    <ProjectReference Include="..\KJ.Comms.Abstractions\KJ.Comms.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

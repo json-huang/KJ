@@ -2,6 +2,7 @@ using KJ.Domain;
 using KJ.Infrastructure.Data;
 using KJ.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace KJ.Infrastructure.Services;
 
@@ -9,12 +10,14 @@ public sealed class EfRecipeEngine : IRecipeEngine
 {
     private readonly IRecipeEngine _inner;
     private readonly IDbContextFactory<KjDbContext> _dbFactory;
+    private readonly ILogger<EfRecipeEngine>? _logger;
     private bool _loaded;
 
-    public EfRecipeEngine(IRecipeEngine inner, IDbContextFactory<KjDbContext> dbFactory)
+    public EfRecipeEngine(IRecipeEngine inner, IDbContextFactory<KjDbContext> dbFactory, ILogger<EfRecipeEngine>? logger = null)
     {
         _inner = inner;
         _dbFactory = dbFactory;
+        _logger = logger;
     }
 
     private void EnsureLoaded()
@@ -38,10 +41,10 @@ public sealed class EfRecipeEngine : IRecipeEngine
                     new DateTimeOffset(recipe.CreatedAt, TimeSpan.Zero),
                     recipe.CreatedBy);
                 try { _inner.SaveRecipeAsync(data).GetAwaiter().GetResult(); }
-                catch { }
+                catch (Exception ex) { _logger?.LogWarning(ex, "Database operation failed"); }
             }
         }
-        catch { }
+        catch (Exception ex) { _logger?.LogWarning(ex, "Database operation failed"); }
     }
 
     public Task ApplyAsync(string recipeName, CancellationToken cancellationToken = default)
@@ -102,7 +105,7 @@ public sealed class EfRecipeEngine : IRecipeEngine
 
                 await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }
-            catch { }
+            catch (Exception ex) { _logger?.LogWarning(ex, "Database operation failed"); }
         }, cancellationToken);
     }
 
@@ -124,7 +127,7 @@ public sealed class EfRecipeEngine : IRecipeEngine
                     await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
                 }
             }
-            catch { }
+            catch (Exception ex) { _logger?.LogWarning(ex, "Database operation failed"); }
         }, cancellationToken);
     }
 }

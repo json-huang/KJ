@@ -2,6 +2,7 @@ using KJ.Domain;
 using KJ.Infrastructure.Data;
 using KJ.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace KJ.Infrastructure.Services;
 
@@ -9,6 +10,7 @@ public sealed class EfAlarmService : IAlarmService
 {
     private readonly IAlarmService _inner;
     private readonly IDbContextFactory<KjDbContext> _dbFactory;
+    private readonly ILogger<EfAlarmService>? _logger;
     private bool _loaded;
 
     public event EventHandler<AlarmEvent>? AlarmRaised
@@ -17,10 +19,11 @@ public sealed class EfAlarmService : IAlarmService
         remove => _inner.AlarmRaised -= value;
     }
 
-    public EfAlarmService(IAlarmService inner, IDbContextFactory<KjDbContext> dbFactory)
+    public EfAlarmService(IAlarmService inner, IDbContextFactory<KjDbContext> dbFactory, ILogger<EfAlarmService>? logger = null)
     {
         _inner = inner;
         _dbFactory = dbFactory;
+        _logger = logger;
         _inner.AlarmRaised += OnAlarmRaised;
     }
 
@@ -41,10 +44,10 @@ public sealed class EfAlarmService : IAlarmService
                     alarm.Name,
                     alarm.IsEnabled);
                 try { _inner.AddRule(rule); }
-                catch { }
+                catch (Exception ex) { _logger?.LogWarning(ex, "Database operation failed"); }
             }
         }
-        catch { }
+        catch (Exception ex) { _logger?.LogWarning(ex, "Database operation failed"); }
     }
 
     private void OnAlarmRaised(object? sender, AlarmEvent e)
@@ -64,7 +67,7 @@ public sealed class EfAlarmService : IAlarmService
                 });
                 db.SaveChanges();
             }
-            catch { }
+            catch (Exception ex) { _logger?.LogWarning(ex, "Database operation failed"); }
         });
     }
 
@@ -90,7 +93,7 @@ public sealed class EfAlarmService : IAlarmService
                 db.Alarms.Add(entity);
                 db.SaveChanges();
             }
-            catch { }
+            catch (Exception ex) { _logger?.LogWarning(ex, "Database operation failed"); }
         });
     }
 
@@ -112,7 +115,7 @@ public sealed class EfAlarmService : IAlarmService
                     }
                 }
             }
-            catch { }
+            catch (Exception ex) { _logger?.LogWarning(ex, "Database operation failed"); }
         });
     }
 
@@ -146,7 +149,7 @@ public sealed class EfAlarmService : IAlarmService
                 });
                 db.SaveChanges();
             }
-            catch { }
+            catch (Exception ex) { _logger?.LogWarning(ex, "Database operation failed"); }
         });
     }
 

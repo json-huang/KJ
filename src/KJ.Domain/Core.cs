@@ -23,6 +23,17 @@ public enum TagQuality
     Unknown = 2,
 }
 
+public enum TagValueType
+{
+    Bool = 0,
+    Int32 = 1,
+    Int64 = 2,
+    Float = 3,
+    Double = 4,
+    String = 5,
+    Bytes = 6,
+}
+
 public readonly record struct TagId(string Value);
 
 public readonly record struct TagValue(TagId Id, object? Value, TagQuality Quality, DateTimeOffset Timestamp);
@@ -34,9 +45,32 @@ public interface ITagStore
     void Upsert(TagValue value);
 }
 
+// ── Tag Config ──────────────────────────────────────────────────────────
+
+public sealed record TagConfig(
+    Guid TagId,
+    string TagKey,
+    string DeviceId,
+    string Address,
+    TagValueType ValueType,
+    int PollIntervalMs = 1000);
+
+public interface ITagConfigStore
+{
+    IReadOnlyList<TagConfig> GetTagsForDevice(string deviceId);
+    IReadOnlyList<TagConfig> GetAllTags();
+}
+
 // ── Device ──────────────────────────────────────────────────────────────
 
-public sealed record DeviceDescriptor(string DeviceId, string DisplayName, string DriverType, string State = "Disconnected");
+public sealed record DeviceDescriptor(
+    string DeviceId,
+    string DisplayName,
+    string DriverType,
+    string State = "Disconnected",
+    string Host = "",
+    int Port = 0,
+    string? Extra = null);
 
 public interface IDeviceManager
 {

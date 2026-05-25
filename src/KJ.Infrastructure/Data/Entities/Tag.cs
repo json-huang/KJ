@@ -21,4 +21,7 @@ public sealed class Tag
     public DateTime Timestamp { get; set; }
 
     public TagDirection Direction { get; set; }
+
+    /// <summary>轮询间隔（毫秒）。0 表示使用默认值 1000ms。</summary>
+    public int PollIntervalMs { get; set; }
 }

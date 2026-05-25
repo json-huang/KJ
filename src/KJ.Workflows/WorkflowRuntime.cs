@@ -122,7 +122,6 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
         WorkflowStep? step;
         WorkflowExecutionContext ctx;
         CancellationToken runToken;
-        Guid? nextId;
 
         lock (_gate)
         {
@@ -142,7 +141,6 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
                 _pauseGate.Set();
 
             step = _current;
-            nextId = _current.NextStepId;
             runToken = _runCts?.Token ?? CancellationToken.None;
             ctx = new WorkflowExecutionContext(ActiveRunId.Value, _log.Append);
         }
@@ -152,7 +150,8 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
 
         lock (_gate)
         {
-            // advance to next (or end)
+            // advance to next (or end) — supports conditional branches
+            var nextId = ResolveNextStep(step, ctx);
             if (nextId is { } nid && _byId!.TryGetValue(nid, out var next))
                 _current = next;
             else
@@ -270,10 +269,11 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
 
                 await ExecuteOneStepAsync(step, ctx, ct).ConfigureAwait(false);
 
-                // advance
+                // advance — supports conditional branches
                 lock (_gate)
                 {
-                    if (_current?.NextStepId is { } nextId && _byId!.TryGetValue(nextId, out var next))
+                    var nextId = ResolveNextStep(step, ctx);
+                    if (nextId is { } nid && _byId!.TryGetValue(nid, out var next))
                         _current = next;
                     else
                         _current = null;
@@ -337,6 +337,19 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
             CurrentStepId = step.Id;
         }
         Changed?.Invoke();
+    }
+
+    /// <summary>
+    /// 解析下一步骤 ID。优先评估条件分支，回退到线性 NextStepId。
+    /// </summary>
+    private Guid? ResolveNextStep(WorkflowStep step, WorkflowExecutionContext ctx)
+    {
+        // 收集运行时变量（从步骤参数 + TagStore 快照）
+        var vars = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var kv in step.Parameters)
+            vars[kv.Key] = kv.Value;
+
+        return BranchEvaluator.EvaluateNext(step, ctx, vars);
     }
 }
 

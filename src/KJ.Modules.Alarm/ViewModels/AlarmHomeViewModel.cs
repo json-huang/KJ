@@ -5,6 +5,9 @@ using Prism.Mvvm;
 
 namespace KJ.Modules.Alarm.ViewModels;
 
+/// <summary>
+/// 告警主页 ViewModel。展示活动告警，支持确认。
+/// </summary>
 public sealed class AlarmHomeViewModel : BindableBase
 {
     private readonly IAlarmService _alarmService;

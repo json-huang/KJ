@@ -367,7 +367,24 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         Name = _workflow.Name,
         Version = _workflow.Version,
         UpdatedAt = _workflow.UpdatedAt,
-        Steps = _steps.ToList(),
+        Steps = _steps.Select(s => new WorkflowStep
+        {
+            Id = s.Id,
+            Title = s.Title,
+            Kind = s.Kind,
+            X = s.X,
+            Y = s.Y,
+            NextStepId = s.NextStepId,
+            Parameters = new Dictionary<string, string>(s.Parameters, StringComparer.OrdinalIgnoreCase),
+            Notes = s.Notes,
+            Branches = s.Branches.Select(b => new WorkflowBranch
+            {
+                Label = b.Label,
+                NextStepId = b.NextStepId,
+                Condition = b.Condition,
+                ConditionType = b.ConditionType,
+            }).ToList(),
+        }).ToList(),
     };
 
     private async Task RunContinuousAsync()
@@ -581,14 +598,7 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
             await Task.Delay(800, ct).ConfigureAwait(true);
             ct.ThrowIfCancellationRequested();
 
-            var snapshot = new WorkflowDefinition
-            {
-                Id = _workflow.Id,
-                Name = _workflow.Name,
-                Version = _workflow.Version,
-                UpdatedAt = _workflow.UpdatedAt,
-                Steps = _steps.ToList(),
-            };
+            var snapshot = CreateSnapshot();
 
             IsSaving = true;
             SaveStatusText = "正在保存…";
@@ -596,8 +606,12 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
 
             if (!ct.IsCancellationRequested)
             {
-                IsDirty = false;
-                SaveStatusText = "已保存";
+                // 只有在保存期间没有新的修改时才清除 IsDirty
+                // 如果用户在保存期间又改了，MarkDirty 会重新设为 true
+                if (!_isDirty)
+                    SaveStatusText = "已保存";
+                else
+                    SaveStatusText = "● 未保存";
             }
         }
         catch (OperationCanceledException)
@@ -622,12 +636,22 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
             if (_trackedSteps.Contains(s))
                 continue;
             _trackedSteps.Add(s);
-            s.PropertyChanged += (_, args) =>
-            {
-                if (args.PropertyName is nameof(WorkflowStep.X) or nameof(WorkflowStep.Y) or nameof(WorkflowStep.NextStepId))
-                    MarkDirty();
-            };
+            s.PropertyChanged += OnStepPropertyChanged;
         }
+
+        // 清理已移除步骤的事件订阅
+        var toRemove = _trackedSteps.Where(s => !_steps.Contains(s)).ToList();
+        foreach (var s in toRemove)
+        {
+            s.PropertyChanged -= OnStepPropertyChanged;
+            _trackedSteps.Remove(s);
+        }
+    }
+
+    private void OnStepPropertyChanged(object? sender, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName is nameof(WorkflowStep.X) or nameof(WorkflowStep.Y) or nameof(WorkflowStep.NextStepId))
+            MarkDirty();
     }
 
     private async Task TryRecoverAutosaveIfNeededAsync()

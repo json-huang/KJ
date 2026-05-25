@@ -14,6 +14,40 @@ public sealed class WorkflowDefinition
     public List<WorkflowStep> Steps { get; set; } = [];
 }
 
+/// <summary>条件分支：当条件满足时跳转到目标步骤。</summary>
+public sealed class WorkflowBranch
+{
+    /// <summary>分支标签（用于 UI 显示）。</summary>
+    public string Label { get; set; } = "";
+
+    /// <summary>目标步骤 ID。</summary>
+    public Guid NextStepId { get; set; }
+
+    /// <summary>条件表达式（如 "temperature > 100"、"status == 'running'"）。</summary>
+    public string Condition { get; set; } = "";
+
+    /// <summary>条件类型。</summary>
+    public BranchConditionType ConditionType { get; set; } = BranchConditionType.Expression;
+}
+
+public enum BranchConditionType
+{
+    /// <summary>表达式求值（如 "tag:temp > 100"）。</summary>
+    Expression = 0,
+
+    /// <summary>标签值匹配（Parameters[key] == expectedValue）。</summary>
+    TagEquals = 1,
+
+    /// <summary>标签值大于阈值。</summary>
+    TagGreaterThan = 2,
+
+    /// <summary>标签值小于阈值。</summary>
+    TagLessThan = 3,
+
+    /// <summary>默认/兜底分支（无条件匹配）。</summary>
+    Default = 99,
+}
+
 public sealed class WorkflowStep : INotifyPropertyChanged
 {
     private Guid _id = Guid.NewGuid();
@@ -37,7 +71,7 @@ public sealed class WorkflowStep : INotifyPropertyChanged
         set => SetProperty(ref _kind, value);
     }
 
-    /// <summary>画布位置（像素坐标）。</summary>
+    /// <summary>画布位置(像素坐标)。</summary>
     private double _x;
     public double X
     {
@@ -45,7 +79,7 @@ public sealed class WorkflowStep : INotifyPropertyChanged
         set => SetProperty(ref _x, value);
     }
 
-    /// <summary>画布位置（像素坐标）。</summary>
+    /// <summary>画布位置(像素坐标)。</summary>
     private double _y;
     public double Y
     {
@@ -53,13 +87,16 @@ public sealed class WorkflowStep : INotifyPropertyChanged
         set => SetProperty(ref _y, value);
     }
 
-    /// <summary>默认仅支持“下一步”连线（最小可用）。</summary>
+    /// <summary>默认仅支持"下一步"连线（最小可用）。</summary>
     private Guid? _nextStepId;
     public Guid? NextStepId
     {
         get => _nextStepId;
         set => SetProperty(ref _nextStepId, value);
     }
+
+    /// <summary>条件分支列表。当 Kind="Decision" 时，按顺序评估条件，首个匹配的分支生效。</summary>
+    public List<WorkflowBranch> Branches { get; set; } = new();
 
     /// <summary>任意参数（用于后续扩展：PLC/自定义TCP/脚本等）。</summary>
     public Dictionary<string, string> Parameters { get; set; } = new(StringComparer.OrdinalIgnoreCase);

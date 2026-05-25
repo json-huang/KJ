@@ -1,3 +1,4 @@
+using KJ.Infrastructure.Services;
 using KJ.Modules.Core.Modules;
 using KJ.Modules.Core.Regions;
 using Prism.Navigation.Regions;
@@ -7,7 +8,10 @@ namespace KJ.Modules.Reporting;
 
 public sealed class ReportingModule : ModuleBase
 {
-    protected override void RegisterServices(IContainerRegistry containerRegistry) { }
+    protected override void RegisterServices(IContainerRegistry containerRegistry)
+    {
+        containerRegistry.RegisterSingleton<TagHistoryExportService>();
+    }
 
     protected override void RegisterViews(IContainerRegistry containerRegistry)
     {
@@ -21,4 +25,3 @@ public sealed class ReportingModule : ModuleBase
 
     protected override void InitializeModule() { }
 }
-

@@ -95,7 +95,7 @@ public sealed class TagValueChangedConsumer : IConsumer<TagValueChangedMessage>
                 Type = DeviceType.Plc,
                 State = ConnectionState.Connected,
                 LastConnected = DateTime.Now,
-                Address = new DeviceAddress { Host = "127.0.0.1", Port = 0 },
+                Address = new DeviceAddress { Host = "auto-created", Port = 0 },
                 PropertiesJson = "{}",
             });
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
