@@ -581,6 +581,57 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         return true;
     }
 
+    /// <summary>删除当前选中的步骤（支持多选）。</summary>
+    public bool DeleteSelectedSteps()
+    {
+        List<WorkflowStep> toDelete;
+        if (_selectedSteps.Count > 0)
+            toDelete = _selectedSteps.ToList();
+        else if (_selectedStep is not null)
+            toDelete = [_selectedStep];
+        else
+            return false;
+
+        RecordUndoCheckpoint();
+        var deleteIds = toDelete.Select(s => s.Id).ToHashSet();
+
+        if (_linkFrom is not null && deleteIds.Contains(_linkFrom.Id))
+            _linkFrom = null;
+
+        foreach (var step in toDelete)
+        {
+            step.PropertyChanged -= OnStepPropertyChanged;
+            _trackedSteps.Remove(step);
+            _steps.Remove(step);
+        }
+
+        for (var i = Links.Count - 1; i >= 0; i--)
+        {
+            var link = Links[i];
+            if (deleteIds.Contains(link.FromStepId) || deleteIds.Contains(link.ToStepId))
+                Links.RemoveAt(i);
+        }
+
+        foreach (var survivor in _steps)
+        {
+            if (survivor.NextStepId is { } next && deleteIds.Contains(next))
+                survivor.NextStepId = null;
+
+            survivor.Branches.RemoveAll(b => deleteIds.Contains(b.NextStepId));
+        }
+
+        ClearSelection();
+        TrackStepPropertyChanges();
+        RaisePropertyChanged(nameof(Steps));
+        RaisePropertyChanged(nameof(CanvasDebugText));
+
+        var count = toDelete.Count;
+        var label = count == 1 ? toDelete[0].Title : $"{count} 个步骤";
+        AppendEditorLog($"已删除：{label}");
+        MarkDirty();
+        return true;
+    }
+
     private static WorkflowStep CloneStepSnapshot(WorkflowStep source) =>
         WorkflowEditorSnapshot.CloneStep(source);
 

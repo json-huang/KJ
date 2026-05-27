@@ -982,6 +982,18 @@ public sealed partial class WorkflowEditorPage : Page
         UpdateNodeStyles();
     }
 
+    private void OnDeleteStepAccelerator(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        if (IsTextInputFocused())
+            return;
+
+        if (DataContext is not ViewModels.WorkflowEditorViewModel vm || !vm.DeleteSelectedSteps())
+            return;
+
+        RefreshCanvasAfterHistoryChange(vm);
+        args.Handled = true;
+    }
+
     private void OnPasteStepAccelerator(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
         if (IsTextInputFocused())

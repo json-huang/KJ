@@ -28,6 +28,9 @@
                 Key="Y"
                 Modifiers="Control"
                 Invoked="OnRedoAccelerator" />
+            <KeyboardAccelerator
+                Key="Delete"
+                Invoked="OnDeleteStepAccelerator" />
         </Grid.KeyboardAccelerators>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" MinHeight="92" />
