@@ -25,12 +25,12 @@ public sealed class ShellRegionNavigationAdapter : IShellContentNavigation
     {
         var viewName = routeKey switch
         {
-            ShellRoutes.Home => "HomeOverview",
+            ShellRoutes.Home => "Dashboard",
             ShellRoutes.Monitoring => "MonitoringHome",
             ShellRoutes.Config => "ConfigHome",
             ShellRoutes.Alarm => "AlarmHome",
             ShellRoutes.Reporting => "ReportingHome",
-            _ => "HomeOverview"
+            _ => "Dashboard"
         };
 
         _regionManager.RequestNavigate(KJ.Modules.Core.Regions.RegionNames.MainContent, new Uri(viewName, UriKind.Relative));

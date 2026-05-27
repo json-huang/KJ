@@ -37,7 +37,7 @@ public class NotAHandler
         var compiler = new ScriptCompilationService();
         var result = compiler.Compile(ValidHandlerScript);
 
-        result.Success.Should().BeTrue();
+        result.Success.Should().BeTrue(string.Join(Environment.NewLine, result.Errors));
         result.Assembly.Should().NotBeNull();
         result.Errors.Should().BeEmpty();
     }

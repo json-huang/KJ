@@ -6,20 +6,22 @@
     xmlns:conv="using:KJ.App.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    HorizontalAlignment="Stretch"
+    HorizontalContentAlignment="Stretch"
     mc:Ignorable="d">
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibility" />
     </UserControl.Resources>
-    <StackPanel Padding="8,4,8,0" Spacing="8">
+    <StackPanel Padding="8,4,8,0" Spacing="8" HorizontalAlignment="Stretch">
         <TextBlock Opacity="0.85" Foreground="{StaticResource KjTextSecondaryBrush}" Text="导航" />
-        <ToggleButton x:Name="HomeBtn" Tag="HomeOverview" Checked="Nav_Checked" Style="{StaticResource KjNavToggle}">
+        <ToggleButton x:Name="HomeBtn" HorizontalAlignment="Stretch" Tag="Dashboard" Checked="Nav_Checked" Style="{StaticResource KjNavToggle}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border Background="{StaticResource KjAccentBrush}" Visibility="{Binding IsChecked, ElementName=HomeBtn, Converter={StaticResource BoolToVisibility}}" />
-                <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="概览" />
+                <TextBlock Grid.Column="1" Margin="10,0,0,0" Text="Dashboard" />
             </Grid>
         </ToggleButton>
     </StackPanel>

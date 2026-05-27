@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:KJ.Modules.Monitoring.ViewModels"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="OnLoaded">
     <ScrollViewer Padding="24">
         <Grid ColumnSpacing="16" RowSpacing="16">
             <Grid.ColumnDefinitions>
@@ -41,23 +42,23 @@
                 <Border Background="{StaticResource KjPanel2Brush}" BorderBrush="{StaticResource KjStrokeBrush}" BorderThickness="1" CornerRadius="12" Padding="14,12">
                     <StackPanel Spacing="6">
                         <TextBlock Foreground="{StaticResource KjTextMutedBrush}" FontSize="12" Text="设备总数" />
-                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="{x:Bind ViewModel.DeviceCount}" />
-                        <TextBlock Foreground="{StaticResource KjTextSecondaryBrush}" FontSize="12" Text="{x:Bind ViewModel.SystemStatus}" />
+                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="{x:Bind ViewModel.DeviceCount, Mode=OneWay}" />
+                        <TextBlock Foreground="{StaticResource KjTextSecondaryBrush}" FontSize="12" Text="{x:Bind ViewModel.SystemStatus, Mode=OneWay}" />
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="1" Background="{StaticResource KjPanel2Brush}" BorderBrush="{StaticResource KjStrokeBrush}" BorderThickness="1" CornerRadius="12" Padding="14,12">
                     <StackPanel Spacing="6">
                         <TextBlock Foreground="{StaticResource KjTextMutedBrush}" FontSize="12" Text="告警（24h）" />
-                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="{x:Bind ViewModel.ActiveAlarmCount}" />
-                        <TextBlock Foreground="{StaticResource KjTextSecondaryBrush}" FontSize="12" Text="{x:Bind ViewModel.AlarmSeverityText}" />
+                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="{x:Bind ViewModel.ActiveAlarmCount, Mode=OneWay}" />
+                        <TextBlock Foreground="{StaticResource KjTextSecondaryBrush}" FontSize="12" Text="{x:Bind ViewModel.AlarmSeverityText, Mode=OneWay}" />
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Column="2" Background="{StaticResource KjPanel2Brush}" BorderBrush="{StaticResource KjStrokeBrush}" BorderThickness="1" CornerRadius="12" Padding="14,12">
                     <StackPanel Spacing="6">
                         <TextBlock Foreground="{StaticResource KjTextMutedBrush}" FontSize="12" Text="连接质量" />
-                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="{x:Bind ViewModel.ConnectionQuality}" />
+                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="{x:Bind ViewModel.ConnectionQuality, Mode=OneWay}" />
                         <TextBlock Foreground="{StaticResource KjTextSecondaryBrush}" FontSize="12" Text="设备在线状态" />
                     </StackPanel>
                 </Border>
@@ -65,7 +66,7 @@
                 <Border Grid.Column="3" Background="{StaticResource KjPanel2Brush}" BorderBrush="{StaticResource KjStrokeBrush}" BorderThickness="1" CornerRadius="12" Padding="14,12">
                     <StackPanel Spacing="6">
                         <TextBlock Foreground="{StaticResource KjTextMutedBrush}" FontSize="12" Text="Tag 采样" />
-                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="{x:Bind ViewModel.TagCount}" />
+                        <TextBlock FontSize="26" FontWeight="SemiBold" Text="{x:Bind ViewModel.TagCount, Mode=OneWay}" />
                         <TextBlock Foreground="{StaticResource KjTextSecondaryBrush}" FontSize="12" Text="已注册标签数" />
                     </StackPanel>
                 </Border>
@@ -76,7 +77,7 @@
                 <StackPanel Spacing="12">
                     <TextBlock FontWeight="SemiBold" Text="最近事件" />
 
-                    <ItemsControl ItemsSource="{x:Bind ViewModel.RecentEvents}">
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.RecentEvents, Mode=OneWay}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Spacing="10" />

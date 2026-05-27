@@ -1,5 +1,8 @@
+using KJ.Modules.Core.UI;
+using KJ.Modules.Monitoring.Workflows;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Prism.Navigation;
 using Prism.Navigation.Regions;
 
 namespace KJ.Modules.Monitoring.Views;
@@ -7,13 +10,15 @@ namespace KJ.Modules.Monitoring.Views;
 public sealed partial class MonitoringNavigationView : UserControl
 {
     private readonly IRegionManager _regionManager;
+    private readonly IWorkflowContentNavigator _workflowNavigator;
     private bool _syncingFromContent;
     private bool _contentHooked;
 
-    public MonitoringNavigationView(IRegionManager regionManager)
+    public MonitoringNavigationView(IRegionManager regionManager, IWorkflowContentNavigator workflowNavigator)
     {
         InitializeComponent();
         _regionManager = regionManager;
+        _workflowNavigator = workflowNavigator;
 
         Loaded += (_, _) =>
         {
@@ -24,10 +29,10 @@ public sealed partial class MonitoringNavigationView : UserControl
                 TagMonitorBtn.IsChecked != true &&
                 TrendBtn.IsChecked != true &&
                 WorkflowListBtn.IsChecked != true &&
-                WorkflowEditorBtn.IsChecked != true &&
-                WorkflowRunsBtn.IsChecked != true)
+                WorkflowRunsBtn.IsChecked != true &&
+                PluginCenterBtn.IsChecked != true)
             {
-                SetSelected(DeviceListBtn);
+                SetSelected(DashboardBtn);
             }
         };
     }
@@ -50,14 +55,20 @@ public sealed partial class MonitoringNavigationView : UserControl
 
         SetSelectedVisual(tb);
 
-        _regionManager.RequestNavigate(
-            KJ.Modules.Core.Regions.RegionNames.MainContent,
-            new Uri(route, UriKind.Relative));
+        if (string.Equals(route, "WorkflowEditor", StringComparison.OrdinalIgnoreCase))
+        {
+            MainThread.Enqueue(() => _workflowNavigator.ShowEditor(new NavigationParameters()));
+            return;
+        }
+
+        var uri = new Uri(route, UriKind.Relative);
+        MainThread.Enqueue(() =>
+            _regionManager.RequestNavigate(KJ.Modules.Core.Regions.RegionNames.MainContent, uri));
     }
 
     private void SetSelectedVisual(ToggleButton tb)
     {
-        foreach (var b in new[] { DashboardBtn, DeviceListBtn, TagMonitorBtn, TrendBtn, WorkflowListBtn, WorkflowEditorBtn, WorkflowRunsBtn })
+        foreach (var b in new[] { DashboardBtn, DeviceListBtn, TagMonitorBtn, TrendBtn, WorkflowListBtn, WorkflowRunsBtn, PluginCenterBtn })
         {
             if (!ReferenceEquals(b, tb))
                 b.IsChecked = false;
@@ -109,8 +120,9 @@ public sealed partial class MonitoringNavigationView : UserControl
                 "TagMonitorView" => TagMonitorBtn,
                 "TrendChartView" => TrendBtn,
                 "WorkflowListPage" => WorkflowListBtn,
-                "WorkflowEditorPage" => WorkflowEditorBtn,
+                "WorkflowCenterPage" => WorkflowListBtn,
                 "WorkflowRunsPage" => WorkflowRunsBtn,
+                "PluginCenterPage" => PluginCenterBtn,
                 _ => null
             };
 

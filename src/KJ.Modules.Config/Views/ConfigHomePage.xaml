@@ -33,6 +33,7 @@
                 <ComboBoxItem Content="Tcp" IsSelected="True" />
                 <ComboBoxItem Content="ModbusTcp" />
                 <ComboBoxItem Content="OpcUa" />
+                <ComboBoxItem Content="Plc.Beckhoff.Ads" />
             </ComboBox>
             <Button Grid.Column="3" Content="添加" Command="{x:Bind ViewModel.AddDeviceCommand}" />
         </Grid>

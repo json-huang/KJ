@@ -26,6 +26,28 @@ public sealed class AlarmService : IAlarmService
     public IReadOnlyList<ActiveAlarm> GetActiveAlarms() =>
         _activeAlarms.Values.Where(a => !a.Acknowledged).ToList().AsReadOnly();
 
+    /// <summary>无活动告警时注入演示数据（仅本地演示，可重复调用）。</summary>
+    public void EnsureDemoActiveAlarmsIfEmpty()
+    {
+        if (_activeAlarms.Values.Any(a => !a.Acknowledged))
+            return;
+
+        var now = DateTimeOffset.UtcNow;
+        var demos = new[]
+        {
+            ("demo-alarm-01", "rule-temp-high", "LineA.Temp", "1号线反应釜温度超过设定上限", AlarmSeverity.Critical, now.AddMinutes(-18)),
+            ("demo-alarm-02", "rule-pressure", "Mixer02.Pressure", "混合罐压力偏高", AlarmSeverity.Warning, now.AddMinutes(-42)),
+            ("demo-alarm-03", "rule-comm", "OpcGateway.Link", "OPC 网关通讯抖动", AlarmSeverity.Info, now.AddMinutes(-95)),
+        };
+
+        foreach (var (id, ruleId, tagKey, message, severity, triggeredAt) in demos)
+        {
+            _activeAlarms.TryAdd(
+                id,
+                new ActiveAlarm(id, ruleId, tagKey, message, severity, triggeredAt, false, null));
+        }
+    }
+
     public void AcknowledgeAlarm(string alarmId, string userId)
     {
         _activeAlarms.AddOrUpdate(alarmId,

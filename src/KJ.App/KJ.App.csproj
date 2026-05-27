@@ -82,11 +82,18 @@
       <ProjectReference Include="..\KJ.Infrastructure.Migrations.SqlServer\KJ.Infrastructure.Migrations.SqlServer.csproj" />
       <ProjectReference Include="..\KJ.Drivers\KJ.Drivers.csproj" />
       <ProjectReference Include="..\KJ.Drivers.Abstractions\KJ.Drivers.Abstractions.csproj" />
+      <ProjectReference Include="..\KJ.Drivers.Plc.Beckhoff.Ads\KJ.Drivers.Plc.Beckhoff.Ads.csproj" />
+      <ProjectReference Include="..\KJ.Core\KJ.Core.csproj" />
+      <ProjectReference Include="..\KJ.Plugin.Host\KJ.Plugin.Host.csproj" />
       <ProjectReference Include="..\KJ.Modules.Auth\KJ.Modules.Auth.csproj" />
       <ProjectReference Include="..\KJ.Modules.Monitoring.WinUI\KJ.Modules.Monitoring.csproj" />
       <ProjectReference Include="..\KJ.Modules.Config\KJ.Modules.Config.csproj" />
       <ProjectReference Include="..\KJ.Modules.Alarm\KJ.Modules.Alarm.csproj" />
       <ProjectReference Include="..\KJ.Modules.Reporting\KJ.Modules.Reporting.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="..\..\plugins\sample.plugin.json" Link="plugins\sample.plugin.json" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
     <!-- 

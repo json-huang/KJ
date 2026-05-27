@@ -13,10 +13,6 @@ public sealed partial class HomeNavigationView : UserControl
         InitializeComponent();
         _regionManager = regionManager;
 
-        Loaded += (_, _) =>
-        {
-            HomeBtn.IsChecked = true;
-        };
     }
 
     private void Nav_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)

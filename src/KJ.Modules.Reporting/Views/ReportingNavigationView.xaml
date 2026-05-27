@@ -5,10 +5,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    HorizontalAlignment="Stretch"
+    HorizontalContentAlignment="Stretch"
     mc:Ignorable="d">
-    <StackPanel Spacing="10">
-        <TextBlock Opacity="0.85" Text="报表模块" />
-        <Button Click="GoHome_Click" Content="报表首页" Style="{StaticResource Action}" />
+    <StackPanel Padding="8,4,8,0" Spacing="12" HorizontalAlignment="Stretch">
+        <TextBlock
+            FontSize="12"
+            Opacity="0.75"
+            Foreground="{StaticResource KjTextMutedBrush}"
+            Text="报表模块" />
+        <Button
+            HorizontalAlignment="Stretch"
+            Click="GoHome_Click"
+            Style="{StaticResource KjNavButton}">
+            <TextBlock Margin="4,0,0,0" Text="报表首页" />
+        </Button>
     </StackPanel>
 </UserControl>
-

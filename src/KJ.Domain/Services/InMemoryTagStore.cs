@@ -10,6 +10,8 @@ public sealed class InMemoryTagStore : ITagStore
 
     public bool TryGet(TagId id, out TagValue value) => _tags.TryGetValue(id.Value, out value);
 
+    public int Count => _tags.Count;
+
     public void Upsert(TagValue value)
     {
         _tags[value.Id.Value] = value;

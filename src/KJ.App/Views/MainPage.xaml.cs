@@ -1,6 +1,8 @@
 using KJ.App.Services;
 using KJ.Modules.Auth;
+using KJ.Modules.Core.Diagnostics;
 using KJ.Modules.Core.Regions;
+using KJ.Modules.Core.UI;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -26,7 +28,10 @@ public sealed partial class MainPage : Page
         _sessionState = sessionState;
         _container = container;
         DataContext = viewModel;
-        App.UiDispatcher = DispatcherQueue.GetForCurrentThread();
+        var dq = DispatcherQueue.GetForCurrentThread();
+        App.UiDispatcher = dq;
+        MainThread.Dispatcher = dq is null ? null : new WinUiMainThreadDispatcher(dq);
+        NavTrace.Write("MainPage ctor: UI dispatcher ready");
         Loaded += OnLoaded;
         Unloaded += OnUnloaded;
     }
@@ -45,7 +50,7 @@ public sealed partial class MainPage : Page
         // Defer content navigation so Prism region behaviors finish registering first.
         App.UiDispatcher?.TryEnqueue(() =>
         {
-            var target = _sessionState.IsSignedIn ? "HomeOverview" : "AuthLogin";
+            var target = _sessionState.IsSignedIn ? "Dashboard" : "AuthLogin";
             _regionManager.RequestNavigate(RegionNames.MainContent, new Uri(target, UriKind.Relative));
         });
     }

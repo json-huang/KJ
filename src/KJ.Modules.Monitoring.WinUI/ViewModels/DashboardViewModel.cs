@@ -1,6 +1,10 @@
 using System.Collections.ObjectModel;
 using KJ.Domain;
+using KJ.Domain.Services;
+using KJ.Infrastructure.Data;
+using KJ.Infrastructure.Data.Entities;
 using KJ.Modules.Core.Regions;
+using Microsoft.EntityFrameworkCore;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation.Regions;
@@ -9,11 +13,12 @@ namespace KJ.Modules.Monitoring.ViewModels;
 
 public sealed class DashboardViewModel : BindableBase
 {
-    private readonly IDeviceManager _deviceManager;
     private readonly IAlarmService _alarmService;
     private readonly ITagStore _tagStore;
-    private readonly IAuditLogger _auditLogger;
     private readonly IRegionManager _regionManager;
+    private readonly IDashboardDemoDataEnsurer _demoDataEnsurer;
+    private readonly IDatabaseInitSignal _databaseInitSignal;
+    private readonly IDbContextFactory<KjDbContext> _dbFactory;
 
     private int _deviceCount;
     public int DeviceCount { get => _deviceCount; set => SetProperty(ref _deviceCount, value); }
@@ -40,83 +45,102 @@ public sealed class DashboardViewModel : BindableBase
     public DelegateCommand NavigateToDevicesCommand { get; }
 
     public DashboardViewModel(
-        IDeviceManager deviceManager,
         IAlarmService alarmService,
         ITagStore tagStore,
-        IAuditLogger auditLogger,
-        IRegionManager regionManager)
+        IRegionManager regionManager,
+        IDashboardDemoDataEnsurer demoDataEnsurer,
+        IDatabaseInitSignal databaseInitSignal,
+        IDbContextFactory<KjDbContext> dbFactory)
     {
-        _deviceManager = deviceManager;
         _alarmService = alarmService;
         _tagStore = tagStore;
-        _auditLogger = auditLogger;
         _regionManager = regionManager;
+        _demoDataEnsurer = demoDataEnsurer;
+        _databaseInitSignal = databaseInitSignal;
+        _dbFactory = dbFactory;
 
-        _alarmService.AlarmRaised += (_, _) => Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => _ = RefreshAsync());
-        _tagStore.TagUpdated += (_, _) => TagCount++;
+        _alarmService.AlarmRaised += (_, _) =>
+            Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => _ = RefreshAsync());
 
         RefreshCommand = new DelegateCommand(() => _ = RefreshAsync());
         NavigateToAlarmsCommand = new DelegateCommand(() =>
             _regionManager.RequestNavigate(RegionNames.MainContent, new Uri("AlarmHome", UriKind.Relative)));
         NavigateToDevicesCommand = new DelegateCommand(() =>
             _regionManager.RequestNavigate(RegionNames.MainContent, new Uri("DeviceList", UriKind.Relative)));
-
-        Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() => _ = RefreshAsync());
     }
 
-    private async Task RefreshAsync()
-    {
-        var (devices, activeAlarms) = await Task.Run(() =>
-        {
-            var devs = _deviceManager.ListDevices();
-            var alarms = _alarmService.GetActiveAlarms();
-            return (devs, alarms);
-        }).ConfigureAwait(true);
-
-        DeviceCount = devices.Count;
-        ActiveAlarmCount = activeAlarms.Count;
-        SystemStatus = ActiveAlarmCount > 0 ? "有报警" : "正常";
-
-        var critical = activeAlarms.Count(a => a.Severity == AlarmSeverity.Critical);
-        var warning = activeAlarms.Count(a => a.Severity == AlarmSeverity.Warning);
-        var info = activeAlarms.Count(a => a.Severity == AlarmSeverity.Info);
-        AlarmSeverityText = $"高 {critical} · 中 {warning} · 低 {info}";
-
-        var connected = devices.Count(d => d.State == "Connected");
-        ConnectionQuality = DeviceCount > 0 ? $"{connected}/{DeviceCount} 在线" : "无设备";
-
-        _ = LoadRecentEventsAsync();
-    }
-
-    private async Task LoadRecentEventsAsync()
+    public async Task RefreshAsync()
     {
         try
         {
-            var end = DateTimeOffset.UtcNow;
-            var start = end.AddHours(-24);
-            var logs = await _auditLogger.GetLogsAsync(start, end).ConfigureAwait(false);
+            await _databaseInitSignal.WhenReadyAsync().ConfigureAwait(true);
+            await _demoDataEnsurer.EnsureAsync().ConfigureAwait(true);
 
-            Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread()?.TryEnqueue(() =>
-            {
-                RecentEvents.Clear();
-                foreach (var entry in logs.Take(10))
-                {
-                    var elapsed = DateTimeOffset.UtcNow - entry.Timestamp;
-                    var timeText = elapsed.TotalMinutes < 1 ? "刚刚"
-                        : elapsed.TotalHours < 1 ? $"{(int)elapsed.TotalMinutes}m ago"
-                        : elapsed.TotalDays < 1 ? $"{(int)elapsed.TotalHours}h ago"
-                        : $"{(int)elapsed.TotalDays}d ago";
+            await using var db = await _dbFactory.CreateDbContextAsync().ConfigureAwait(true);
 
-                    RecentEvents.Add(new RecentEventItem
-                    {
-                        Type = entry.Action,
-                        Message = entry.Details ?? entry.Action,
-                        TimeText = timeText,
-                    });
-                }
-            });
+            var devices = await db.Devices.AsNoTracking().ToListAsync().ConfigureAwait(true);
+            DeviceCount = devices.Count;
+
+            var connected = devices.Count(d => d.State == ConnectionState.Connected);
+            ConnectionQuality = DeviceCount > 0 ? $"{connected}/{DeviceCount} 在线" : "无设备";
+
+            var activeAlarms = _alarmService.GetActiveAlarms();
+            ActiveAlarmCount = activeAlarms.Count;
+            SystemStatus = ActiveAlarmCount > 0 ? "有报警" : "正常";
+
+            var critical = activeAlarms.Count(a => a.Severity == AlarmSeverity.Critical);
+            var warning = activeAlarms.Count(a => a.Severity == AlarmSeverity.Warning);
+            var info = activeAlarms.Count(a => a.Severity == AlarmSeverity.Info);
+            AlarmSeverityText = $"高 {critical} · 中 {warning} · 低 {info}";
+
+            TagCount = _tagStore is InMemoryTagStore memoryStore ? memoryStore.Count : TagCount;
+
+            await LoadRecentEventsAsync(db).ConfigureAwait(true);
         }
-        catch { }
+        catch (Exception ex)
+        {
+            ConnectionQuality = "加载失败";
+            SystemStatus = ex.Message.Length > 40 ? ex.Message[..40] + "…" : ex.Message;
+        }
+    }
+
+    private async Task LoadRecentEventsAsync(KjDbContext db)
+    {
+        try
+        {
+            var end = DateTime.UtcNow;
+            var start = end.AddHours(-24);
+
+            var rows = await db.AuditLogs
+                .AsNoTracking()
+                .Where(l => l.Timestamp >= start && l.Timestamp <= end)
+                .OrderByDescending(l => l.Timestamp)
+                .Take(10)
+                .ToListAsync()
+                .ConfigureAwait(true);
+
+            RecentEvents.Clear();
+            foreach (var row in rows)
+            {
+                var timestamp = new DateTimeOffset(row.Timestamp, TimeSpan.Zero);
+                var elapsed = DateTimeOffset.UtcNow - timestamp;
+                var timeText = elapsed.TotalMinutes < 1 ? "刚刚"
+                    : elapsed.TotalHours < 1 ? $"{(int)elapsed.TotalMinutes}m ago"
+                    : elapsed.TotalDays < 1 ? $"{(int)elapsed.TotalHours}h ago"
+                    : $"{(int)elapsed.TotalDays}d ago";
+
+                RecentEvents.Add(new RecentEventItem
+                {
+                    Type = row.Action,
+                    Message = row.Details ?? row.Action,
+                    TimeText = timeText,
+                });
+            }
+        }
+        catch
+        {
+            // 审计查询失败时保持列表为空
+        }
     }
 }
 

@@ -17,7 +17,14 @@
     <Project Path="src/KJ.Modules.Monitoring/KJ.Modules.Monitoring.csproj" />
     <Project Path="src/KJ.Modules.Reporting/KJ.Modules.Reporting.csproj" />
     <Project Path="src/KJ.Modules.Core/KJ.Modules.Core.csproj" />
+    <Project Path="src/KJ.Plugin.Contracts/KJ.Plugin.Contracts.csproj" />
+    <Project Path="src/KJ.Plugin.Host/KJ.Plugin.Host.csproj" />
+    <Project Path="src/KJ.WinUI.Docking/KJ.WinUI.Docking.csproj" />
+    <Project Path="src/KJ.WinUI.Hosting/KJ.WinUI.Hosting.csproj" />
     <Project Path="src/KJ.Workflows/KJ.Workflows.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/KJ.Plugin.Sample.WinForms/KJ.Plugin.Sample.WinForms.csproj" />
   </Folder>
   <Folder Name="/src/KJ.Modules.Monitoring.WinUI/">
     <Project Path="src/KJ.Modules.Monitoring.WinUI/KJ.Modules.Monitoring.csproj" />

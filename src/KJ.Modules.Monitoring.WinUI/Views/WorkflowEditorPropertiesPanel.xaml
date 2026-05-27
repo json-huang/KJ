@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UserControl
+    x:Class="KJ.Modules.Monitoring.Views.WorkflowEditorPropertiesPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:KJ.Modules.Monitoring.ViewModels"
+    xmlns:conv="using:KJ.Modules.Monitoring.Converters"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConverter x:Key="KjBoolToVisibility" />
+    </UserControl.Resources>
+    <Grid VerticalAlignment="Stretch">
+        <ScrollViewer VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="12">
+                <Grid RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="108" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="流程名" VerticalAlignment="Center" />
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding WorkflowName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="步骤标题" VerticalAlignment="Center" />
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding StepTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="步骤类型" VerticalAlignment="Center" />
+                    <TextBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        IsReadOnly="True"
+                        Text="{Binding StepKind, Mode=OneWay}" />
+                </Grid>
+
+                <TextBlock
+                    Foreground="{StaticResource KjTextMutedBrush}"
+                    FontSize="12"
+                    Text="{Binding SelectedModuleDescription}"
+                    TextWrapping="WrapWholeWords" />
+
+                <ItemsControl ItemsSource="{Binding StepPropertyFields}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:WorkflowStepPropertyFieldViewModel">
+                            <Grid Margin="0,0,0,10" ColumnSpacing="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="108" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    Opacity="0.8"
+                                    Foreground="{StaticResource KjTextSecondaryBrush}"
+                                    Text="{x:Bind Label}" />
+                                <TextBox
+                                    Grid.Column="1"
+                                    IsReadOnly="{x:Bind IsReadOnly}"
+                                    PlaceholderText="{x:Bind Placeholder}"
+                                    Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock
+                    Foreground="{StaticResource KjTextMutedBrush}"
+                    FontSize="12"
+                    Text="该步骤类型无额外参数。"
+                    Visibility="{Binding ShowNoExtraParamsHint, Converter={StaticResource KjBoolToVisibility}}" />
+
+                <TextBlock
+                    Opacity="0.75"
+                    Foreground="{StaticResource KjTextMutedBrush}"
+                    FontSize="12"
+                    Text="连线：将鼠标移到节点边缘圆点，按住左键拖到另一节点圆点后松开。"
+                    TextWrapping="WrapWholeWords" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

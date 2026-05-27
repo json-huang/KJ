@@ -13,6 +13,7 @@ public sealed class MonitoringModule : ModuleBase
     {
         containerRegistry.RegisterSingleton<IDeviceStatusProvider, DeviceStatusProvider>();
         containerRegistry.RegisterSingleton<IWorkflowStore, WorkflowJsonStore>();
+        containerRegistry.RegisterSingleton<IWorkflowContentNavigator, WorkflowContentNavigator>();
     }
 
     protected override void RegisterViews(IContainerRegistry containerRegistry)
@@ -24,7 +25,9 @@ public sealed class MonitoringModule : ModuleBase
         containerRegistry.RegisterForNavigation<Views.DashboardView, ViewModels.DashboardViewModel>("Dashboard");
         containerRegistry.RegisterForNavigation<Views.WorkflowListPage, ViewModels.WorkflowListViewModel>("WorkflowList");
         containerRegistry.RegisterForNavigation<Views.WorkflowEditorPage, ViewModels.WorkflowEditorViewModel>("WorkflowEditor");
+        containerRegistry.RegisterForNavigation<Views.WorkflowCenterPage>("WorkflowCenter");
         containerRegistry.RegisterForNavigation<Views.WorkflowRunsPage, ViewModels.WorkflowRunsViewModel>("WorkflowRuns");
+        containerRegistry.RegisterForNavigation<Views.PluginCenterPage>("PluginCenter");
         containerRegistry.RegisterForNavigation<Views.MonitoringNavigationView>("MonitoringNav");
     }
 

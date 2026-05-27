@@ -11,12 +11,19 @@ using Prism.Dialogs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.UI;
 using Microsoft.UI.Dispatching;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using Windows.UI;
 using Prism.Ioc;
 using Prism.Modularity;
+using KJ.Modules.Monitoring.Workflows;
+using KJ.Plugin.Host;
 using KJ.Workflows;
+using KJ.Workflows.Modules;
 using Microsoft.EntityFrameworkCore;
+using WinRT.Interop;
 
 namespace KJ.App;
 
@@ -41,7 +48,40 @@ public partial class App : PrismApplication
         base.ConfigureWindow(window);
         MainWindow = window;
         window.Title = "KJ";
+        window.ExtendsContentIntoTitleBar = true;
+        ConfigureTitleBar(window);
         window.Activate();
+
+        if (window.AppWindow.Presenter is OverlappedPresenter presenter)
+            presenter.Maximize();
+    }
+
+    private static void ConfigureTitleBar(Window window)
+    {
+        if (window.AppWindow.Presenter is OverlappedPresenter presenter)
+        {
+            presenter.SetBorderAndTitleBar(true, false);
+            presenter.IsMaximizable = true;
+            presenter.IsMinimizable = true;
+            presenter.IsResizable = true;
+        }
+
+        if (!AppWindowTitleBar.IsCustomizationSupported())
+            return;
+
+        var titleBar = window.AppWindow.TitleBar;
+        var bg = Color.FromArgb(255, 11, 15, 20);
+        titleBar.BackgroundColor = bg;
+        titleBar.InactiveBackgroundColor = bg;
+        titleBar.ForegroundColor = Color.FromArgb(255, 167, 176, 189);
+        titleBar.InactiveForegroundColor = Color.FromArgb(180, 123, 134, 150);
+
+        // 隐藏系统标题栏按钮，避免挡住自定义红黄绿按钮并抢走指针样式
+        var transparent = Color.FromArgb(0, 0, 0, 0);
+        titleBar.ButtonBackgroundColor = transparent;
+        titleBar.ButtonInactiveBackgroundColor = transparent;
+        titleBar.ButtonForegroundColor = transparent;
+        titleBar.ButtonInactiveForegroundColor = transparent;
     }
 
     protected override void ConfigureServices(IServiceCollection services)
@@ -55,6 +95,8 @@ public partial class App : PrismApplication
         services.AddLogging(builder => builder.AddDebug().SetMinimumLevel(LogLevel.Information));
         services.AddKjPersistence(configuration);
         services.AddKjMessaging();
+        services.AddSingleton<PluginManager>();
+        services.AddSingleton<PluginHostEventBridge>();
 
         // Shared domain singletons must live in the MS.DI container so that
         // MassTransit consumers and Prism viewmodels observe the same instance.
@@ -90,9 +132,9 @@ public partial class App : PrismApplication
         services.AddSingleton<KJ.Infrastructure.Services.EfTagConfigStore>();
         services.AddSingleton<KJ.Domain.ITagConfigStore>(sp =>
             sp.GetRequiredService<KJ.Infrastructure.Services.EfTagConfigStore>());
-        services.AddSingleton<KJ.Comms.Abstractions.ICommsService, KJ.Core.DevicePollingService>();
+        services.AddSingleton<KJ.Domain.ICommsService, KJ.Core.DevicePollingService>();
         services.AddSingleton<KJ.Core.DevicePollingService>(sp =>
-            (KJ.Core.DevicePollingService)sp.GetRequiredService<KJ.Comms.Abstractions.ICommsService>());
+            (KJ.Core.DevicePollingService)sp.GetRequiredService<KJ.Domain.ICommsService>());
 
         // TagHistory 持久化（监听 TagUpdated 事件，异步写入 DB）
         services.AddSingleton<KJ.Infrastructure.Services.TagHistoryWriter>();
@@ -173,6 +215,8 @@ public partial class App : PrismApplication
         services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.ReadTagStepHandler>();
         services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.WriteTagStepHandler>();
         services.AddSingleton<IWorkflowRuntime, WorkflowRuntimeService>();
+        services.AddSingleton<IWorkflowStepModuleCatalog>(_ =>
+            WorkflowStepModuleRegistration.CreateDefaultCatalog(FindWorkflowModulesDirectory()));
     }
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -218,17 +262,112 @@ public partial class App : PrismApplication
     protected override async void OnInitialized()
     {
         base.OnInitialized();
+        WorkflowAppServices.GetRuntime = ResolveWorkflowRuntime;
+        WorkflowAppServices.GetPluginManager = ResolvePluginManager;
+        WorkflowAppServices.ActivateMainWindow = () => MainWindow?.Activate();
+        WorkflowAppServices.GetMainWindowHandle = () => MainWindow is null ? IntPtr.Zero : WindowNative.GetWindowHandle(MainWindow);
+        WorkflowAppServices.GetDialogXamlRoot = () => MainWindow?.Content is Microsoft.UI.Xaml.FrameworkElement root ? root.XamlRoot : null;
         try
         {
             // Ensure messaging bridges are instantiated early.
             _ = Container.Resolve<KJ.Infrastructure.Messaging.TagValuePublishingBridge>();
+            _ = ResolvePluginHostEventBridge();
 
             await InitializeDatabaseAsync().ConfigureAwait(false);
+            await InitializePluginsAsync().ConfigureAwait(false);
+            _ = ResolveWorkflowRuntime();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"App init failed: {ex}");
         }
         finally
         {
+            try
+            {
+                Container.Resolve<KJ.Infrastructure.Data.IDatabaseInitSignal>().MarkReady();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Database init signal failed: {ex}");
+            }
+
             DatabaseInitializationCompleted.TrySetResult(true);
         }
+    }
+
+    private static IWorkflowRuntime? _workflowRuntime;
+    private static PluginManager? _pluginManager;
+    private static PluginHostEventBridge? _pluginHostEventBridge;
+
+    private static IWorkflowRuntime ResolveWorkflowRuntime()
+    {
+        if (_workflowRuntime is not null)
+            return _workflowRuntime;
+
+        var app = (App)Current;
+        var scopeFactory = app.Container.Resolve<IServiceScopeFactory>();
+        using var scope = scopeFactory.CreateScope();
+        _workflowRuntime = scope.ServiceProvider.GetRequiredService<IWorkflowRuntime>();
+        return _workflowRuntime;
+    }
+
+    private static PluginHostEventBridge ResolvePluginHostEventBridge()
+    {
+        if (_pluginHostEventBridge is not null)
+            return _pluginHostEventBridge;
+
+        var app = (App)Current;
+        var scopeFactory = app.Container.Resolve<IServiceScopeFactory>();
+        using var scope = scopeFactory.CreateScope();
+        _pluginHostEventBridge = scope.ServiceProvider.GetRequiredService<PluginHostEventBridge>();
+        return _pluginHostEventBridge;
+    }
+
+    private static PluginManager ResolvePluginManager()
+    {
+        if (_pluginManager is not null)
+            return _pluginManager;
+
+        var app = (App)Current;
+        var scopeFactory = app.Container.Resolve<IServiceScopeFactory>();
+        using var scope = scopeFactory.CreateScope();
+        _pluginManager = scope.ServiceProvider.GetRequiredService<PluginManager>();
+        return _pluginManager;
+    }
+
+    private static async Task InitializePluginsAsync()
+    {
+        var pluginManager = ResolvePluginManager();
+        await pluginManager.LoadAsync(FindPluginDirectory()).ConfigureAwait(false);
+    }
+
+    private static string FindPluginDirectory()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (directory is not null)
+        {
+            if (File.Exists(Path.Combine(directory.FullName, "KJ.slnx")))
+                return Path.Combine(directory.FullName, "plugins");
+
+            directory = directory.Parent;
+        }
+
+        return Path.Combine(AppContext.BaseDirectory, "plugins");
+    }
+
+    private static string FindWorkflowModulesDirectory()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (directory is not null)
+        {
+            if (File.Exists(Path.Combine(directory.FullName, "KJ.slnx")))
+                return Path.Combine(directory.FullName, "modules", "workflow");
+
+            directory = directory.Parent;
+        }
+
+        return Path.Combine(AppContext.BaseDirectory, "modules", "workflow");
     }
 
     private async Task InitializeDatabaseAsync()

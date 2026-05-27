@@ -12,6 +12,32 @@ public class ExternalStepHandlerTests
         return new WorkflowExecutionContext(Guid.NewGuid(), e => logs.Add(e));
     }
 
+    private static Dictionary<string, string> EchoCommand(string text) =>
+        OperatingSystem.IsWindows()
+            ? new Dictionary<string, string>
+            {
+                ["command"] = "cmd.exe",
+                ["args"] = $"/c echo {text}",
+            }
+            : new Dictionary<string, string>
+            {
+                ["command"] = "/bin/sh",
+                ["args"] = $"-c \"echo {text}\"",
+            };
+
+    private static Dictionary<string, string> FailingCommand() =>
+        OperatingSystem.IsWindows()
+            ? new Dictionary<string, string>
+            {
+                ["command"] = "cmd.exe",
+                ["args"] = "/c exit 7",
+            }
+            : new Dictionary<string, string>
+            {
+                ["command"] = "/bin/sh",
+                ["args"] = "-c \"exit 7\"",
+            };
+
     // ── HttpStepHandler ──────────────────────────────────────────────────
 
     [Fact]
@@ -68,13 +94,9 @@ public class ExternalStepHandlerTests
         {
             Title = "Echo",
             Kind = "Shell",
-            Parameters = new()
-            {
-                ["command"] = "echo",
-                ["args"] = "hello world",
-                ["resultVar"] = "output",
-            }
+            Parameters = EchoCommand("hello world")
         };
+        step.Parameters["resultVar"] = "output";
         var ctx = FakeCtx();
 
         await handler.ExecuteAsync(step, ctx, CancellationToken.None);
@@ -91,13 +113,9 @@ public class ExternalStepHandlerTests
         {
             Title = "Echo",
             Kind = "Shell",
-            Parameters = new()
-            {
-                ["command"] = "echo",
-                ["args"] = "test output",
-                ["resultVar"] = "output",
-            }
+            Parameters = EchoCommand("test output")
         };
+        step.Parameters["resultVar"] = "output";
         var ctx = FakeCtx();
 
         await handler.ExecuteAsync(step, ctx, CancellationToken.None);
@@ -113,10 +131,7 @@ public class ExternalStepHandlerTests
         {
             Title = "Fail",
             Kind = "Shell",
-            Parameters = new()
-            {
-                ["command"] = "false",
-            }
+            Parameters = FailingCommand()
         };
         var ctx = FakeCtx();
 

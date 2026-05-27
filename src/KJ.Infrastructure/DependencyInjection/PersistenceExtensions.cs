@@ -18,7 +18,7 @@ public static class PersistenceExtensions
         var connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection is missing.");
 
-        services.AddDbContext<KjDbContext>(options =>
+        void ConfigureDb(DbContextOptionsBuilder options)
         {
             var provider = (configuration["Database:Provider"] ?? "MySql").Trim();
 
@@ -35,10 +35,12 @@ public static class PersistenceExtensions
             var serverVersion = ServerVersion.AutoDetect(connectionString);
             options.UseMySql(connectionString, serverVersion, mySql =>
             {
-                // MySQL migrations live with Infrastructure for now.
                 mySql.MigrationsAssembly(typeof(KjDbContext).Assembly.GetName().Name);
             });
-        });
+        }
+
+        services.AddDbContext<KjDbContext>(ConfigureDb);
+        services.AddDbContextFactory<KjDbContext>(ConfigureDb);
 
         services
             .AddIdentityCore<IdentityUser>(options =>
@@ -58,6 +60,9 @@ public static class PersistenceExtensions
             .AddEntityFrameworkStores<KjDbContext>();
 
         services.AddScoped<DatabaseInitializer>();
+        services.AddSingleton<DatabaseInitSignal>();
+        services.AddSingleton<IDatabaseInitSignal>(sp => sp.GetRequiredService<DatabaseInitSignal>());
+        services.AddSingleton<IDashboardDemoDataEnsurer, DashboardDemoDataEnsurer>();
         services.AddScoped<ILocalAuthService, LocalAuthService>();
         services.AddScoped<IUserManager, IdentityUserManager>();
         services.AddScoped<IRoleManager, IdentityRoleManager>();

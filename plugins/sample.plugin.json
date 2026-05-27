@@ -1,0 +1,12 @@
+{
+  "pluginId": "kj.sample.winforms",
+  "displayName": "示例 WinForms 插件",
+  "executablePath": "../samples/KJ.Plugin.Sample.WinForms/bin/Debug/net8.0-windows/KJ.Plugin.Sample.WinForms.exe",
+  "workingDirectory": "../samples/KJ.Plugin.Sample.WinForms/bin/Debug/net8.0-windows",
+  "grpcEndpoint": "http://127.0.0.1:50551",
+  "requiredPermissions": [
+    "window-handle",
+    "commands",
+    "events"
+  ]
+}

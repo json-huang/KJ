@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UserControl
+    x:Class="KJ.Modules.Monitoring.Views.WorkflowEditorLogPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    mc:Ignorable="d">
+    <Border
+        Background="#FF1F2933"
+        BorderBrush="#FF3B4756"
+        BorderThickness="1"
+        CornerRadius="2">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="28" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid
+                Grid.Row="0"
+                Padding="8,0,4,0"
+                Background="#FF111827">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    Foreground="#FFDCE8F5"
+                    Text="编辑日志" />
+                <Button
+                    Grid.Column="1"
+                    Margin="4,0,0,0"
+                    Padding="8,2"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Command="{Binding ClearEditorLogCommand}"
+                    Content="清空"
+                    FontSize="11"
+                    Foreground="{StaticResource KjTextSecondaryBrush}" />
+                <Button
+                    x:Name="CloseButton"
+                    Grid.Column="2"
+                    Width="24"
+                    Height="22"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Click="OnCloseClick"
+                    ToolTipService.ToolTip="收起">
+                    <FontIcon FontSize="12" Foreground="#FFE8A0A0" Glyph="&#xE711;" />
+                </Button>
+            </Grid>
+
+            <TextBlock
+                Grid.Row="1"
+                Margin="12,8,12,0"
+                FontSize="11"
+                Foreground="{StaticResource KjTextMutedBrush}"
+                Text="可查看自动记录，也可直接输入备注（支持多行）。"
+                TextWrapping="WrapWholeWords" />
+
+            <TextBox
+                Grid.Row="2"
+                Margin="12,8,12,12"
+                AcceptsReturn="True"
+                TextWrapping="Wrap"
+                PlaceholderText="流程编辑日志将显示在这里…"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                Text="{Binding EditorLogText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                FontFamily="Consolas"
+                FontSize="12"
+                Foreground="{StaticResource KjTextPrimaryBrush}"
+                Background="{StaticResource KjPanelBrush}"
+                BorderBrush="{StaticResource KjStrokeBrush}" />
+        </Grid>
+    </Border>
+</UserControl>

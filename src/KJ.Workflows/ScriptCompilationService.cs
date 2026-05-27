@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Reflection.PortableExecutable;
 using System.Runtime.Loader;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -28,14 +29,8 @@ public sealed class ScriptCompilationService
         var runtimeDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
         foreach (var dll in Directory.GetFiles(runtimeDir, "*.dll"))
         {
-            try
-            {
-                _references.Add(MetadataReference.CreateFromFile(dll));
-            }
-            catch
-            {
-                // 跳过无法加载的程序集
-            }
+            if (TryCreateMetadataReference(dll) is { } reference)
+                _references.Add(reference);
         }
 
         // 添加 KJ.Workflows 引用（用于 IWorkflowStepHandler 等）
@@ -89,6 +84,24 @@ public sealed class ScriptCompilationService
             return null;
 
         return Activator.CreateInstance(handlerType) as IWorkflowStepHandler;
+    }
+
+    private static MetadataReference? TryCreateMetadataReference(string path)
+    {
+        try
+        {
+            using var stream = File.OpenRead(path);
+            using var reader = new PEReader(stream);
+            if (!reader.HasMetadata)
+                return null;
+
+            return MetadataReference.CreateFromFile(path);
+        }
+        catch
+        {
+            // Runtime directories can contain native or otherwise unreadable DLLs.
+            return null;
+        }
     }
 }
 

@@ -3,132 +3,241 @@
     x:Class="KJ.Modules.Monitoring.Views.WorkflowEditorPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:docking="using:KJ.WinUI.Docking"
+    xmlns:views="using:KJ.Modules.Monitoring.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded">
-    <Grid Padding="24" ColumnSpacing="16">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="3*" />
-        </Grid.ColumnDefinitions>
+    <Grid Padding="12" RowSpacing="12">
+        <Grid.KeyboardAccelerators>
+            <KeyboardAccelerator
+                Key="C"
+                Modifiers="Control"
+                Invoked="OnCopyStepAccelerator" />
+            <KeyboardAccelerator
+                Key="V"
+                Modifiers="Control"
+                Invoked="OnPasteStepAccelerator" />
+            <KeyboardAccelerator
+                Key="Z"
+                Modifiers="Control"
+                Invoked="OnUndoAccelerator" />
+            <KeyboardAccelerator
+                Key="Y"
+                Modifiers="Control"
+                Invoked="OnRedoAccelerator" />
+        </Grid.KeyboardAccelerators>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="92" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <!-- Left: canvas -->
-        <Grid Grid.Column="0" RowSpacing="12">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <Grid>
+        <!-- 顶栏：全宽固定，不受属性面板停靠/浮动影响 -->
+        <Border
+            Grid.Row="0"
+            MinHeight="92"
+            Padding="0,0,0,12"
+            BorderBrush="{StaticResource KjStrokeSubtleBrush}"
+            BorderThickness="0,0,0,1">
+            <Grid VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" MinWidth="200" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Spacing="2">
+                <StackPanel Spacing="2" VerticalAlignment="Center">
                     <TextBlock FontSize="22" Text="{Binding Title}" />
-                    <TextBlock Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="{Binding SubTitle}" />
-                    <TextBlock Opacity="0.85" Foreground="{StaticResource KjTextSecondaryBrush}" Text="{Binding SaveStatusText}" />
-                    <TextBlock Opacity="0.85" Foreground="{StaticResource KjTextSecondaryBrush}" Text="{Binding RuntimeHint}" />
+                    <TextBlock
+                        Opacity="0.8"
+                        Foreground="{StaticResource KjTextSecondaryBrush}"
+                        Text="{Binding SubTitle}"
+                        TextTrimming="CharacterEllipsis" />
+                    <TextBlock
+                        Opacity="0.85"
+                        Foreground="{StaticResource KjTextSecondaryBrush}"
+                        Text="{Binding SaveStatusText}" />
+                    <TextBlock
+                        Opacity="0.85"
+                        Foreground="{StaticResource KjTextSecondaryBrush}"
+                        Text="{Binding RuntimeHint}" />
                 </StackPanel>
-                <Button Grid.Column="1" Margin="12,0,0,0" Command="{Binding RunCommand}" Content="运行" Style="{StaticResource Action}" />
-                <Button Grid.Column="2" Margin="8,0,0,0" Command="{Binding StepCommand}" Content="单步" Style="{StaticResource Action}" />
-                <Button Grid.Column="3" Margin="8,0,0,0" Command="{Binding PauseCommand}" Content="暂停" Style="{StaticResource Action}" />
-                <Button Grid.Column="4" Margin="8,0,0,0" Command="{Binding ResumeCommand}" Content="继续" Style="{StaticResource Action}" />
-                <Button Grid.Column="5" Margin="8,0,0,0" Command="{Binding CancelCommand}" Content="取消" Style="{StaticResource Action}" />
-                <Button Grid.Column="6" Margin="8,0,0,0" Command="{Binding AddStepCommand}" Content="加一步" Style="{StaticResource Action}" />
-                <Button Grid.Column="7" Margin="8,0,0,0" Command="{Binding SaveCommand}" Content="保存" Style="{StaticResource PrimaryAction}" />
+                <ScrollViewer
+                    Grid.Column="1"
+                    HorizontalScrollBarVisibility="Auto"
+                    HorizontalScrollMode="Auto"
+                    VerticalScrollBarVisibility="Disabled"
+                    VerticalScrollMode="Disabled">
+                    <StackPanel
+                        Margin="12,0,0,0"
+                        Orientation="Horizontal"
+                        Spacing="8"
+                        VerticalAlignment="Center">
+                        <Button Command="{Binding RunCommand}" Content="运行" Style="{StaticResource Action}" />
+                        <Button Command="{Binding StepCommand}" Content="单步" Style="{StaticResource Action}" />
+                        <Button Command="{Binding PauseCommand}" Content="暂停" Style="{StaticResource Action}" />
+                        <Button Command="{Binding ResumeCommand}" Content="继续" Style="{StaticResource Action}" />
+                        <Button Command="{Binding CancelCommand}" Content="取消" Style="{StaticResource Action}" />
+                        <Button Command="{Binding UndoCommand}" Content="撤回" Style="{StaticResource Action}" />
+                        <Button Command="{Binding RedoCommand}" Content="重做" Style="{StaticResource Action}" />
+                        <Button Command="{Binding AddStepCommand}" Content="加一步" Style="{StaticResource Action}" />
+                        <Button Click="OnTogglePropertiesPaneClick" Content="属性面板" Style="{StaticResource Action}" />
+                        <Button Click="OnToggleLogPanelClick" Content="编辑日志" Style="{StaticResource Action}" />
+                        <Button Click="OnEmbedExternalWindowClick" Content="嵌入窗口" Style="{StaticResource Action}" />
+                        <Button Command="{Binding SaveCommand}" Content="保存" Style="{StaticResource PrimaryAction}" />
+                    </StackPanel>
+                </ScrollViewer>
             </Grid>
+        </Border>
 
-            <Border Grid.Row="1" Background="{StaticResource KjPanelBrush}" BorderBrush="{StaticResource KjStrokeBrush}" BorderThickness="1" CornerRadius="10">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Padding="12">
-                    <Grid>
-                        <Canvas x:Name="LinkLayer" Canvas.ZIndex="0" />
-                        <Canvas x:Name="NodesLayer" Canvas.ZIndex="10" />
+        <!-- 工作区：工具箱 + 画布；属性面板仅在此区域内停靠 -->
+        <Grid Grid.Row="1">
+            <docking:DockHost x:Name="EditorDockHost">
+            <docking:DockHost.MainContent>
+                <Grid RowSpacing="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition x:Name="LogPanelRow" Height="200" />
+                    </Grid.RowDefinitions>
 
-                    <!-- quick visual self-check -->
+                    <Grid Grid.Row="0" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="260" MinWidth="220" MaxWidth="360" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
                     <Border
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Padding="10,6"
-                        CornerRadius="8"
+                        Grid.Column="0"
                         Background="{StaticResource KjPanel2Brush}"
-                        BorderBrush="{StaticResource KjStrokeSubtleBrush}"
-                        BorderThickness="1">
-                        <TextBlock
-                            FontSize="12"
-                            Opacity="0.85"
-                            Foreground="{StaticResource KjTextSecondaryBrush}"
-                            Text="{Binding CanvasDebugText}" />
+                        BorderBrush="{StaticResource KjStrokeBrush}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="12">
+                        <views:WorkflowEditorToolboxPanel DataContext="{Binding}" />
                     </Border>
 
-                    <!-- Nodes are rendered imperatively into NodesLayer for stable Canvas positioning & drag -->
+                    <Border
+                        x:Name="CanvasHost"
+                        Grid.Column="1"
+                        AllowDrop="True"
+                        Background="{StaticResource KjPanelBrush}"
+                        BorderBrush="{StaticResource KjStrokeBrush}"
+                        BorderThickness="1"
+                        CornerRadius="10">
+                        <Grid>
+                            <Border
+                                x:Name="ViewportGridHost"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Background="{StaticResource KjPanelBrush}"
+                                IsHitTestVisible="False">
+                                <Canvas x:Name="ViewportGridLayer" />
+                            </Border>
+                            <ScrollViewer
+                                x:Name="CanvasScroller"
+                                AllowDrop="True"
+                                Background="Transparent"
+                                HorizontalScrollBarVisibility="Auto"
+                                VerticalScrollBarVisibility="Auto"
+                                ZoomMode="Disabled"
+                                ViewChanged="OnCanvasViewChanged"
+                                Loaded="OnCanvasScrollerLoaded"
+                                Padding="12">
+                                <Grid
+                                    x:Name="CanvasDropRoot"
+                                    AllowDrop="True"
+                                    Background="Transparent"
+                                    ToolTipService.ToolTip="按住左键拖拽平移画布">
+                                    <Grid
+                                        x:Name="CanvasWorld"
+                                        RenderTransformOrigin="0,0"
+                                        Background="Transparent">
+                                        <Grid.RenderTransform>
+                                            <TransformGroup>
+                                                <TranslateTransform x:Name="CanvasWorldTranslate" />
+                                                <ScaleTransform x:Name="CanvasScaleTransform" ScaleX="1" ScaleY="1" />
+                                            </TransformGroup>
+                                        </Grid.RenderTransform>
+                                        <Canvas x:Name="LinkLayer" Canvas.ZIndex="5" IsHitTestVisible="False" />
+                                        <Canvas x:Name="NodesLayer" Canvas.ZIndex="10" />
+                                        <Canvas x:Name="PortsLayer" Canvas.ZIndex="20" />
+                                        <Canvas
+                                            x:Name="LinkPreviewLayer"
+                                            Canvas.ZIndex="30"
+                                            IsHitTestVisible="False" />
+                                    </Grid>
+                                </Grid>
+                            </ScrollViewer>
+
+                            <!-- 固定于画布视口右下角，不随滚动/缩放内容移动 -->
+                            <Border
+                                x:Name="CanvasZoomBar"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Margin="0,0,16,16"
+                                Padding="6,4"
+                                CornerRadius="8"
+                                Background="{StaticResource KjPanel2Brush}"
+                                BorderBrush="{StaticResource KjStrokeSubtleBrush}"
+                                BorderThickness="1">
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <Button
+                                        Click="OnZoomOutClick"
+                                        Content="−"
+                                        FontSize="16"
+                                        Padding="10,4"
+                                        Style="{StaticResource Action}"
+                                        ToolTipService.ToolTip="缩小" />
+                                    <TextBlock
+                                        x:Name="ZoomLabel"
+                                        MinWidth="48"
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="{StaticResource KjTextSecondaryBrush}"
+                                        Text="100%"
+                                        TextAlignment="Center" />
+                                    <Button
+                                        Click="OnZoomInClick"
+                                        Content="+"
+                                        FontSize="16"
+                                        Padding="10,4"
+                                        Style="{StaticResource Action}"
+                                        ToolTipService.ToolTip="放大（最大 500%）" />
+                                    <Button
+                                        Click="OnZoomFitClick"
+                                        Content="适应"
+                                        Padding="10,4"
+                                        Style="{StaticResource Action}"
+                                        ToolTipService.ToolTip="适应全部步骤与连线" />
+                                    <Button
+                                        Click="OnZoomResetClick"
+                                        Content="100%"
+                                        Padding="10,4"
+                                        Style="{StaticResource Action}"
+                                        ToolTipService.ToolTip="重置缩放" />
+                                    <Button
+                                        Command="{Binding SaveCommand}"
+                                        Content="保存"
+                                        Style="{StaticResource PrimaryAction}" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
                     </Grid>
-                </ScrollViewer>
-            </Border>
+
+                    <views:WorkflowEditorLogPanel
+                        x:Name="EditorLogPanel"
+                        Grid.Row="1"
+                        DataContext="{Binding}" />
+                </Grid>
+            </docking:DockHost.MainContent>
+            </docking:DockHost>
+            <Canvas
+                x:Name="ToolboxDragOverlay"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                IsHitTestVisible="False"
+                Visibility="Collapsed" />
         </Grid>
-
-        <!-- Right: properties -->
-        <StackPanel Grid.Column="1" Spacing="12">
-            <TextBlock FontSize="16" Opacity="0.9" Text="属性" />
-
-            <Grid RowSpacing="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="140" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Row="0" Grid.Column="0" Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="流程名" VerticalAlignment="Center" />
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding WorkflowName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                <TextBlock Grid.Row="1" Grid.Column="0" Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="步骤标题" VerticalAlignment="Center" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding StepTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                <TextBlock Grid.Row="2" Grid.Column="0" Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="步骤类型" VerticalAlignment="Center" />
-                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding StepKind, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                <TextBlock Grid.Row="3" Grid.Column="0" Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="ADS AmsNetId" VerticalAlignment="Center" />
-                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding AdsAmsNetId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="例如 192.168.1.10.1.1" />
-
-                <TextBlock Grid.Row="4" Grid.Column="0" Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="ADS Port" VerticalAlignment="Center" />
-                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding AdsAmsPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="通常 851" />
-
-                <TextBlock Grid.Row="5" Grid.Column="0" Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="Symbol" VerticalAlignment="Center" />
-                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding AdsSymbol, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="例如 MAIN.nSpeed" />
-
-                <TextBlock Grid.Row="6" Grid.Column="0" Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="数据类型" VerticalAlignment="Center" />
-                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding AdsDataType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="BOOL/INT/DINT/REAL/STRING…" />
-            </Grid>
-
-            <StackPanel Spacing="8">
-                <TextBlock Opacity="0.8" Foreground="{StaticResource KjTextSecondaryBrush}" Text="{Binding LinkHint}" TextWrapping="WrapWholeWords" />
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <Button Command="{Binding SetLinkFromCommand}" Content="设为起点" Style="{StaticResource Action}" />
-                    <Button Command="{Binding ConnectToSelectedCommand}" Content="连接" Style="{StaticResource Action}" />
-                </StackPanel>
-            </StackPanel>
-
-            <Border Padding="12" Background="{StaticResource KjPanelBrush}" BorderBrush="{StaticResource KjStrokeBrush}" BorderThickness="1" CornerRadius="8">
-                <TextBlock Opacity="0.75" Foreground="{StaticResource KjTextSecondaryBrush}"
-                           Text="提示：当前画布支持拖拽节点 + ‘下一步’连线，并写入 JSON。后续会扩展分支/条件与运行调试。" TextWrapping="WrapWholeWords" />
-            </Border>
-        </StackPanel>
     </Grid>
 </Page>
-

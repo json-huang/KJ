@@ -15,6 +15,7 @@ public sealed class DatabaseInitializer
     private readonly UserManager<IdentityUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
+    private readonly IDashboardDemoDataEnsurer _dashboardDemoDataEnsurer;
     private readonly ILogger<DatabaseInitializer> _logger;
 
     public DatabaseInitializer(
@@ -22,12 +23,14 @@ public sealed class DatabaseInitializer
         UserManager<IdentityUser> userManager,
         RoleManager<IdentityRole> roleManager,
         IConfiguration configuration,
+        IDashboardDemoDataEnsurer dashboardDemoDataEnsurer,
         ILogger<DatabaseInitializer> logger)
     {
         _db = db;
         _userManager = userManager;
         _roleManager = roleManager;
         _configuration = configuration;
+        _dashboardDemoDataEnsurer = dashboardDemoDataEnsurer;
         _logger = logger;
     }
 
@@ -71,6 +74,7 @@ public sealed class DatabaseInitializer
         }
 
         await EnsureSeedDeviceAndTagAsync(cancellationToken).ConfigureAwait(false);
+        await _dashboardDemoDataEnsurer.EnsureAsync(cancellationToken).ConfigureAwait(false);
     }
 
     private async Task EnsureSeedDeviceAndTagAsync(CancellationToken cancellationToken)

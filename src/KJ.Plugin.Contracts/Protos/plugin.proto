@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+option csharp_namespace = "KJ.Plugin.Contracts";
+
+package kj.plugin.v1;
+
+service PluginService {
+  rpc Handshake(HandshakeRequest) returns (HandshakeReply);
+  rpc GetManifest(GetManifestRequest) returns (PluginManifest);
+  rpc GetWindow(GetWindowRequest) returns (WindowHandleReply);
+  rpc InvokeCommand(CommandRequest) returns (CommandReply);
+  rpc SubscribeEvents(EventSubscribeRequest) returns (stream PluginEvent);
+  rpc PushHostEvent(HostEvent) returns (Ack);
+}
+
+message HandshakeRequest {
+  string host_id = 1;
+  string host_version = 2;
+  int32 protocol_version = 3;
+  repeated string capabilities = 4;
+}
+
+message HandshakeReply {
+  string plugin_id = 1;
+  string plugin_version = 2;
+  int32 protocol_version = 3;
+  bool accepted = 4;
+  string message = 5;
+  repeated string capabilities = 6;
+}
+
+message GetManifestRequest {
+}
+
+message PluginManifest {
+  string plugin_id = 1;
+  string display_name = 2;
+  string description = 3;
+  string version = 4;
+  repeated PluginPage pages = 5;
+  repeated PluginCommand commands = 6;
+  repeated string required_permissions = 7;
+  repeated string subscriptions = 8;
+}
+
+message PluginPage {
+  string page_id = 1;
+  string title = 2;
+  string dock_position = 3;
+}
+
+message PluginCommand {
+  string command_id = 1;
+  string title = 2;
+  string description = 3;
+}
+
+message GetWindowRequest {
+  string page_id = 1;
+}
+
+message WindowHandleReply {
+  int64 hwnd = 1;
+  string title = 2;
+  bool available = 3;
+  string message = 4;
+}
+
+message CommandRequest {
+  string command_id = 1;
+  map<string, string> parameters = 2;
+}
+
+message CommandReply {
+  bool success = 1;
+  string message = 2;
+  map<string, string> values = 3;
+}
+
+message EventSubscribeRequest {
+  repeated string topics = 1;
+}
+
+message PluginEvent {
+  string plugin_id = 1;
+  string topic = 2;
+  string payload_json = 3;
+  int64 unix_time_ms = 4;
+}
+
+message HostEvent {
+  string topic = 1;
+  string payload_json = 2;
+  int64 unix_time_ms = 3;
+}
+
+message Ack {
+  bool success = 1;
+  string message = 2;
+}

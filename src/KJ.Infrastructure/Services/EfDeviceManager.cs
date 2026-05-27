@@ -26,7 +26,6 @@ public sealed class EfDeviceManager : IDeviceManager
     private void EnsureLoaded()
     {
         if (_loaded) return;
-        _loaded = true;
         try
         {
             using var db = _dbFactory.CreateDbContext();
@@ -42,6 +41,8 @@ public sealed class EfDeviceManager : IDeviceManager
                 try { _inner.AddDevice(descriptor); }
                 catch (InvalidOperationException) { /* 设备已存在，跳过 */ }
             }
+
+            _loaded = true;
         }
         catch (Exception ex)
         {

@@ -80,6 +80,7 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
     private WorkflowDefinition? _workflow;
     private Dictionary<Guid, WorkflowStep>? _byId;
     private WorkflowStep? _current;
+    private readonly Queue<Guid> _pendingStepIds = new();
     private int _remainingBudget;
     private ManualResetEventSlim _pauseGate = new(true);
 
@@ -150,12 +151,7 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
 
         lock (_gate)
         {
-            // advance to next (or end) — supports conditional branches
-            var nextId = ResolveNextStep(step, ctx);
-            if (nextId is { } nid && _byId!.TryGetValue(nid, out var next))
-                _current = next;
-            else
-                _current = null;
+            AdvanceToNextStep(step, ctx);
 
             if (_current is null)
             {
@@ -217,8 +213,9 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
 
             _workflow = workflow;
             _byId = workflow.Steps.ToDictionary(x => x.Id);
+            _pendingStepIds.Clear();
             _current = workflow.Steps.FirstOrDefault(s => string.Equals(s.Kind, "Start", StringComparison.OrdinalIgnoreCase)) ?? workflow.Steps.FirstOrDefault();
-            _remainingBudget = workflow.Steps.Count + 5;
+            _remainingBudget = workflow.Steps.Count + workflow.Links.Count + 5;
             _pauseGate = new ManualResetEventSlim(!stepMode);
 
             ActiveRunId = Guid.NewGuid();
@@ -269,14 +266,9 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
 
                 await ExecuteOneStepAsync(step, ctx, ct).ConfigureAwait(false);
 
-                // advance — supports conditional branches
                 lock (_gate)
                 {
-                    var nextId = ResolveNextStep(step, ctx);
-                    if (nextId is { } nid && _byId!.TryGetValue(nid, out var next))
-                        _current = next;
-                    else
-                        _current = null;
+                    AdvanceToNextStep(step, ctx);
                 }
             }
 
@@ -339,17 +331,39 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
         Changed?.Invoke();
     }
 
-    /// <summary>
-    /// 解析下一步骤 ID。优先评估条件分支，回退到线性 NextStepId。
-    /// </summary>
-    private Guid? ResolveNextStep(WorkflowStep step, WorkflowExecutionContext ctx)
+    private void AdvanceToNextStep(WorkflowStep step, WorkflowExecutionContext ctx)
     {
-        // 收集运行时变量（从步骤参数 + TagStore 快照）
-        var vars = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var kv in step.Parameters)
-            vars[kv.Key] = kv.Value;
+        if (_workflow is null || _byId is null)
+        {
+            _current = null;
+            return;
+        }
 
-        return BranchEvaluator.EvaluateNext(step, ctx, vars);
+        var vars = WorkflowStepNavigator.CollectRuntimeVars(step);
+        var outgoing = WorkflowStepNavigator.GetOutgoingStepIds(_workflow, step, ctx, vars);
+
+        if (outgoing.Count > 1)
+            ctx.Info(step, $"Fan-out: {outgoing.Count} successor(s) queued.");
+
+        foreach (var id in outgoing)
+            _pendingStepIds.Enqueue(id);
+
+        _current = DequeueNextValidStep();
+    }
+
+    private WorkflowStep? DequeueNextValidStep()
+    {
+        if (_byId is null)
+            return null;
+
+        while (_pendingStepIds.Count > 0)
+        {
+            var id = _pendingStepIds.Dequeue();
+            if (_byId.TryGetValue(id, out var next))
+                return next;
+        }
+
+        return null;
     }
 }
 

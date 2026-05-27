@@ -39,6 +39,7 @@
             <ScrollViewer Grid.Row="1" Padding="8,0,8,8">
                 <StackPanel
                     x:Name="MainNavigationHost"
+                    HorizontalAlignment="Stretch"
                     Spacing="4" />
             </ScrollViewer>
 

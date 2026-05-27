@@ -12,6 +12,31 @@ public sealed class WorkflowDefinition
     public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.Now;
 
     public List<WorkflowStep> Steps { get; set; } = [];
+
+    /// <summary>
+    /// 图形连线（用于编辑器展示/多连线/多端口）。运行时仍可回退使用 Step.NextStepId / Step.Branches。
+    /// </summary>
+    public List<WorkflowLink> Links { get; set; } = [];
+}
+
+public enum WorkflowPort
+{
+    Top = 0,
+    Right = 1,
+    Bottom = 2,
+    Left = 3,
+}
+
+public sealed class WorkflowLink
+{
+    public Guid FromStepId { get; set; }
+    public WorkflowPort FromPort { get; set; } = WorkflowPort.Right;
+    public Guid ToStepId { get; set; }
+    public WorkflowPort ToPort { get; set; } = WorkflowPort.Left;
+
+    /// <summary>可选标签（如 Decision 分支名）。</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Label { get; set; }
 }
 
 /// <summary>条件分支：当条件满足时跳转到目标步骤。</summary>

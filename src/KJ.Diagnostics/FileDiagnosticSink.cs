@@ -6,23 +6,22 @@ public sealed class FileDiagnosticSink : IDiagnosticSink, IDisposable
 {
     private readonly string _path;
     private readonly object _gate = new();
-    private StreamWriter? _writer;
+    private bool _disposed;
 
     public FileDiagnosticSink(string path)
     {
         _path = path;
         Directory.CreateDirectory(Path.GetDirectoryName(_path)!);
-        _writer = new StreamWriter(new FileStream(_path, FileMode.Append, FileAccess.Write, FileShare.ReadWrite), Encoding.UTF8)
-        {
-            AutoFlush = true
-        };
     }
 
     public void OnEvent(DiagnosticEvent e)
     {
         lock (_gate)
         {
-            _writer?.WriteLine(DiagnosticHub.ToJsonLine(e));
+            if (_disposed)
+                return;
+
+            File.AppendAllText(_path, DiagnosticHub.ToJsonLine(e) + Environment.NewLine, Encoding.UTF8);
         }
     }
 
@@ -30,8 +29,7 @@ public sealed class FileDiagnosticSink : IDiagnosticSink, IDisposable
     {
         lock (_gate)
         {
-            _writer?.Dispose();
-            _writer = null;
+            _disposed = true;
         }
     }
 }
