@@ -53,14 +53,15 @@ public sealed class SamplePluginService : PluginService.PluginServiceBase
 
     public override Task<HandshakeReply> Handshake(HandshakeRequest request, ServerCallContext context)
     {
-        var accepted = request.ProtocolVersion == PluginProtocol.CurrentVersion;
+        var accepted = request.ProtocolVersion >= PluginProtocol.MinSupportedVersion &&
+                       request.ProtocolVersion <= PluginProtocol.CurrentVersion;
         return Task.FromResult(new HandshakeReply
         {
             PluginId = PluginId,
             PluginVersion = "1.0.0",
             ProtocolVersion = PluginProtocol.CurrentVersion,
             Accepted = accepted,
-            Message = accepted ? "ok" : "protocol version mismatch",
+            Message = accepted ? "ok" : $"protocol version mismatch (host={request.ProtocolVersion})",
             Capabilities =
             {
                 PluginProtocol.Capabilities.WindowHandle,
@@ -128,6 +129,25 @@ public sealed class SamplePluginService : PluginService.PluginServiceBase
             {
                 Success = true,
                 Message = "ready for embed",
+            });
+        }
+
+        if (request.CommandId == "release.embed")
+        {
+            if (_form is null)
+            {
+                return Task.FromResult(new CommandReply
+                {
+                    Success = false,
+                    Message = "plugin form is not ready",
+                });
+            }
+
+            _form.Invoke(() => _form.RestoreAfterEmbedRelease());
+            return Task.FromResult(new CommandReply
+            {
+                Success = true,
+                Message = "standalone window restored",
             });
         }
 

@@ -24,11 +24,14 @@ public sealed partial class ExternalWindowHost : UserControl, IDisposable
     private IntPtr _originalParent;
     private IntPtr _originalStyle;
     private IntPtr _originalExStyle;
+    private NativeMethods.Rect _originalRect;
+    private bool _hasOriginalRect;
     private FrameworkElement? _boundsTarget;
     private ExternalWindowInfo? _pendingWindow;
     private readonly DispatcherTimer _positionTimer;
     private bool _attached;
     private bool _disposed;
+    private bool _overlaySuppressed;
 
     public ExternalWindowHost()
     {
@@ -37,8 +40,9 @@ public sealed partial class ExternalWindowHost : UserControl, IDisposable
         Loaded += OnLoaded;
         Unloaded += OnUnloaded;
         SizeChanged += OnSizeChanged;
+        EffectiveViewportChanged += OnEffectiveViewportChanged;
 
-        _positionTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
+        _positionTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
         _positionTimer.Tick += (_, _) => ResizeHostedWindow();
     }
 
@@ -104,9 +108,35 @@ public sealed partial class ExternalWindowHost : UserControl, IDisposable
 
     public void RefreshBounds() => ResizeHostedWindow();
 
+    /// <summary>获取嵌入区域在屏幕上的物理像素矩形（POPUP 模式）。</summary>
+    public bool TryGetBoundsInScreenPixels(out Windows.Foundation.Rect rect)
+    {
+        rect = default;
+        if (ParentWindowHandle == IntPtr.Zero)
+            return false;
+
+        if (!TryComputeHostBounds(out var x, out var y, out var w, out var h))
+            return false;
+
+        rect = new Windows.Foundation.Rect(x, y, w, h);
+        return true;
+    }
+
+    /// <summary>将焦点交给嵌入的外部窗口（便于键盘输入）。</summary>
+    public void FocusHostedWindow()
+    {
+        if (_hostedWindow == IntPtr.Zero || !NativeMethods.IsWindow(_hostedWindow))
+            return;
+
+        _ = NativeMethods.SetForegroundWindow(_hostedWindow);
+    }
+
     public void SetOverlayVisible(bool visible)
     {
         if (_containerWindow == IntPtr.Zero || !NativeMethods.IsWindow(_containerWindow))
+            return;
+
+        if (_overlaySuppressed && visible)
             return;
 
         _ = NativeMethods.ShowWindow(_containerWindow, visible ? NativeMethods.SwShow : NativeMethods.SwHide);
@@ -178,6 +208,31 @@ public sealed partial class ExternalWindowHost : UserControl, IDisposable
 
     private void OnSizeChanged(object sender, SizeChangedEventArgs e) => ResizeHostedWindow();
 
+    private void OnEffectiveViewportChanged(FrameworkElement sender, EffectiveViewportChangedEventArgs args)
+    {
+        // When navigating between pages, WinUI can keep controls loaded but outside of the effective viewport.
+        // In POPUP mode the native container HWND would otherwise keep floating on screen.
+        if (_containerWindow == IntPtr.Zero || !NativeMethods.IsWindow(_containerWindow))
+            return;
+
+        var inViewport = args.EffectiveViewport.Width > 0 && args.EffectiveViewport.Height > 0;
+        _overlaySuppressed = !inViewport;
+
+        if (!inViewport)
+        {
+            _positionTimer.Stop();
+            _ = NativeMethods.ShowWindow(_containerWindow, NativeMethods.SwHide);
+            return;
+        }
+
+        if (_attached)
+        {
+            _ = NativeMethods.ShowWindow(_containerWindow, NativeMethods.SwShow);
+            _positionTimer.Start();
+            ResizeHostedWindow();
+        }
+    }
+
     private bool AttachPendingWindow()
     {
         if (_pendingWindow is null || ParentWindowHandle == IntPtr.Zero)
@@ -206,9 +261,10 @@ public sealed partial class ExternalWindowHost : UserControl, IDisposable
         }
 
         _hostedWindow = window.Handle;
-        _originalParent = NativeMethods.SetParent(_hostedWindow, _containerWindow);
+        _hasOriginalRect = NativeMethods.GetWindowRect(_hostedWindow, out _originalRect);
         _originalStyle = NativeMethods.GetWindowLongPtr(_hostedWindow, NativeMethods.GwlStyle);
         _originalExStyle = NativeMethods.GetWindowLongPtr(_hostedWindow, NativeMethods.GwlExStyle);
+        _originalParent = NativeMethods.SetParent(_hostedWindow, _containerWindow);
 
         var style = _originalStyle.ToInt64();
         style &= ~(NativeMethods.WsPopup |
@@ -243,6 +299,7 @@ public sealed partial class ExternalWindowHost : UserControl, IDisposable
         _positionTimer.Start();
         ResizeHostedWindow();
         ScheduleBoundsRefresh();
+        FocusHostedWindow();
         return true;
     }
 
@@ -276,15 +333,21 @@ public sealed partial class ExternalWindowHost : UserControl, IDisposable
                 _ = NativeMethods.SetParent(_hostedWindow, _originalParent);
                 _ = NativeMethods.SetWindowLongPtr(_hostedWindow, NativeMethods.GwlStyle, _originalStyle);
                 _ = NativeMethods.SetWindowLongPtr(_hostedWindow, NativeMethods.GwlExStyle, _originalExStyle);
-                _ = NativeMethods.SetWindowPos(
-                    _hostedWindow,
-                    IntPtr.Zero,
-                    0,
-                    0,
-                    0,
-                    0,
-                    NativeMethods.SwpNoZOrder | NativeMethods.SwpNoActivate | NativeMethods.SwpFrameChanged);
-                _ = NativeMethods.ShowWindow(_hostedWindow, NativeMethods.SwShow);
+                PluginWindowInterop.RestoreStandaloneWindow(_hostedWindow);
+
+                if (_hasOriginalRect)
+                {
+                    var width = Math.Max(1, _originalRect.Right - _originalRect.Left);
+                    var height = Math.Max(1, _originalRect.Bottom - _originalRect.Top);
+                    _ = NativeMethods.SetWindowPos(
+                        _hostedWindow,
+                        IntPtr.Zero,
+                        _originalRect.Left,
+                        _originalRect.Top,
+                        width,
+                        height,
+                        NativeMethods.SwpNoZOrder | NativeMethods.SwpNoActivate | NativeMethods.SwpShowWindow);
+                }
             }
         }
 
@@ -295,6 +358,7 @@ public sealed partial class ExternalWindowHost : UserControl, IDisposable
         _originalParent = IntPtr.Zero;
         _originalStyle = IntPtr.Zero;
         _originalExStyle = IntPtr.Zero;
+        _hasOriginalRect = false;
         AttachedWindow = null;
         Placeholder.Visibility = Visibility.Visible;
         StatusText = "已释放外部窗口";
@@ -318,6 +382,14 @@ public sealed partial class ExternalWindowHost : UserControl, IDisposable
         if (!TryComputeHostBounds(out var posX, out var posY, out var width, out var height))
         {
             UpdateDiagnostics("resize skipped");
+            // When the host is not measurable/visible (e.g. navigated away with region caching),
+            // hide the popup container to avoid floating leftovers on screen.
+            if (!EmbedAsChildWindow && _containerWindow != IntPtr.Zero && NativeMethods.IsWindow(_containerWindow))
+            {
+                _positionTimer.Stop();
+                _overlaySuppressed = true;
+                _ = NativeMethods.ShowWindow(_containerWindow, NativeMethods.SwHide);
+            }
             return;
         }
 

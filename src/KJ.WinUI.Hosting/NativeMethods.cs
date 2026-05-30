@@ -43,6 +43,17 @@ internal static partial class NativeMethods
         public int Y;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct Rect
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
+    internal const uint GaRoot = 2;
+
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static partial bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
@@ -100,6 +111,10 @@ internal static partial class NativeMethods
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static partial bool ClientToScreen(IntPtr hWnd, ref Point lpPoint);
 
+    [LibraryImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
+
     [LibraryImport("user32.dll", EntryPoint = "GetWindowLongPtrW", SetLastError = true)]
     internal static partial IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
 
@@ -130,6 +145,16 @@ internal static partial class NativeMethods
 
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial bool GetCursorPos(out Point lpPoint);
+
+    [LibraryImport("user32.dll")]
+    internal static partial IntPtr WindowFromPoint(Point point);
+
+    [LibraryImport("user32.dll")]
+    internal static partial IntPtr GetAncestor(IntPtr hWnd, uint gaFlags);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
     internal static partial bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, [MarshalAs(UnmanagedType.Bool)] bool bErase);
 
     [LibraryImport("user32.dll")]
@@ -137,6 +162,33 @@ internal static partial class NativeMethods
     internal static partial bool UpdateWindow(IntPtr hWnd);
 
     internal const uint WmSize = 0x0005;
+
+    internal const uint EventSystemMoveSizeStart = 0x000A;
+    internal const uint EventSystemMoveSizeEnd = 0x000B;
+    internal const uint WineventOutOfContext = 0x0000;
+
+    internal delegate void WinEventProc(
+        IntPtr hWinEventHook,
+        uint eventType,
+        IntPtr hwnd,
+        int idObject,
+        int idChild,
+        uint dwEventThread,
+        uint dwmsEventTime);
+
+    [LibraryImport("user32.dll")]
+    internal static partial IntPtr SetWinEventHook(
+        uint eventMin,
+        uint eventMax,
+        IntPtr hmodWinEventProc,
+        WinEventProc lpfnWinEventProc,
+        uint idProcess,
+        uint idThread,
+        uint dwFlags);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial bool UnhookWinEvent(IntPtr hWinEventHook);
 
     internal static void NotifyChildResized(IntPtr hWnd, int width, int height)
     {

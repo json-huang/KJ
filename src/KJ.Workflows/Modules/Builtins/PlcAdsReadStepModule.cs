@@ -10,17 +10,13 @@ public sealed class PlcAdsReadStepModule : IWorkflowStepModule
 
     public IReadOnlyList<WorkflowStepPropertyDefinition> Properties { get; } =
     [
-        new("device", "设备 ID", "与配置模块一致"),
-        new("amsNetId", "AmsNetId", "192.168.1.10.1.1"),
-        new("amsPort", "ADS Port", "851"),
+        new("device", "设备", "从设备配置中选择（Host/Port 在设备里配置）"),
         new("symbol", "Symbol", "GVL.bRun"),
         new("type", "数据类型", "BOOL/DINT…"),
     ];
 
     public void ApplyDefaults(WorkflowStep step)
     {
-        step.Parameters["amsNetId"] = "192.168.1.10.1.1";
-        step.Parameters["amsPort"] = "851";
         step.Parameters["symbol"] = "GVL.bRun";
         step.Parameters["type"] = "DINT";
     }

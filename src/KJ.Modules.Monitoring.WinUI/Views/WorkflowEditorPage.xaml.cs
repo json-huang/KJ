@@ -32,7 +32,8 @@ public sealed partial class WorkflowEditorPage : Page
     private double _canvasPadTop = CanvasWorldInset;
     private double _contentMinX;
     private double _contentMinY;
-    private const double CanvasFitMarginPx = 56;
+    private const double CanvasFitMarginPx = 16;
+    private const float CanvasFitMaxZoom = 2.5f;
     private const double CanvasRouteBoundsPad =
         WorkflowGridLinkRouter.PortStubLength + WorkflowGridLinkRouter.NodeClearance + 64;
     private const double CanvasNodeMinX = -4000;
@@ -117,8 +118,18 @@ public sealed partial class WorkflowEditorPage : Page
         InitializeComponent();
         DataContext = viewModel;
         DataContextChanged += (_, _) => HookVm();
+        EditorDockHost.DisableDockingWhenFloating = true;
+        EditorDockHost.UseOverlayDocking = true;
+        EditorDockHost.HideShowsCollapsedTab = false;
         EditorDockHost.PaneTitle = "属性";
         EditorDockHost.SetPaneContent(new WorkflowEditorPropertiesPanel { DataContext = viewModel });
+        // 默认不强制停靠占位：让它收起，需要时再打开
+        EditorDockHost.HidePane();
+        EditorDockHost.PaneClosed += (_, _) =>
+        {
+            if (DataContext is ViewModels.WorkflowEditorViewModel vm)
+                vm.OnPropertiesPaneClosed();
+        };
         EditorLogPanel.CloseRequested += (_, _) => SetLogPanelVisible(false);
         WireCanvasDropTargets();
         WireCanvasZoomWheel();
@@ -363,17 +374,72 @@ public sealed partial class WorkflowEditorPage : Page
         if (!TryGetWorkflowContentBounds(vm, out var minX, out var minY, out var maxX, out var maxY))
             return;
 
-        var contentW = Math.Max(480, maxX - minX + CanvasRouteBoundsPad * 2);
-        var contentH = Math.Max(360, maxY - minY + CanvasRouteBoundsPad * 2);
+        // 右下角缩放/工具条会覆盖画布，Fit 时把这块区域当作不可用，避免“被遮住”
+        var overlayRight = 0d;
+        var overlayBottom = 0d;
+        if (CanvasZoomBar is not null && CanvasZoomBar.ActualWidth > 1 && CanvasZoomBar.ActualHeight > 1)
+        {
+            // 右下角条本身 + 内边距（不要过度预留，用户更在意放大效果）
+            overlayRight = CanvasZoomBar.ActualWidth + 16;
+            overlayBottom = CanvasZoomBar.ActualHeight + 16;
+        }
 
-        var zoom = (float)Math.Clamp(Math.Min(clientW / contentW, clientH / contentH), CanvasMinZoom, CanvasMaxZoom);
+        var fitClientW = Math.Max(1, clientW - overlayRight);
+        var fitClientH = Math.Max(1, clientH - overlayBottom);
+
+        // Fit：给内容边缘留出安全距离，避免节点/标题被裁切
+        const double fitPadWorld = 28;
+        minX -= fitPadWorld;
+        minY -= fitPadWorld;
+        maxX += fitPadWorld;
+        maxY += fitPadWorld;
+
+        var contentW = Math.Max(1, maxX - minX);
+        var contentH = Math.Max(1, maxY - minY);
+
+        // Fit 只负责“能装下”，不要过度放大到很满
+        var zoom = (float)Math.Clamp(
+            Math.Min(fitClientW / contentW, fitClientH / contentH),
+            CanvasMinZoom,
+            Math.Min(CanvasMaxZoom, CanvasFitMaxZoom));
         ApplyCanvasZoom(zoom, resetScroll: false);
 
         if (!TryGetCanvasViewportMetrics(out _, out _, out _, out _, out var originX, out var originY, out _, out _))
             return;
 
-        var scrollX = Math.Max(0, originX + WorldToScrollX(minX) * _canvasZoom - CanvasFitMarginPx);
-        var scrollY = Math.Max(0, originY + WorldToScrollY(minY) * _canvasZoom - CanvasFitMarginPx);
+        // 居中适应：把内容 bbox 居中到视口，避免只贴左上导致右侧/下方留大块空白
+        var left = originX + WorldToScrollX(minX) * _canvasZoom;
+        var top = originY + WorldToScrollY(minY) * _canvasZoom;
+        var right = originX + WorldToScrollX(maxX) * _canvasZoom;
+        var bottom = originY + WorldToScrollY(maxY) * _canvasZoom;
+
+        // 将内容中心对齐到“扣掉遮挡后的可用区域中心”
+        var targetCenterX = originX + fitClientW * 0.5;
+        var targetCenterY = originY + fitClientH * 0.5;
+        var contentCenterX = (left + right) * 0.5;
+        var contentCenterY = (top + bottom) * 0.5;
+
+        var scrollX = Math.Max(0, (contentCenterX - targetCenterX) - CanvasFitMarginPx);
+        var scrollY = Math.Max(0, (contentCenterY - targetCenterY) - CanvasFitMarginPx);
+
+        // 左上角优先：确保内容左/上边界不会被裁掉（适应后至少留出 margin）
+        // screenLeft = left - scrollX >= margin  => scrollX <= left - margin
+        // screenTop  = top  - scrollY >= margin  => scrollY <= top  - margin
+        // 同时尽量不让右/下溢出
+        var minAllowedScrollX = Math.Max(0, right - fitClientW + CanvasFitMarginPx);
+        var maxAllowedScrollX = Math.Max(0, left - CanvasFitMarginPx);
+        var minAllowedScrollY = Math.Max(0, bottom - fitClientH + CanvasFitMarginPx);
+        var maxAllowedScrollY = Math.Max(0, top - CanvasFitMarginPx);
+
+        if (minAllowedScrollX <= maxAllowedScrollX)
+            scrollX = Math.Clamp(scrollX, minAllowedScrollX, maxAllowedScrollX);
+        if (minAllowedScrollY <= maxAllowedScrollY)
+            scrollY = Math.Clamp(scrollY, minAllowedScrollY, maxAllowedScrollY);
+
+        // 渲染安全垫：节点标题/阴影可能超出逻辑 bbox，额外留一点像素避免“砍一截”
+        const double renderSafetyPx = 24;
+        scrollX = Math.Max(0, scrollX - renderSafetyPx);
+        scrollY = Math.Max(0, scrollY - renderSafetyPx);
         _ = CanvasScroller.ChangeView(scrollX, scrollY, null, disableAnimation: true);
         QueueRedrawViewportGrid();
     }
@@ -461,6 +527,8 @@ public sealed partial class WorkflowEditorPage : Page
         _logPanelVisible = visible;
         LogPanelRow.Height = visible ? new GridLength(200) : new GridLength(0);
         EditorLogPanel.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+        if (visible)
+            EditorLogPanel.SelectRunOutputTab();
     }
 
     private void WireCanvasDropTargets()
@@ -1044,7 +1112,7 @@ public sealed partial class WorkflowEditorPage : Page
         RenderNodes();
         RedrawLinks();
 
-        _ = vm.TryRecoverAutosaveDeferredAsync();
+        // 用户要求“不点保存就不修改”：禁用自动草稿恢复，并在进入会话时清理残留 autosave。
         _ = vm.BeginEditorSessionAsync();
         NavTrace.Write("WorkflowEditorPage.EnsureLoaded: done");
     }
@@ -1072,7 +1140,11 @@ public sealed partial class WorkflowEditorPage : Page
                 EditorDockHost.SetPaneContent(new WorkflowEditorPropertiesPanel { DataContext = vm });
         }
 
-        EditorDockHost.TogglePaneFloating();
+        // 以“浮动”作为默认打开方式（仍可拖到边缘停靠）
+        if (EditorDockHost.IsPaneOpen)
+            EditorDockHost.HidePane();
+        else
+            EditorDockHost.ShowPaneFloating();
     }
 
     private async void OnEmbedExternalWindowClick(object sender, RoutedEventArgs e)
@@ -1378,8 +1450,25 @@ public sealed partial class WorkflowEditorPage : Page
         border.PointerPressed += Node_PointerPressed;
         border.PointerMoved += Node_PointerMoved;
         border.PointerReleased += Node_PointerReleased;
+        border.DoubleTapped += Node_DoubleTapped;
 
         return border;
+    }
+
+    private void Node_DoubleTapped(object sender, Microsoft.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
+    {
+        if (sender is not Border { DataContext: WorkflowStep step })
+            return;
+
+        if (DataContext is not WorkflowEditorViewModel vm)
+            return;
+
+        // Ensure selection is consistent and show properties pane.
+        vm.SelectedStep = step;
+        EditorDockHost.PaneTitle = "属性";
+        EditorDockHost.SetPaneContent(new WorkflowEditorPropertiesPanel { DataContext = vm });
+        EditorDockHost.ShowPaneFloatingCentered();
+        e.Handled = true;
     }
 
     private static TextBlock CreateNodeCaption(string text, bool isSecondary) =>

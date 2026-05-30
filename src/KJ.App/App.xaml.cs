@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using System.IO;
+using System.Runtime.InteropServices;
 using KJ.App.Dialogs;
 using KJ.App.Services;
 using KJ.App.ViewModels.Dialogs;
@@ -23,6 +24,7 @@ using KJ.Plugin.Host;
 using KJ.Workflows;
 using KJ.Workflows.Modules;
 using Microsoft.EntityFrameworkCore;
+using KJ.Diagnostics;
 using WinRT.Interop;
 
 namespace KJ.App;
@@ -50,6 +52,23 @@ public partial class App : PrismApplication
         window.Title = "KJ";
         window.ExtendsContentIntoTitleBar = true;
         ConfigureTitleBar(window);
+
+        // 强制设置运行时窗口/任务栏图标（避免系统缓存导致的旧图标）
+        try
+        {
+            var pngPath = Path.Combine(AppContext.BaseDirectory, "carrot.png");
+            if (File.Exists(pngPath))
+            {
+                var iconPath = EnsureIcoFromPng(pngPath);
+                if (File.Exists(iconPath))
+                    window.AppWindow.SetIcon(iconPath);
+            }
+        }
+        catch
+        {
+            // ignore
+        }
+
         window.Activate();
 
         if (window.AppWindow.Presenter is OverlappedPresenter presenter)
@@ -95,6 +114,7 @@ public partial class App : PrismApplication
         services.AddLogging(builder => builder.AddDebug().SetMinimumLevel(LogLevel.Information));
         services.AddKjPersistence(configuration);
         services.AddKjMessaging();
+        services.AddSingleton<DiagnosticHub>();
         services.AddSingleton<PluginManager>();
         services.AddSingleton<PluginHostEventBridge>();
 
@@ -123,9 +143,7 @@ public partial class App : PrismApplication
         services.AddSingleton<KJ.Drivers.ModbusTcpDriver>();
         services.AddSingleton<KJ.Drivers.ModbusRtuDriver>();
         services.AddSingleton<KJ.Drivers.OpcUaDriver>();
-        services.AddSingleton<KJ.Drivers.Plc.Beckhoff.Ads.BeckhoffAdsDriver>();
-        services.AddSingleton<KJ.Drivers.Abstractions.IDeviceDriver>(sp =>
-            sp.GetRequiredService<KJ.Drivers.Plc.Beckhoff.Ads.BeckhoffAdsDriver>());
+        services.AddTransient<KJ.Drivers.Plc.Beckhoff.Ads.BeckhoffAdsDriver>();
         services.AddSingleton<KJ.Drivers.Abstractions.IDeviceDriverFactory, KJ.Drivers.DeviceDriverFactory>();
 
         // 标签配置 & 设备采集
@@ -133,11 +151,13 @@ public partial class App : PrismApplication
         services.AddSingleton<KJ.Domain.ITagConfigStore>(sp =>
             sp.GetRequiredService<KJ.Infrastructure.Services.EfTagConfigStore>());
         services.AddSingleton<KJ.Domain.ICommsService, KJ.Core.DevicePollingService>();
+        services.AddSingleton<KJ.Domain.IDeviceConnectionService, KJ.Core.DeviceConnectionService>();
         services.AddSingleton<KJ.Core.DevicePollingService>(sp =>
             (KJ.Core.DevicePollingService)sp.GetRequiredService<KJ.Domain.ICommsService>());
 
         // TagHistory 持久化（监听 TagUpdated 事件，异步写入 DB）
         services.AddSingleton<KJ.Infrastructure.Services.TagHistoryWriter>();
+        services.AddSingleton<KJ.Workflows.ITrendPointSink, KJ.Infrastructure.Services.TrendPointSink>();
 
         // 数据保留策略（每天清理超过 30 天的历史数据）
         services.AddSingleton<KJ.Infrastructure.Services.TagHistoryRetentionService>();
@@ -208,12 +228,14 @@ public partial class App : PrismApplication
         services.AddSingleton<KJ.Domain.Services.AlarmNotificationService>();
 
         // Workflow runtime
+        services.AddSingleton<KJ.Workflows.IWorkflowPlcConnection, KJ.Core.WorkflowPlcConnection>();
         services.AddSingleton<KJ.Workflows.PlcDataBridge>();
         services.AddSingleton<KJ.Workflows.ScriptCompilationService>();
         services.AddSingleton<IWorkflowRunLogStore, KJ.Infrastructure.Workflows.EfWorkflowRunLogStore>();
         services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.StartStepHandler>();
         services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.ReadTagStepHandler>();
         services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.WriteTagStepHandler>();
+        services.AddSingleton<IWorkflowStepHandler, KJ.Infrastructure.Workflows.ScriptStepHandler>();
         services.AddSingleton<IWorkflowRuntime, WorkflowRuntimeService>();
         services.AddSingleton<IWorkflowStepModuleCatalog>(_ =>
             WorkflowStepModuleRegistration.CreateDefaultCatalog(FindWorkflowModulesDirectory()));
@@ -418,4 +440,33 @@ public partial class App : PrismApplication
             // keep default behavior in release; we only need evidence
         };
     }
+
+    private static string EnsureIcoFromPng(string pngPath)
+    {
+        // Keep it stable to avoid recreating every launch.
+        var stamp = File.GetLastWriteTimeUtc(pngPath).Ticks;
+        var icoPath = Path.Combine(Path.GetTempPath(), $"KJ.App-icon-{stamp}.ico");
+        if (File.Exists(icoPath))
+            return icoPath;
+
+        // Create a single-size icon; sufficient for taskbar/window icon.
+        using var src = new System.Drawing.Bitmap(pngPath);
+        using var bmp = new System.Drawing.Bitmap(src, new System.Drawing.Size(256, 256));
+        var hIcon = bmp.GetHicon();
+        try
+        {
+            using var icon = System.Drawing.Icon.FromHandle(hIcon);
+            using var fs = new FileStream(icoPath, FileMode.Create, FileAccess.Write, FileShare.Read);
+            icon.Save(fs);
+        }
+        finally
+        {
+            _ = DestroyIcon(hIcon);
+        }
+
+        return icoPath;
+    }
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool DestroyIcon(IntPtr hIcon);
 }

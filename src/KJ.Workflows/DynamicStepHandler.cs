@@ -25,13 +25,13 @@ public sealed class DynamicStepHandler : IWorkflowStepHandler, IDisposable
     /// 加载或重新加载脚本。支持热重载。
     /// </summary>
     /// <returns>编译是否成功。</returns>
-    public bool LoadScript(string scriptCode, string kind = "Script")
+    public bool LoadScript(string scriptCode, IEnumerable<string>? references = null, string kind = "Script")
     {
         // 脚本未变化则跳过
         if (scriptCode == _currentScript && _inner is not null)
             return true;
 
-        var result = _compiler.Compile(scriptCode);
+        var result = _compiler.Compile(scriptCode, references);
 
         if (!result.Success)
         {

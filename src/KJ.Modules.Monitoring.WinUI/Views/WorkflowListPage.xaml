@@ -57,6 +57,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <StackPanel>
                                 <TextBlock Text="{Binding Name}" FontSize="16" />
@@ -66,6 +67,12 @@
                                 Grid.Column="1"
                                 Click="OnOpenItemClick"
                                 Content="打开"
+                                Style="{StaticResource Action}" />
+                            <Button
+                                Grid.Column="2"
+                                Margin="8,0,0,0"
+                                Click="OnDeleteItemClick"
+                                Content="删除"
                                 Style="{StaticResource Action}" />
                         </Grid>
                     </DataTemplate>

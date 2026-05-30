@@ -37,6 +37,14 @@ public sealed class ReadTagStepHandler : IWorkflowStepHandler
 
         var valueType = PlcDataBridge.ParsePlcType(typeStr);
 
+        if (string.IsNullOrWhiteSpace(deviceId))
+        {
+            const string hint =
+                "步骤参数 device 为空：请在属性面板的「设备」下拉框选择 Beckhoff ADS 设备（Host/Port 在【设备配置】中维护）。";
+            ctx.Error(step, hint, hint);
+            throw new InvalidOperationException(hint);
+        }
+
         ctx.Info(step, $"Reading {symbol} from device {deviceId} (type={valueType})");
 
         var result = await _bridge.ReadSignalAsync(deviceId, address, valueType, ct).ConfigureAwait(false);
@@ -50,8 +58,9 @@ public sealed class ReadTagStepHandler : IWorkflowStepHandler
         }
         else
         {
-            ctx.Error(step, $"Read failed: {result.Error}", result.Error);
-            throw new InvalidOperationException($"Failed to read {symbol}: {result.Error}");
+            var detail = $"ADS 读失败：设备={deviceId}，符号={symbol}，类型={typeStr}。{result.Error}";
+            ctx.Error(step, detail, result.Error);
+            throw new InvalidOperationException(detail);
         }
     }
 }
@@ -92,6 +101,14 @@ public sealed class WriteTagStepHandler : IWorkflowStepHandler
         var valueType = PlcDataBridge.ParsePlcType(typeStr);
         var value = PlcDataBridge.ConvertValue(valueStr, valueType);
 
+        if (string.IsNullOrWhiteSpace(deviceId))
+        {
+            const string hint =
+                "步骤参数 device 为空：请在属性面板的「设备」下拉框选择 Beckhoff ADS 设备（Host/Port 在【设备配置】中维护）。";
+            ctx.Error(step, hint, hint);
+            throw new InvalidOperationException(hint);
+        }
+
         ctx.Info(step, $"Writing {symbol} <= {value} (type={valueType})");
 
         var result = await _bridge.WriteSignalAsync(deviceId, address, valueType, value, ct).ConfigureAwait(false);
@@ -102,8 +119,9 @@ public sealed class WriteTagStepHandler : IWorkflowStepHandler
         }
         else
         {
-            ctx.Error(step, $"Write failed: {result.Error}", result.Error);
-            throw new InvalidOperationException($"Failed to write {symbol}: {result.Error}");
+            var detail = $"ADS 写失败：设备={deviceId}，符号={symbol}，类型={typeStr}。{result.Error}";
+            ctx.Error(step, detail, result.Error);
+            throw new InvalidOperationException(detail);
         }
     }
 }

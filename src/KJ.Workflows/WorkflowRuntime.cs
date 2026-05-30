@@ -55,13 +55,15 @@ public sealed class WorkflowExecutionContext
 {
     private readonly Action<WorkflowRunLogEntry> _log;
 
-    public WorkflowExecutionContext(Guid runId, Action<WorkflowRunLogEntry> log)
+    public WorkflowExecutionContext(Guid runId, Action<WorkflowRunLogEntry> log, IServiceProvider? services = null)
     {
         RunId = runId;
         _log = log;
+        Services = services;
     }
 
     public Guid RunId { get; }
+    public IServiceProvider? Services { get; }
 
     public void Info(WorkflowStep step, string message) =>
         _log(new WorkflowRunLogEntry(DateTimeOffset.Now, RunId, step.Id, step.Kind, message, true, null));
@@ -70,10 +72,30 @@ public sealed class WorkflowExecutionContext
         _log(new WorkflowRunLogEntry(DateTimeOffset.Now, RunId, step.Id, step.Kind, message, false, error));
 }
 
+public interface ITrendPointSink
+{
+    Task WriteAsync(string tagKey, object? value, DateTimeOffset? timestamp = null, CancellationToken ct = default);
+}
+
+public static class WorkflowExecutionContextTrendExtensions
+{
+    public static Task TrendAsync(this WorkflowExecutionContext ctx, string tagKey, object? value, DateTimeOffset? timestamp = null, CancellationToken ct = default)
+    {
+        if (ctx.Services is null)
+            throw new InvalidOperationException("WorkflowExecutionContext.Services 未初始化，无法写入趋势数据。");
+
+        var sink = ctx.Services.GetService(typeof(ITrendPointSink)) as ITrendPointSink;
+        if (sink is null)
+            throw new InvalidOperationException("ITrendPointSink 未注册，无法写入趋势数据。");
+        return sink.WriteAsync(tagKey, value, timestamp, ct);
+    }
+}
+
 public sealed class WorkflowRuntimeService : IWorkflowRuntime
 {
     private readonly IReadOnlyList<IWorkflowStepHandler> _handlers;
     private readonly IWorkflowRunLogStore _log;
+    private readonly IServiceProvider _services;
 
     private readonly object _gate = new();
     private CancellationTokenSource? _runCts;
@@ -102,10 +124,11 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
 
     public event Action? Changed;
 
-    public WorkflowRuntimeService(IEnumerable<IWorkflowStepHandler> handlers, IWorkflowRunLogStore log)
+    public WorkflowRuntimeService(IEnumerable<IWorkflowStepHandler> handlers, IWorkflowRunLogStore log, IServiceProvider services)
     {
         _handlers = handlers.ToArray();
         _log = log;
+        _services = services;
     }
 
     public async Task<Guid> StartContinuousAsync(WorkflowDefinition workflow, CancellationToken ct = default)
@@ -143,7 +166,7 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
 
             step = _current;
             runToken = _runCts?.Token ?? CancellationToken.None;
-            ctx = new WorkflowExecutionContext(ActiveRunId.Value, _log.Append);
+            ctx = new WorkflowExecutionContext(ActiveRunId.Value, _log.Append, _services);
         }
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(ct, runToken);
@@ -239,7 +262,7 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
 
     private async Task RunLoopAsync(Guid runId)
     {
-        WorkflowExecutionContext ctx = new(runId, _log.Append);
+        WorkflowExecutionContext ctx = new(runId, _log.Append, _services);
         try
         {
             while (true)
@@ -282,7 +305,7 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
         }
         catch (Exception ex)
         {
-            _log.Append(new WorkflowRunLogEntry(DateTimeOffset.Now, runId, Guid.Empty, "Run", "Run failed.", false, ex.Message));
+            _log.Append(new WorkflowRunLogEntry(DateTimeOffset.Now, runId, Guid.Empty, "Run", "Run failed.", false, ex.ToString()));
             State = WorkflowRunState.Failed;
         }
         finally
@@ -320,8 +343,17 @@ public sealed class WorkflowRuntimeService : IWorkflowRuntime
         }
 
         ctx.Info(step, "Step started.");
-        await handler.ExecuteAsync(step, ctx, ct).ConfigureAwait(false);
-        ctx.Info(step, "Step completed.");
+        try
+        {
+            await handler.ExecuteAsync(step, ctx, ct).ConfigureAwait(false);
+            ctx.Info(step, "Step completed.");
+        }
+        catch (Exception ex)
+        {
+            // 关键：确保异常一定写进步骤日志，否则 UI 看起来像“没有错误信息”
+            ctx.Error(step, "Step failed.", ex.ToString());
+            throw;
+        }
 
         lock (_gate)
         {

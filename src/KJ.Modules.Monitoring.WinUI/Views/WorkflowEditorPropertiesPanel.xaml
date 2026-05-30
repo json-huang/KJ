@@ -1,17 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <UserControl
     x:Class="KJ.Modules.Monitoring.Views.WorkflowEditorPropertiesPanel"
+    x:Name="PanelRoot"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:KJ.Modules.Monitoring.ViewModels"
     xmlns:conv="using:KJ.Modules.Monitoring.Converters"
-    HorizontalAlignment="Stretch"
+    xmlns:views="using:KJ.Modules.Monitoring.Views"
     VerticalAlignment="Stretch"
     mc:Ignorable="d">
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="KjBoolToVisibility" />
+        <!-- 仅编辑器控件模板（label 在外层统一渲染） -->
+        <DataTemplate x:Key="DeviceFieldEditorTemplate" x:DataType="vm:WorkflowStepPropertyFieldViewModel">
+            <ComboBox
+                MinWidth="200"
+                PlaceholderText="请选择设备"
+                ItemsSource="{x:Bind DeviceOptions}"
+                DisplayMemberPath="Label"
+                SelectedItem="{x:Bind SelectedDevice, Mode=TwoWay}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="PlcTypeFieldEditorTemplate" x:DataType="vm:WorkflowStepPropertyFieldViewModel">
+            <ComboBox
+                MinWidth="120"
+                PlaceholderText="请选择类型"
+                ItemsSource="{x:Bind TypeOptions}"
+                SelectedItem="{x:Bind Value, Mode=TwoWay}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="DefaultFieldEditorTemplate" x:DataType="vm:WorkflowStepPropertyFieldViewModel">
+            <TextBox
+                IsReadOnly="{x:Bind IsReadOnly}"
+                PlaceholderText="{x:Bind Placeholder}"
+                Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </DataTemplate>
+
+        <views:WorkflowPropertyFieldEditorTemplateSelector x:Key="FieldEditorTemplateSelector"
+                                                          DeviceTemplate="{StaticResource DeviceFieldEditorTemplate}"
+                                                          PlcTypeTemplate="{StaticResource PlcTypeFieldEditorTemplate}"
+                                                          DefaultTemplate="{StaticResource DefaultFieldEditorTemplate}" />
     </UserControl.Resources>
     <Grid VerticalAlignment="Stretch">
         <ScrollViewer VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
@@ -47,6 +77,53 @@
                     Text="{Binding SelectedModuleDescription}"
                     TextWrapping="WrapWholeWords" />
 
+                <StackPanel
+                    Spacing="8"
+                    Visibility="{Binding IsScriptStepSelected, Converter={StaticResource KjBoolToVisibility}}">
+                    <TextBlock
+                        Opacity="0.8"
+                        Foreground="{StaticResource KjTextSecondaryBrush}"
+                        Text="脚本代码（实现 IWorkflowStepHandler）" />
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            Opacity="0.8"
+                            Foreground="{StaticResource KjTextSecondaryBrush}"
+                            Text="引用库（每行一个：程序集名 或 dll 路径）" />
+                        <Button
+                            Grid.Column="1"
+                            Command="{Binding BrowseDllReferencesCommand}"
+                            Content="选择DLL"
+                            Style="{StaticResource Action}" />
+                    </Grid>
+                    <TextBox
+                        AcceptsReturn="True"
+                        FontFamily="Consolas"
+                        FontSize="12"
+                        MinHeight="80"
+                        PlaceholderText="例如：System.Text.Json&#10;或者：D:\libs\MyLib.dll"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        Text="{Binding ScriptReferencesDraft, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        TextWrapping="Wrap" />
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button
+                            Command="{Binding SaveScriptCommand}"
+                            Content="保存脚本"
+                            Style="{StaticResource PrimaryAction}" />
+                        <Button
+                            Command="{Binding CompileScriptCommand}"
+                            Content="编译检查"
+                            Style="{StaticResource Action}" />
+                    </StackPanel>
+                    <views:ScriptCodeEditor
+                        ReferencesText="{Binding ScriptReferencesDraft, Mode=OneWay}"
+                        Text="{Binding ScriptDraft, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
                 <ItemsControl ItemsSource="{Binding StepPropertyFields}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="vm:WorkflowStepPropertyFieldViewModel">
@@ -60,11 +137,10 @@
                                     Opacity="0.8"
                                     Foreground="{StaticResource KjTextSecondaryBrush}"
                                     Text="{x:Bind Label}" />
-                                <TextBox
+                                <ContentControl
                                     Grid.Column="1"
-                                    IsReadOnly="{x:Bind IsReadOnly}"
-                                    PlaceholderText="{x:Bind Placeholder}"
-                                    Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Content="{x:Bind}"
+                                    ContentTemplateSelector="{StaticResource FieldEditorTemplateSelector}" />
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

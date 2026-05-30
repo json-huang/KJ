@@ -5,6 +5,11 @@ namespace KJ.Workflows.Tests;
 
 public class WorkflowRuntimeTests
 {
+    private sealed class NullServices : IServiceProvider
+    {
+        public object? GetService(Type serviceType) => null;
+    }
+
     private static WorkflowDefinition MakeWorkflow(params (string title, string kind, Guid? next)[] steps)
     {
         var stepList = new List<WorkflowStep>();
@@ -29,7 +34,7 @@ public class WorkflowRuntimeTests
     private static WorkflowRuntimeService CreateRuntime(params IWorkflowStepHandler[] handlers)
     {
         var logStore = new InMemoryRunLogStore();
-        return new WorkflowRuntimeService(handlers, logStore);
+        return new WorkflowRuntimeService(handlers, logStore, new NullServices());
     }
 
     private sealed class TestStepHandler : IWorkflowStepHandler
@@ -253,7 +258,7 @@ public class WorkflowRuntimeTests
         var wf = MakeWorkflow(("A", "Action", null));
         var handler = new TestStepHandler();
         var logStore = new InMemoryRunLogStore();
-        var runtime = new WorkflowRuntimeService(new[] { handler }, logStore);
+        var runtime = new WorkflowRuntimeService(new[] { handler }, logStore, new NullServices());
 
         await runtime.StartContinuousAsync(wf);
         await WaitUntil(() => runtime.State == WorkflowRunState.Completed);

@@ -85,4 +85,17 @@ public sealed class SamplePluginForm : Form
         PerformLayout();
         Refresh();
     }
+
+    /// <summary>宿主释放嵌入后恢复为独立窗口（任务栏可见）。</summary>
+    public void RestoreAfterEmbedRelease()
+    {
+        ShowInTaskbar = true;
+        FormBorderStyle = FormBorderStyle.Sizable;
+        WindowState = FormWindowState.Normal;
+        if (!Visible)
+            Show();
+        BringToFront();
+        Activate();
+        _status.Text = "已取消嵌入，插件仍在运行。可在 KJ 插件中心再次点击「连接并嵌入」。";
+    }
 }

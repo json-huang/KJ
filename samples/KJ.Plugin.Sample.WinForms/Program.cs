@@ -7,18 +7,22 @@ using Microsoft.Extensions.DependencyInjection;
 
 internal static class Program
 {
-    private const string Endpoint = "http://127.0.0.1:50551";
+    private const string DefaultEndpoint = "http://127.0.0.1:50551";
 
     [STAThread]
     private static void Main(string[] args)
     {
         ApplicationConfiguration.Initialize();
 
+        var endpoint = PluginLaunchConfiguration.ResolveEndpoint(args, DefaultEndpoint);
+        if (!PluginLaunchConfiguration.TryGetListenPort(endpoint, out var port))
+            port = 50551;
+
         using var form = new SamplePluginForm();
         SamplePluginService.BindForm(form);
         form.Show();
 
-        using var app = CreateGrpcApp(args);
+        using var app = CreateGrpcApp(port);
         var serverTask = app.RunAsync();
 
         Application.Run(form);
@@ -36,12 +40,12 @@ internal static class Program
         serverTask.GetAwaiter().GetResult();
     }
 
-    private static WebApplication CreateGrpcApp(string[] args)
+    private static WebApplication CreateGrpcApp(int port)
     {
-        var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder();
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.ListenLocalhost(50551, listenOptions =>
+            options.ListenLocalhost(port, listenOptions =>
             {
                 listenOptions.Protocols = HttpProtocols.Http2;
             });

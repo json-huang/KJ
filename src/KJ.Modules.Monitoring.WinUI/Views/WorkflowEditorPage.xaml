@@ -85,7 +85,7 @@
                         <Button Command="{Binding RedoCommand}" Content="重做" Style="{StaticResource Action}" />
                         <Button Command="{Binding AddStepCommand}" Content="加一步" Style="{StaticResource Action}" />
                         <Button Click="OnTogglePropertiesPaneClick" Content="属性面板" Style="{StaticResource Action}" />
-                        <Button Click="OnToggleLogPanelClick" Content="编辑日志" Style="{StaticResource Action}" />
+                        <Button Click="OnToggleLogPanelClick" Content="日志" Style="{StaticResource Action}" />
                         <Button Click="OnEmbedExternalWindowClick" Content="嵌入窗口" Style="{StaticResource Action}" />
                         <Button Command="{Binding SaveCommand}" Content="保存" Style="{StaticResource PrimaryAction}" />
                     </StackPanel>

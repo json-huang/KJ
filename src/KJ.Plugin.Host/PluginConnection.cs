@@ -13,6 +13,21 @@ public sealed class PluginConnection : IAsyncDisposable
     private PluginService.PluginServiceClient? _client;
     private Process? _process;
     private CancellationTokenSource? _eventsCts;
+    private CancellationTokenSource? _reconnectCts;
+    private readonly CancellationTokenSource _lifetimeCts = new();
+    private bool _startedByHost;
+    private int _reconnectAttempt;
+    private int _eventSubscriptionGeneration;
+    private bool _autoReconnectEnabled = true;
+    private readonly SemaphoreSlim _connectGate = new(1, 1);
+
+    private static readonly TimeSpan MaxReconnectDelay = TimeSpan.FromSeconds(30);
+
+    static PluginConnection()
+    {
+        // gRPC over http:// (no TLS) for local plugins
+        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+    }
 
     public PluginConnection(PluginDescriptor descriptor, ILogger logger)
     {
@@ -30,15 +45,39 @@ public sealed class PluginConnection : IAsyncDisposable
 
     public event EventHandler<PluginEvent>? PluginEventReceived;
 
+    public void SetAutoReconnectEnabled(bool enabled) => _autoReconnectEnabled = enabled;
+
     public async Task<bool> ConnectAsync(CancellationToken cancellationToken = default)
     {
+        if (_lifetimeCts.IsCancellationRequested)
+            return false;
+
+        await _connectGate.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            State = PluginConnectionState.Connecting;
+            if (State is PluginConnectionState.Faulted or PluginConnectionState.Disconnected or PluginConnectionState.Reconnecting)
+                ResetGrpcClient();
+
+            if (State != PluginConnectionState.Connected)
+                State = State == PluginConnectionState.Reconnecting
+                    ? PluginConnectionState.Reconnecting
+                    : PluginConnectionState.Connecting;
+
             await EnsureProcessStartedAsync(cancellationToken).ConfigureAwait(false);
 
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-            _channel ??= GrpcChannel.ForAddress(Descriptor.GrpcEndpoint);
+            _channel ??= GrpcChannel.ForAddress(
+                Descriptor.GrpcEndpoint,
+                new GrpcChannelOptions
+                {
+                    HttpHandler = new SocketsHttpHandler
+                    {
+                        EnableMultipleHttp2Connections = true,
+                        PooledConnectionIdleTimeout = TimeSpan.FromMinutes(2),
+                        KeepAlivePingDelay = TimeSpan.FromSeconds(30),
+                        KeepAlivePingTimeout = TimeSpan.FromSeconds(10),
+                        KeepAlivePingPolicy = HttpKeepAlivePingPolicy.Always,
+                    },
+                });
             _client ??= new PluginService.PluginServiceClient(_channel);
 
             var handshake = await _client.HandshakeAsync(new HandshakeRequest
@@ -54,10 +93,14 @@ public sealed class PluginConnection : IAsyncDisposable
                 },
             }, cancellationToken: cancellationToken).ResponseAsync.ConfigureAwait(false);
 
-            if (!handshake.Accepted || handshake.ProtocolVersion != PluginProtocol.CurrentVersion)
+            if (!handshake.Accepted ||
+                handshake.ProtocolVersion < PluginProtocol.MinSupportedVersion ||
+                handshake.ProtocolVersion > PluginProtocol.CurrentVersion)
             {
                 State = PluginConnectionState.Faulted;
+                LastMessage = handshake.Message ?? "Handshake rejected.";
                 _logger.LogWarning("Plugin {PluginId} rejected handshake: {Message}", Descriptor.PluginId, handshake.Message);
+                ScheduleReconnect("handshake rejected");
                 return false;
             }
 
@@ -65,6 +108,7 @@ public sealed class PluginConnection : IAsyncDisposable
                 .ResponseAsync.ConfigureAwait(false);
             State = PluginConnectionState.Connected;
             LastMessage = $"Connected: {Manifest.DisplayName}";
+            Interlocked.Exchange(ref _reconnectAttempt, 0);
             StartEventSubscription();
             return true;
         }
@@ -73,7 +117,12 @@ public sealed class PluginConnection : IAsyncDisposable
             State = PluginConnectionState.Faulted;
             LastMessage = ex.Message;
             _logger.LogWarning(ex, "Failed to connect plugin {PluginId}", Descriptor.PluginId);
+            ScheduleReconnect("connect failed");
             return false;
+        }
+        finally
+        {
+            _connectGate.Release();
         }
     }
 
@@ -139,13 +188,13 @@ public sealed class PluginConnection : IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        _eventsCts?.Cancel();
-        _eventsCts?.Dispose();
-        _eventsCts = null;
-        _channel?.Dispose();
-        _channel = null;
-        _client = null;
-        await Task.CompletedTask.ConfigureAwait(false);
+        await _lifetimeCts.CancelAsync().ConfigureAwait(false);
+        _reconnectCts?.Cancel();
+        _reconnectCts?.Dispose();
+        _reconnectCts = null;
+        ResetGrpcClient();
+        await TryStopOwnedProcessAsync().ConfigureAwait(false);
+        _lifetimeCts.Dispose();
     }
 
     private async Task<bool> EnsureConnectedAsync(CancellationToken cancellationToken)
@@ -167,7 +216,10 @@ public sealed class PluginConnection : IAsyncDisposable
         var executablePath = ResolvePath(Descriptor.ExecutablePath);
         _process = FindExistingProcess(executablePath);
         if (_process is { HasExited: false })
+        {
+            _startedByHost = false;
             return Task.CompletedTask;
+        }
 
         if (!File.Exists(executablePath))
         {
@@ -178,10 +230,12 @@ public sealed class PluginConnection : IAsyncDisposable
         State = PluginConnectionState.Starting;
         var startInfo = new ProcessStartInfo(executablePath)
         {
-            UseShellExecute = true,
+            UseShellExecute = false,
             WorkingDirectory = ResolveWorkingDirectory(executablePath),
         };
+        PluginLaunchOptions.ApplyTo(startInfo, Descriptor);
         _process = Process.Start(startInfo);
+        _startedByHost = _process is not null;
         return Task.Delay(TimeSpan.FromMilliseconds(800), cancellationToken);
     }
 
@@ -253,10 +307,15 @@ public sealed class PluginConnection : IAsyncDisposable
 
     private void StartEventSubscription()
     {
-        if (_client is null || _eventsCts is not null)
+        if (_client is null)
             return;
 
-        _eventsCts = new CancellationTokenSource();
+        var generation = Interlocked.Increment(ref _eventSubscriptionGeneration);
+        _eventsCts?.Cancel();
+        _eventsCts?.Dispose();
+        _eventsCts = CancellationTokenSource.CreateLinkedTokenSource(_lifetimeCts.Token);
+        var eventsToken = _eventsCts.Token;
+
         _ = Task.Run(async () =>
         {
             try
@@ -264,9 +323,9 @@ public sealed class PluginConnection : IAsyncDisposable
                 using var call = _client.SubscribeEvents(new EventSubscribeRequest
                 {
                     Topics = { "*" },
-                }, cancellationToken: _eventsCts.Token);
+                }, cancellationToken: eventsToken);
 
-                await foreach (var pluginEvent in call.ResponseStream.ReadAllAsync(_eventsCts.Token).ConfigureAwait(false))
+                await foreach (var pluginEvent in call.ResponseStream.ReadAllAsync(eventsToken).ConfigureAwait(false))
                     PluginEventReceived?.Invoke(this, pluginEvent);
             }
             catch (OperationCanceledException)
@@ -276,6 +335,100 @@ public sealed class PluginConnection : IAsyncDisposable
             {
                 _logger.LogDebug(ex, "Plugin event stream ended for {PluginId}", Descriptor.PluginId);
             }
-        });
+            finally
+            {
+                if (generation == Volatile.Read(ref _eventSubscriptionGeneration) &&
+                    !_lifetimeCts.IsCancellationRequested)
+                {
+                    if (State == PluginConnectionState.Connected)
+                    {
+                        State = PluginConnectionState.Disconnected;
+                        LastMessage = "Event stream ended.";
+                    }
+
+                    ScheduleReconnect("event stream ended");
+                }
+            }
+        }, eventsToken);
+    }
+
+    private void ResetGrpcClient()
+    {
+        _eventsCts?.Cancel();
+        _eventsCts?.Dispose();
+        _eventsCts = null;
+        _channel?.Dispose();
+        _channel = null;
+        _client = null;
+        Manifest = null;
+    }
+
+    private void ScheduleReconnect(string reason)
+    {
+        if (!_autoReconnectEnabled || _lifetimeCts.IsCancellationRequested)
+            return;
+
+        _reconnectCts?.Cancel();
+        _reconnectCts?.Dispose();
+        _reconnectCts = CancellationTokenSource.CreateLinkedTokenSource(_lifetimeCts.Token);
+        var token = _reconnectCts.Token;
+
+        _ = Task.Run(async () =>
+        {
+            var attempt = Interlocked.Increment(ref _reconnectAttempt);
+            var delaySeconds = Math.Min(MaxReconnectDelay.TotalSeconds, Math.Pow(2, Math.Min(attempt - 1, 5)));
+            var delay = TimeSpan.FromSeconds(delaySeconds);
+
+            try
+            {
+                State = PluginConnectionState.Reconnecting;
+                LastMessage = $"Reconnecting in {delay.TotalSeconds:0}s ({reason})…";
+                await Task.Delay(delay, token).ConfigureAwait(false);
+                if (token.IsCancellationRequested)
+                    return;
+
+                _logger.LogInformation("Reconnecting plugin {PluginId} (attempt {Attempt})", Descriptor.PluginId, attempt);
+                await ConnectAsync(token).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception ex)
+            {
+                _logger.LogDebug(ex, "Reconnect loop failed for {PluginId}", Descriptor.PluginId);
+                ScheduleReconnect("reconnect loop error");
+            }
+        }, token);
+    }
+
+    private async Task TryStopOwnedProcessAsync()
+    {
+        if (!_startedByHost || _process is null)
+            return;
+
+        try
+        {
+            if (_process.HasExited)
+                return;
+
+            // Best-effort graceful close
+            _process.CloseMainWindow();
+            await Task.Delay(500).ConfigureAwait(false);
+
+            if (_process.HasExited)
+                return;
+
+            _process.Kill(entireProcessTree: true);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Failed to stop plugin process {PluginId}", Descriptor.PluginId);
+        }
+        finally
+        {
+            try { _process.Dispose(); } catch { }
+            _process = null;
+            _startedByHost = false;
+        }
     }
 }

@@ -2,11 +2,13 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Windows.Foundation;
+using Windows.System;
 
 namespace KJ.WinUI.Docking;
 
 public sealed partial class DockHost : UserControl
 {
+    public event EventHandler? PaneClosed;
     public static readonly DependencyProperty MainContentProperty =
         DependencyProperty.Register(nameof(MainContent), typeof(UIElement), typeof(DockHost),
             new PropertyMetadata(null, OnMainContentChanged));
@@ -24,14 +26,26 @@ public sealed partial class DockHost : UserControl
     private Point _dragStart;
     private Point _dragOffset;
     private DockPosition? _previewPosition;
+    public bool DisableDockingWhenFloating { get; set; }
+    private bool _allowDockingPreview;
+    public bool UseOverlayDocking { get; set; }
+    public bool HideShowsCollapsedTab { get; set; } = true;
 
     public DockHost()
     {
         InitializeComponent();
         _pane.Title = PaneTitle;
         _pane.FloatRequested += (_, _) => FloatPane();
-        _pane.CloseRequested += (_, _) => CollapsePane();
-        _pane.AutoHideRequested += (_, _) => CollapsePane();
+        _pane.CloseRequested += (_, _) =>
+        {
+            CollapsePane();
+            PaneClosed?.Invoke(this, EventArgs.Empty);
+        };
+        _pane.AutoHideRequested += (_, _) =>
+        {
+            CollapsePane();
+            PaneClosed?.Invoke(this, EventArgs.Empty);
+        };
         _pane.HeaderPointerPressed += OnPaneHeaderPointerPressed;
         _pane.HeaderPointerMoved += OnPaneHeaderPointerMoved;
         _pane.HeaderPointerReleased += OnPaneHeaderPointerReleased;
@@ -78,6 +92,28 @@ public sealed partial class DockHost : UserControl
             FloatPane();
         else
             RestoreAndFloat();
+    }
+
+    /// <summary>以浮动窗口居中显示（不贴边）。</summary>
+    public void ShowPaneFloatingCentered()
+    {
+        ShowPaneFloating();
+        CenterFloatingPane();
+    }
+
+    private void CenterFloatingPane()
+    {
+        if (!_isFloating || FloatingLayer.Visibility != Visibility.Visible)
+            return;
+
+        // Use current (possibly user-resized) size when available.
+        var width = double.IsNaN(_pane.Width) ? _pane.ActualWidth : _pane.Width;
+        var height = double.IsNaN(_pane.Height) ? _pane.ActualHeight : _pane.Height;
+        if (width <= 0) width = 360;
+        if (height <= 0) height = 280;
+
+        Canvas.SetLeft(_pane, Math.Max(24, (ActualWidth - width) / 2));
+        Canvas.SetTop(_pane, Math.Max(24, (ActualHeight - height) / 2));
     }
 
     /// <summary>停靠显示面板（默认右侧）。</summary>
@@ -204,6 +240,41 @@ public sealed partial class DockHost : UserControl
         ClearDockHosts();
         _pane.SetPaneContent(_paneContent);
 
+        if (UseOverlayDocking)
+        {
+            // Overlay docking: do NOT reserve layout space. Always draw above MainContent.
+            LeftColumn.Width = new GridLength(0);
+            RightColumn.Width = new GridLength(0);
+            BottomRow.Height = new GridLength(0);
+            CollapsedTab.Visibility = Visibility.Collapsed;
+
+            ApplyFloatingPaneSize();
+            FloatingLayer.Children.Clear();
+            FloatingLayer.Children.Add(_pane);
+            FloatingLayer.Visibility = Visibility.Visible;
+            _isFloating = true;
+
+            var margin = 12d;
+            var width = double.IsNaN(_pane.Width) ? 360 : _pane.Width;
+            var height = double.IsNaN(_pane.Height) ? 280 : _pane.Height;
+            var left = position switch
+            {
+                DockPosition.Left => margin,
+                DockPosition.Right => Math.Max(margin, ActualWidth - width - margin),
+                _ => Math.Max(margin, (ActualWidth - width) / 2)
+            };
+            var top = position switch
+            {
+                DockPosition.Bottom => Math.Max(margin, ActualHeight - height - margin),
+                _ => margin
+            };
+
+            Canvas.SetLeft(_pane, left);
+            Canvas.SetTop(_pane, top);
+            Overlay.Hide();
+            return;
+        }
+
         switch (position)
         {
             case DockPosition.Left:
@@ -244,9 +315,18 @@ public sealed partial class DockHost : UserControl
 
         ClearDockHosts();
         LeftColumn.Width = new GridLength(0);
-        RightColumn.Width = new GridLength(36);
         BottomRow.Height = new GridLength(0);
-        CollapsedTab.Visibility = Visibility.Visible;
+
+        if (HideShowsCollapsedTab && !UseOverlayDocking)
+        {
+            RightColumn.Width = new GridLength(36);
+            CollapsedTab.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            RightColumn.Width = new GridLength(0);
+            CollapsedTab.Visibility = Visibility.Collapsed;
+        }
     }
 
     private void OnCollapsedTabClick(object sender, RoutedEventArgs e) => DockPane(_dockPosition);
@@ -260,10 +340,12 @@ public sealed partial class DockHost : UserControl
 
     private void ApplyFloatingPaneSize()
     {
+        // Default floating size: a shorter rectangle, less intrusive.
         _pane.Width = 360;
-        _pane.Height = ActualHeight > 120 ? Math.Max(320, ActualHeight - 16) : 520;
-        _pane.VerticalAlignment = VerticalAlignment.Stretch;
-        _pane.HorizontalAlignment = HorizontalAlignment.Stretch;
+        _pane.Height = 280;
+        // In floating mode, do not stretch; allow manual resize.
+        _pane.VerticalAlignment = VerticalAlignment.Top;
+        _pane.HorizontalAlignment = HorizontalAlignment.Left;
     }
 
     private void OnPaneHeaderPointerPressed(DockPane pane, PointerRoutedEventArgs e)
@@ -286,6 +368,7 @@ public sealed partial class DockHost : UserControl
         if (!_isHeaderPointerDown)
             return;
 
+        _allowDockingPreview = e.KeyModifiers.HasFlag(VirtualKeyModifiers.Control);
         var pointer = e.GetCurrentPoint(FloatingLayer).Position;
         if (!_isFloating)
         {
@@ -316,14 +399,19 @@ public sealed partial class DockHost : UserControl
             return;
 
         _isDraggingFloating = false;
-        if (_previewPosition is DockPosition position)
+        if ((!DisableDockingWhenFloating || _allowDockingPreview) && _previewPosition is DockPosition position)
         {
             DockFloatingPane(position);
             e.Handled = true;
             return;
         }
 
-        Overlay.Show("浮动：拖到指南针或边缘可停靠");
+        if (!DisableDockingWhenFloating)
+            Overlay.Show("浮动：拖到指南针或边缘可停靠");
+        else if (_allowDockingPreview)
+            Overlay.Show("按住 Ctrl 可停靠", null);
+        else
+            Overlay.Hide();
         e.Handled = true;
     }
 
@@ -339,6 +427,13 @@ public sealed partial class DockHost : UserControl
         var top = Math.Clamp(pointer.Y - _dragOffset.Y, 0, Math.Max(0, ActualHeight - _pane.ActualHeight));
         Canvas.SetLeft(_pane, left);
         Canvas.SetTop(_pane, top);
+
+        if (DisableDockingWhenFloating && !_allowDockingPreview)
+        {
+            _previewPosition = null;
+            Overlay.Hide();
+            return;
+        }
 
         _previewPosition = GetPreviewPosition(pointer, left, top);
         if (_previewPosition is DockPosition position)

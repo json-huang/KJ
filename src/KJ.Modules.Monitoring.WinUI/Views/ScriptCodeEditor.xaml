@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UserControl
+    x:Class="KJ.Modules.Monitoring.Views.ScriptCodeEditor"
+    x:Name="Root"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid RowSpacing="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            FontSize="11"
+            Foreground="{StaticResource KjTextMutedBrush}"
+            Text="Ctrl+Space 智能提示 · 输入「.」触发成员补全 · ↑↓ 选择 · Tab/Enter 插入" />
+
+        <TextBox
+            x:Name="Editor"
+            Grid.Row="1"
+            AcceptsReturn="True"
+            FontFamily="Consolas"
+            FontSize="12"
+            MinHeight="280"
+            PlaceholderText="C# 脚本…"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            TextWrapping="NoWrap"
+            KeyDown="OnEditorKeyDown"
+            SelectionChanged="OnEditorSelectionChanged"
+            TextChanged="OnEditorTextChanged" />
+
+        <Border
+            x:Name="CompletionHost"
+            Grid.Row="2"
+            MaxHeight="180"
+            Background="{StaticResource KjPanelBrush}"
+            BorderBrush="{StaticResource KjStrokeBrush}"
+            BorderThickness="1"
+            CornerRadius="2"
+            Visibility="Collapsed">
+            <ListView
+                x:Name="CompletionList"
+                DisplayMemberPath="DisplayText"
+                IsItemClickEnabled="True"
+                ItemClick="OnCompletionItemClick"
+                MaxHeight="176"
+                SelectionChanged="OnCompletionSelectionChanged" />
+        </Border>
+    </Grid>
+</UserControl>

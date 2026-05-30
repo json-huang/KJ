@@ -37,12 +37,23 @@ public sealed class BeckhoffAdsDriver : IDeviceDriver
             _endpoint = endpoint;
 
             _client = new AdsClient();
-            var amsNetId = AmsNetId.Parse(endpoint.Host);
+            var amsNetId = ResolveAmsNetId(endpoint.Host);
             var port = endpoint.Port > 0 ? endpoint.Port : 851;
 
             await _client.ConnectAsync(amsNetId, port, cancellationToken).ConfigureAwait(false);
 
-            var stateInfo = _client.ReadState();
+            StateInfo stateInfo;
+            try
+            {
+                stateInfo = _client.ReadState();
+            }
+            catch (AdsErrorException adsEx) when ((int)adsEx.ErrorCode == 6)
+            {
+                throw new InvalidOperationException(
+                    $"ADS 端口 {port} 不可用（错误 6）：请确认 TwinCAT 已启动且 PLC 处于 Run，" +
+                    $"AmsNetId={amsNetId}，PLC 端口通常为 851（非 10000 系统端口）。", adsEx);
+            }
+
             if (stateInfo.AdsState == AdsState.Error)
                 throw new InvalidOperationException($"PLC is in error state: {stateInfo}");
 
@@ -59,7 +70,13 @@ public sealed class BeckhoffAdsDriver : IDeviceDriver
                 DateTimeOffset.Now, Guid.NewGuid().ToString("N"),
                 DiagnosticStage.Exception, nameof(BeckhoffAdsDriver),
                 Message: $"ADS connect failed to {endpoint.Host}:{endpoint.Port}",
-                Error: ex.Message));
+                Error: ex.ToString(),
+                Meta: new Dictionary<string, string>
+                {
+                    ["host"] = endpoint.Host,
+                    ["port"] = endpoint.Port.ToString(),
+                    ["exception"] = ex.GetType().FullName ?? ex.GetType().Name,
+                }));
             throw;
         }
     }
@@ -99,13 +116,14 @@ public sealed class BeckhoffAdsDriver : IDeviceDriver
         }
         catch (Exception ex)
         {
+            var detail = FormatAdsException(ex, request.Address.Address);
             _diagnostics.Publish(new DiagnosticEvent(
                 DateTimeOffset.Now, Guid.NewGuid().ToString("N"),
                 DiagnosticStage.Exception, nameof(BeckhoffAdsDriver),
                 TagKey: request.TagKey,
                 Message: $"ADS read failed for {request.Address.Address}",
-                Error: ex.Message));
-            return new TagReadResult(request.TagKey, null, DateTimeOffset.Now, false, ex.Message);
+                Error: detail));
+            return new TagReadResult(request.TagKey, null, DateTimeOffset.Now, false, detail);
         }
     }
 
@@ -122,13 +140,14 @@ public sealed class BeckhoffAdsDriver : IDeviceDriver
         }
         catch (Exception ex)
         {
+            var detail = FormatAdsException(ex, request.Address.Address);
             _diagnostics.Publish(new DiagnosticEvent(
                 DateTimeOffset.Now, Guid.NewGuid().ToString("N"),
                 DiagnosticStage.Exception, nameof(BeckhoffAdsDriver),
                 TagKey: request.TagKey,
                 Message: $"ADS write failed for {request.Address.Address}",
-                Error: ex.Message));
-            throw;
+                Error: detail));
+            throw new InvalidOperationException(detail, ex);
         }
     }
 
@@ -175,6 +194,36 @@ public sealed class BeckhoffAdsDriver : IDeviceDriver
             TagValueType.Bytes => data.ToArray(),
             _ => BitConverter.ToInt32(data),
         };
+    }
+
+    private static AmsNetId ResolveAmsNetId(string host)
+    {
+        var trimmed = host.Trim();
+        if (string.IsNullOrWhiteSpace(trimmed))
+            throw new ArgumentException("Host (AmsNetId) is required.", nameof(host));
+
+        if (trimmed.Equals("local", StringComparison.OrdinalIgnoreCase) ||
+            trimmed.Equals("localhost", StringComparison.OrdinalIgnoreCase))
+            return AmsNetId.Local;
+
+        return AmsNetId.Parse(trimmed);
+    }
+
+    private static string FormatAdsException(Exception ex, string symbol)
+    {
+        if (ex is AdsErrorException adsEx)
+        {
+            var code = (int)adsEx.ErrorCode;
+            if ((int)adsEx.ErrorCode == 6)
+            {
+                return $"符号「{symbol}」ADS 端口不可用（错误 {code}）：TwinCAT/PLC 未在目标端口运行，" +
+                       $"请确认已 Run、AmsNetId/路由正确，PLC 端口一般为 851。";
+            }
+
+            return $"符号「{symbol}」ADS 错误 {code} (0x{code:X}): {adsEx.Message}";
+        }
+
+        return $"{ex.GetType().Name}: {ex.Message}";
     }
 
     private static byte[] ConvertToBytes(object? value, TagValueType type)

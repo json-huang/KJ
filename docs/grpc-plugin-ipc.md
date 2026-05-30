@@ -34,7 +34,26 @@ KJ 启动时会扫描 `plugins/*.plugin.json`。示例：
 - `SubscribeEvents`：向 KJ 推送插件事件。
 - `PushHostEvent`：接收 KJ 内部事件。
 
-第一版协议版本为 `PluginProtocol.CurrentVersion`。
+第一版协议版本为 `PluginProtocol.CurrentVersion`（支持范围 `MinSupportedVersion`～`CurrentVersion`）。
+
+## 宿主启动参数
+
+宿主启动插件进程时会注入：
+
+| 方式 | 键 | 说明 |
+|------|-----|------|
+| 环境变量 | `KJ_PLUGIN_ENDPOINT` | gRPC 地址，与清单 `grpcEndpoint` 一致 |
+| 环境变量 | `KJ_PLUGIN_HOST_ID` | 固定为 `KJ` |
+| 环境变量 | `KJ_PLUGIN_PROTOCOL_VERSION` | 当前协议版本 |
+| 命令行 | `--kj-endpoint=...` | 同上，便于调试 |
+| 命令行 | `--kj-host-id=KJ` | 同上 |
+
+插件侧用 `PluginLaunchConfiguration.ResolveEndpoint(args, default)` 解析监听端口。示例见 `samples/KJ.Plugin.Sample.WinForms/Program.cs`。
+
+## 连接与重连
+
+- 事件流断开或握手失败时，宿主会按指数退避（最长 30s）自动重连。
+- 由宿主启动的插件进程在 `PluginManager` 释放时会尝试优雅退出。
 
 ## KJ 打开插件窗口
 

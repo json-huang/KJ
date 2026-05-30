@@ -10,6 +10,7 @@ public static class WorkflowStepModuleRegistration
         catalog.RegisterRange(
         [
             new StartStepModule(),
+            new ScriptStepModule(),
             new PlcAdsReadStepModule(),
             new PlcAdsWriteStepModule(),
             new PlcReadStepModule(),

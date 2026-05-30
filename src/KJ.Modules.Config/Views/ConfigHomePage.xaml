@@ -23,59 +23,98 @@
                 <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="100" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" PlaceholderText="设备 ID"
                      Text="{x:Bind ViewModel.NewDeviceId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox Grid.Column="1" PlaceholderText="显示名称"
                      Text="{x:Bind ViewModel.NewDeviceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <ComboBox Grid.Column="2" SelectedValue="{x:Bind ViewModel.NewDriverType, Mode=TwoWay}">
+            <ComboBox
+                Grid.Column="2"
+                SelectedValuePath="Content"
+                SelectedValue="{x:Bind ViewModel.NewDriverType, Mode=TwoWay}">
                 <ComboBoxItem Content="Tcp" IsSelected="True" />
                 <ComboBoxItem Content="ModbusTcp" />
                 <ComboBoxItem Content="OpcUa" />
                 <ComboBoxItem Content="Plc.Beckhoff.Ads" />
             </ComboBox>
-            <Button Grid.Column="3" Content="添加" Command="{x:Bind ViewModel.AddDeviceCommand}" />
+            <TextBox
+                Grid.Column="3"
+                PlaceholderText="Host / AmsNetId / IP"
+                Text="{x:Bind ViewModel.NewHost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox
+                Grid.Column="4"
+                PlaceholderText="端口"
+                Text="{x:Bind ViewModel.NewPortText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Grid.Column="5" Content="添加" Command="{x:Bind ViewModel.AddDeviceCommand}" />
         </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="12">
             <Button Content="刷新" Command="{x:Bind ViewModel.RefreshCommand}" />
+            <TextBlock VerticalAlignment="Center" Foreground="#FFB0B0B0"
+                       Text="{x:Bind ViewModel.ActionMessage, Mode=OneWay}" />
         </StackPanel>
 
         <ListView Grid.Row="3" ItemsSource="{x:Bind ViewModel.Devices}" SelectionMode="None">
             <ListView.Header>
                 <Grid Padding="8,4" ColumnSpacing="16">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="320" />
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="260" />
+                        <ColumnDefinition Width="90" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="70" />
+                        <ColumnDefinition Width="260" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="设备 ID" FontWeight="Bold" />
                     <TextBlock Grid.Column="1" Text="名称" FontWeight="Bold" />
                     <TextBlock Grid.Column="2" Text="驱动类型" FontWeight="Bold" />
-                    <TextBlock Grid.Column="3" Text="状态" FontWeight="Bold" />
-                    <TextBlock Grid.Column="4" Text="操作" FontWeight="Bold" />
+                    <TextBlock Grid.Column="3" Text="Host" FontWeight="Bold" />
+                    <TextBlock Grid.Column="4" Text="Port" FontWeight="Bold" />
+                    <TextBlock Grid.Column="5" Text="状态" FontWeight="Bold" />
+                    <TextBlock Grid.Column="6" Text="操作" FontWeight="Bold" />
                 </Grid>
             </ListView.Header>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="vm:DeviceDisplayItem">
                     <Grid Padding="8,4" ColumnSpacing="16">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="320" />
                             <ColumnDefinition Width="200" />
                             <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="260" />
+                            <ColumnDefinition Width="90" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="70" />
+                        <ColumnDefinition Width="260" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{x:Bind DeviceId}" FontWeight="SemiBold" />
+                        <!-- 设备ID需要可复制且不截断 -->
+                        <TextBox
+                            Grid.Column="0"
+                            IsReadOnly="True"
+                            BorderThickness="0"
+                            Background="Transparent"
+                            Padding="0"
+                            FontWeight="SemiBold"
+                            Text="{x:Bind DeviceId}" />
                         <TextBlock Grid.Column="1" Text="{x:Bind DisplayName}" />
                         <TextBlock Grid.Column="2" Text="{x:Bind DriverType}" />
-                        <TextBlock Grid.Column="3" Text="{x:Bind State}" />
-                        <Button Grid.Column="4" Content="删除" Style="{StaticResource Action}"
-                                Command="{Binding DataContext.RemoveDeviceCommand, ElementName=PageRoot}"
-                                CommandParameter="{x:Bind DeviceId}" />
+                        <TextBlock Grid.Column="3" Text="{x:Bind Host}" />
+                        <TextBlock Grid.Column="4" Text="{x:Bind Port}" />
+                        <TextBlock Grid.Column="5" Text="{x:Bind State}" />
+                        <StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="4">
+                            <Button Content="连接" Style="{StaticResource Action}" MinWidth="48" Padding="10,6"
+                                    Command="{Binding ViewModel.ConnectDeviceCommand, ElementName=PageRoot}"
+                                    CommandParameter="{x:Bind DeviceId}" />
+                            <Button Content="断开" Style="{StaticResource Action}" MinWidth="48" Padding="10,6"
+                                    Command="{Binding ViewModel.DisconnectDeviceCommand, ElementName=PageRoot}"
+                                    CommandParameter="{x:Bind DeviceId}" />
+                            <Button Content="删除" Style="{StaticResource Action}" MinWidth="48" Padding="10,6"
+                                    Command="{Binding ViewModel.RemoveDeviceCommand, ElementName=PageRoot}"
+                                    CommandParameter="{x:Bind DeviceId}" />
+                        </StackPanel>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

@@ -1,5 +1,6 @@
 using KJ.Modules.Core.Diagnostics;
 using KJ.Modules.Monitoring.ViewModels;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace KJ.Modules.Monitoring.Views;
@@ -39,5 +40,27 @@ public sealed partial class WorkflowListPage : Page
         {
             NavTrace.Write("WorkflowListPage.OnOpenItemClick: DataContext not WorkflowListItem");
         }
+    }
+
+    private async void OnDeleteItemClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Microsoft.UI.Xaml.Controls.Button { DataContext: WorkflowListItem item })
+            return;
+
+        var dialog = new ContentDialog
+        {
+            XamlRoot = XamlRoot,
+            Title = "删除流程",
+            Content = $"确定要删除流程「{item.Name}」吗？此操作会删除本地文件，无法恢复。",
+            PrimaryButtonText = "删除",
+            CloseButtonText = "取消",
+            DefaultButton = ContentDialogButton.Close,
+        };
+
+        var result = await dialog.ShowAsync();
+        if (result != ContentDialogResult.Primary)
+            return;
+
+        await ViewModel.DeleteAsync(item);
     }
 }

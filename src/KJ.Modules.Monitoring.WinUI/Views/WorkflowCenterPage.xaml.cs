@@ -5,6 +5,7 @@ using KJ.Workflows;
 using KJ.Workflows.Modules;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using Prism.Ioc;
 using Prism.Navigation;
 
@@ -16,6 +17,7 @@ public sealed partial class WorkflowCenterPage : Page
 
     private readonly IWorkflowStore _store;
     private readonly IWorkflowStepModuleCatalog _moduleCatalog;
+    private readonly IServiceScopeFactory _scopeFactory;
 
     private WorkflowEditorPage? _editorPage;
     private WorkflowEditorViewModel? _editorVm;
@@ -25,10 +27,12 @@ public sealed partial class WorkflowCenterPage : Page
     public WorkflowCenterPage(
         WorkflowListViewModel listViewModel,
         IWorkflowStore store,
-        IWorkflowStepModuleCatalog moduleCatalog)
+        IWorkflowStepModuleCatalog moduleCatalog,
+        IServiceScopeFactory scopeFactory)
     {
         _store = store;
         _moduleCatalog = moduleCatalog;
+        _scopeFactory = scopeFactory;
         ViewModel = new WorkflowCenterViewModel(listViewModel);
         InitializeComponent();
         DataContext = ViewModel;
@@ -78,6 +82,28 @@ public sealed partial class WorkflowCenterPage : Page
         }
     }
 
+    private async void OnDeleteItemClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button { DataContext: WorkflowListItem item })
+            return;
+
+        var dialog = new ContentDialog
+        {
+            XamlRoot = XamlRoot,
+            Title = "删除流程",
+            Content = $"确定要删除流程「{item.Name}」吗？此操作会删除本地文件，无法恢复。",
+            PrimaryButtonText = "删除",
+            CloseButtonText = "取消",
+            DefaultButton = ContentDialogButton.Close,
+        };
+
+        var result = await dialog.ShowAsync();
+        if (result != ContentDialogResult.Primary)
+            return;
+
+        await ViewModel.List.DeleteAsync(item);
+    }
+
     private void OnBackToListClick(object sender, RoutedEventArgs e) => CloseEditor();
 
     private void OpenEditor(INavigationParameters parameters)
@@ -100,7 +126,7 @@ public sealed partial class WorkflowCenterPage : Page
 
         DisposeEditor();
 
-        _editorVm = new WorkflowEditorViewModel(_store, _moduleCatalog)
+        _editorVm = new WorkflowEditorViewModel(_store, _moduleCatalog, _scopeFactory)
         {
             DialogXamlRoot = XamlRoot,
         };

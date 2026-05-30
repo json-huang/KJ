@@ -82,7 +82,7 @@ public class NotAHandler
         var compiler = new ScriptCompilationService();
         var dynamic = new DynamicStepHandler(compiler);
 
-        var loaded = dynamic.LoadScript(ValidHandlerScript, "Custom");
+        var loaded = dynamic.LoadScript(ValidHandlerScript, references: null, kind: "Custom");
 
         loaded.Should().BeTrue();
         dynamic.IsCompiled.Should().BeTrue();
@@ -117,7 +117,7 @@ public class NotAHandler
         var dynamic = new DynamicStepHandler(compiler);
 
         // 第一次加载
-        dynamic.LoadScript(ValidHandlerScript, "Custom");
+        dynamic.LoadScript(ValidHandlerScript, references: null, kind: "Custom");
         dynamic.CanHandle("Custom").Should().BeTrue();
 
         // 热重载为新的 handler
@@ -136,7 +136,7 @@ public sealed class NewHandler : IWorkflowStepHandler
     }
 }";
 
-        dynamic.LoadScript(newScript, "NewKind");
+        dynamic.LoadScript(newScript, references: null, kind: "NewKind");
         dynamic.CanHandle("Custom").Should().BeFalse();
         dynamic.CanHandle("NewKind").Should().BeTrue();
     }
@@ -147,8 +147,8 @@ public sealed class NewHandler : IWorkflowStepHandler
         var compiler = new ScriptCompilationService();
         var dynamic = new DynamicStepHandler(compiler);
 
-        dynamic.LoadScript(ValidHandlerScript, "Custom");
-        var result = dynamic.LoadScript(ValidHandlerScript, "Custom");
+        dynamic.LoadScript(ValidHandlerScript, references: null, kind: "Custom");
+        var result = dynamic.LoadScript(ValidHandlerScript, references: null, kind: "Custom");
 
         result.Should().BeTrue(); // 跳过重新编译
     }

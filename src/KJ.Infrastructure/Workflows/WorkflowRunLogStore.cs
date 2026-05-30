@@ -39,35 +39,29 @@ public sealed class InMemoryWorkflowRunLogStore : IWorkflowRunLogStore
 public sealed class EfWorkflowRunLogStore : IWorkflowRunLogStore
 {
     private readonly IServiceScopeFactory _scopeFactory;
+    private readonly ConcurrentQueue<WorkflowRunLogEntry> _live = new();
+    private readonly int _liveMax = 2000;
 
     public EfWorkflowRunLogStore(IServiceScopeFactory scopeFactory) => _scopeFactory = scopeFactory;
 
     public void Append(WorkflowRunLogEntry entry)
     {
+        _live.Enqueue(entry);
+        while (_live.Count > _liveMax && _live.TryDequeue(out _))
+        {
+        }
+
         // fire-and-forget: 日志不应阻塞运行主循环；失败也不影响运行
         _ = PersistAsync(entry);
     }
 
     public IReadOnlyList<WorkflowRunLogEntry> GetRecent(int take = 200)
     {
-        using var scope = _scopeFactory.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<KjDbContext>();
-
-        var rows = db.WorkflowRunSteps
-            .AsNoTracking()
-            .OrderByDescending(x => x.TimestampUtc)
-            .Take(Math.Clamp(take, 1, 500))
-            .Select(x => new WorkflowRunLogEntry(
-                new DateTimeOffset(DateTime.SpecifyKind(x.TimestampUtc, DateTimeKind.Utc)),
-                x.RunId,
-                x.StepId,
-                x.Kind,
-                x.Message,
-                x.Success,
-                x.Error))
-            .ToArray();
-
-        return rows.Reverse().ToArray();
+        take = Math.Clamp(take, 1, 2000);
+        var arr = _live.ToArray();
+        if (arr.Length <= take)
+            return arr;
+        return arr.Skip(Math.Max(0, arr.Length - take)).ToArray();
     }
 
     private async Task PersistAsync(WorkflowRunLogEntry entry)

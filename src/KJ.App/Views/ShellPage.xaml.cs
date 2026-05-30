@@ -1,14 +1,21 @@
 using KJ.App.Services;
 using KJ.Modules.Auth;
+using KJ.Modules.Monitoring.Workflows;
+using KJ.Plugin.Host;
+using KJ.WinUI.Hosting;
+using KJ.Diagnostics;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml.Controls;
 using Prism.Ioc;
+using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
 namespace KJ.App.Views;
 
 public sealed partial class ShellPage : Page
 {
+    private static int _diagnosticsSinkHooked;
     private readonly INavigator _navigator;
     private readonly ISessionState _sessionState;
     private readonly IContainerProvider _container;
@@ -20,7 +27,9 @@ public sealed partial class ShellPage : Page
         _navigator = navigator;
         _sessionState = sessionState;
         _container = container;
+        PluginInboundNotification.Received += OnPluginInboundReceived;
         Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
 
         if (App.MainWindow?.AppWindow is { } appWindow)
             appWindow.Changed += OnAppWindowChanged;
@@ -57,10 +66,58 @@ public sealed partial class ShellPage : Page
     private void CloseWindowButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) =>
         App.MainWindow?.Close();
 
+    private void OnUnloaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) =>
+        PluginInboundNotification.Received -= OnPluginInboundReceived;
+
+    private void OnPluginInboundReceived(Plugin.Contracts.PluginEvent pluginEvent)
+    {
+        if (!PluginEventDisplay.ShouldNotify(pluginEvent))
+            return;
+
+        var (title, message) = PluginEventDisplay.Format(pluginEvent);
+        _ = DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Normal, () =>
+        {
+            GlobalNotification.Show(title, message);
+            WorkflowAppServices.ActivateMainWindow?.Invoke();
+        });
+    }
+
     private async void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         UpdateMaximizeToolTip();
         App.UiDispatcher ??= DispatcherQueue.GetForCurrentThread();
+
+        // 全局诊断通知（连接失败等）——只挂一次，避免重复弹窗
+        if (Interlocked.Exchange(ref _diagnosticsSinkHooked, 1) == 0 && App.UiDispatcher is { } dq)
+        {
+            try
+            {
+                var scopeFactory = _container.Resolve<IServiceScopeFactory>();
+                using var scope = scopeFactory.CreateScope();
+                var hub = scope.ServiceProvider.GetRequiredService<DiagnosticHub>();
+
+                // 同时落一份本地日志，方便拷贝排查
+                var logPath = Path.Combine(Path.GetTempPath(), "KJ.App-ads-connect.log");
+                try
+                {
+                    if (!File.Exists(logPath))
+                        File.WriteAllText(logPath, string.Empty);
+                }
+                catch
+                {
+                    // ignore
+                }
+                hub.AddSink(new FileDiagnosticSink(logPath));
+                hub.AddSink(new Services.GlobalNotificationDiagnosticSink(
+                    dq,
+                    sourceEquals: nameof(KJ.Drivers.Plc.Beckhoff.Ads.BeckhoffAdsDriver)));
+            }
+            catch
+            {
+                // ignore (best-effort)
+            }
+        }
+
         await App.WaitForDatabaseInitializationAsync().ConfigureAwait(true);
         _navigator.Attach(RootFrame);
 

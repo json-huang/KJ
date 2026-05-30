@@ -3,6 +3,8 @@ using System.Net.Sockets;
 using KJ.Diagnostics;
 using KJ.Domain;
 using KJ.Drivers.Abstractions;
+using KJ.Drivers.Plc.Beckhoff.Ads;
+using Microsoft.Extensions.DependencyInjection;
 using NModbus;
 using NModbus.IO;
 using NModbus.Serial;
@@ -747,6 +749,8 @@ public sealed class DeviceDriverFactory : IDeviceDriverFactory
         ModbusTcpDriver.DriverTypeConst => (IDeviceDriver)_services.GetService(typeof(ModbusTcpDriver))!,
         ModbusRtuDriver.DriverTypeConst => (IDeviceDriver)_services.GetService(typeof(ModbusRtuDriver))!,
         OpcUaDriver.DriverTypeConst => (IDeviceDriver)_services.GetService(typeof(OpcUaDriver))!,
+        // 每次 Create 返回新实例，避免多设备/流程与轮询共用同一 ADS 连接
+        BeckhoffAdsDriver.DriverTypeConst => _services.GetRequiredService<BeckhoffAdsDriver>(),
         // Beckhoff ADS and other extension drivers are resolved by convention from IServiceProvider
         _ => ResolveExtensionDriver(driverType),
     };

@@ -6,6 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:KJ.Modules.Monitoring.ViewModels"
+    xmlns:views="using:KJ.Modules.Monitoring.Views"
+    xmlns:hosting="using:KJ.WinUI.Hosting"
     mc:Ignorable="d"
     Loaded="OnLoaded">
     <ScrollViewer Padding="24">
@@ -145,6 +147,91 @@
                             </Border>
                         </Grid>
                     </StackPanel>
+                </Border>
+
+                <!-- Embed zone -->
+                <Border
+                    x:Name="DashboardEmbedZone"
+                    Background="{StaticResource KjPanel2Brush}"
+                    BorderBrush="{StaticResource KjStrokeBrush}"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Padding="14,12">
+                    <Grid RowSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Grid ColumnSpacing="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontWeight="SemiBold" Text="嵌入区" />
+                            <ToggleSwitch
+                                Grid.Column="1"
+                                x:Name="WindowDropToggle"
+                                OffContent="拖窗嵌入：关"
+                                OnContent="拖窗嵌入：开"
+                                Toggled="OnWindowDropToggle" />
+                            <Button
+                                Grid.Column="2"
+                                x:Name="ReleaseEmbeddedButton"
+                                Content="释放"
+                                IsEnabled="False"
+                                Style="{StaticResource Action}"
+                                Click="OnReleaseEmbeddedClick" />
+                        </Grid>
+
+                        <Border
+                            Grid.Row="1"
+                            x:Name="EmbedHostBorder"
+                            AllowDrop="True"
+                            Background="{StaticResource KjPanelBrush}"
+                            BorderBrush="{StaticResource KjStrokeSubtleBrush}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            DragLeave="OnEmbedZoneDragLeave"
+                            DragOver="OnEmbedZoneDragOver"
+                            Drop="OnEmbedZoneDrop">
+                            <Grid x:Name="EmbedHostSurface">
+                                <StackPanel
+                                    x:Name="EmbedPlaceholder"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Spacing="8">
+                                    <TextBlock HorizontalAlignment="Center" FontSize="14" FontWeight="SemiBold" Text="把插件拖到这里即可嵌入" />
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        Foreground="{StaticResource KjTextSecondaryBrush}"
+                                        Opacity="0.85"
+                                        Text="从插件中心拖拽插件到此区域松开"
+                                        TextAlignment="Center"
+                                        TextWrapping="WrapWholeWords" />
+                                </StackPanel>
+                                <Border
+                                    x:Name="EmbedDropHighlight"
+                                    Background="#2200A3FF"
+                                    BorderBrush="{StaticResource KjAccentBrush}"
+                                    BorderThickness="2"
+                                    CornerRadius="10"
+                                    IsHitTestVisible="False"
+                                    Opacity="0"
+                                    Visibility="Collapsed">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
+                                        Foreground="{StaticResource KjAccentBrush}"
+                                        Text="松开鼠标以嵌入插件" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Grid>
                 </Border>
             </StackPanel>
         </Grid>

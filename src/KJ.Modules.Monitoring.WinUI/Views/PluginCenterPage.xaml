@@ -9,52 +9,8 @@
     mc:Ignorable="d"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded">
-    <Grid RowSpacing="0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <!-- 置顶通知条：独立占一行，不会被右侧 HWND 浮层盖住 -->
-        <Border
-            x:Name="EventBanner"
-            Grid.Row="0"
-            Margin="24,24,24,0"
-            Padding="14,10"
-            HorizontalAlignment="Stretch"
-            Background="#F01E3A5F"
-            BorderBrush="{StaticResource KjAccentBrush}"
-            BorderThickness="1"
-            CornerRadius="8"
-            Visibility="Collapsed"
-            Canvas.ZIndex="1000">
-            <Grid ColumnSpacing="12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Spacing="4">
-                    <TextBlock
-                        x:Name="EventBannerTitle"
-                        FontWeight="SemiBold"
-                        Foreground="#FFDCE8F5"
-                        Text="收到插件信息" />
-                    <TextBlock
-                        x:Name="EventBannerText"
-                        Foreground="#FFDCE8F5"
-                        TextWrapping="WrapWholeWords" />
-                </StackPanel>
-                <Button
-                    Grid.Column="1"
-                    VerticalAlignment="Top"
-                    Click="OnDismissEventBannerClick"
-                    Content="关闭"
-                    Style="{StaticResource Action}" />
-            </Grid>
-        </Border>
-
+    <Grid>
         <Grid
-            Grid.Row="1"
             Padding="24"
             ColumnSpacing="16">
             <Grid.ColumnDefinitions>
@@ -75,7 +31,7 @@
                     <TextBlock
                         Foreground="{StaticResource KjTextSecondaryBrush}"
                         Opacity="0.85"
-                        Text="连接外部插件并通过 gRPC 通讯；插件界面嵌入右侧区域。"
+                        Text="将左侧插件拖到右侧嵌入区即可嵌入；也可点击「连接并嵌入」。"
                         TextWrapping="WrapWholeWords" />
                     <TextBlock
                         x:Name="StatusTextBlock"
@@ -101,9 +57,11 @@
                 <ListView
                     x:Name="PluginList"
                     Grid.Row="3"
+                    CanDragItems="True"
                     BorderBrush="{StaticResource KjStrokeBrush}"
                     BorderThickness="1"
                     CornerRadius="8"
+                    DragItemsStarting="OnPluginDragItemsStarting"
                     SelectionChanged="OnPluginSelectionChanged">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="views:PluginListItem">
@@ -138,30 +96,55 @@
                     Text="尚未嵌入插件" />
 
                 <Border
+                    x:Name="EmbedDropZone"
                     Grid.Row="1"
+                    AllowDrop="True"
                     Background="{StaticResource KjPanelBrush}"
                     BorderBrush="{StaticResource KjStrokeBrush}"
                     BorderThickness="1"
-                    CornerRadius="10">
-                    <Grid x:Name="PluginHostSurface" Padding="4">
-                        <StackPanel
-                            x:Name="Placeholder"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Spacing="8">
+                    CornerRadius="10"
+                    DragLeave="OnEmbedZoneDragLeave"
+                    DragOver="OnEmbedZoneDragOver"
+                    Drop="OnEmbedZoneDrop">
+                    <Grid>
+                        <Grid x:Name="PluginHostSurface" Padding="4">
+                            <StackPanel
+                                x:Name="Placeholder"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Spacing="8">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Text="插件嵌入区" />
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    Foreground="{StaticResource KjTextSecondaryBrush}"
+                                    MaxWidth="360"
+                                    Opacity="0.85"
+                                    Text="从左侧列表将插件拖放到此处即可嵌入；释放嵌入不会结束插件进程。"
+                                    TextAlignment="Center"
+                                    TextWrapping="WrapWholeWords" />
+                            </StackPanel>
+                        </Grid>
+                        <Border
+                            x:Name="EmbedDropHighlight"
+                            Background="#2200A3FF"
+                            BorderBrush="{StaticResource KjAccentBrush}"
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            IsHitTestVisible="False"
+                            Opacity="0"
+                            Visibility="Collapsed">
                             <TextBlock
                                 HorizontalAlignment="Center"
-                                FontSize="16"
+                                VerticalAlignment="Center"
+                                FontSize="18"
                                 FontWeight="SemiBold"
-                                Text="插件显示区" />
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                Foreground="{StaticResource KjTextSecondaryBrush}"
-                                Opacity="0.85"
-                                Text="连接并嵌入后，插件窗口将显示在此区域"
-                                TextAlignment="Center"
-                                TextWrapping="WrapWholeWords" />
-                        </StackPanel>
+                                Foreground="{StaticResource KjAccentBrush}"
+                                Text="松开鼠标以嵌入插件" />
+                        </Border>
                     </Grid>
                 </Border>
             </Grid>

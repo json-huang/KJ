@@ -11,19 +11,24 @@ public sealed class PlcDataBridge
 {
     private readonly IDeviceDriverFactory _driverFactory;
     private readonly IDeviceManager _deviceManager;
+    private readonly IWorkflowPlcConnection? _workflowPlcConnection;
     private readonly ITagStore _tagStore;
     private readonly ITagConfigStore _tagConfigStore;
+    private readonly Dictionary<string, (IDeviceDriver Driver, DeviceEndpoint Endpoint, bool Owned)> _connected = new();
+    private readonly object _gate = new();
 
     public PlcDataBridge(
         IDeviceDriverFactory driverFactory,
         IDeviceManager deviceManager,
         ITagStore tagStore,
-        ITagConfigStore tagConfigStore)
+        ITagConfigStore tagConfigStore,
+        IWorkflowPlcConnection? workflowPlcConnection = null)
     {
         _driverFactory = driverFactory;
         _deviceManager = deviceManager;
         _tagStore = tagStore;
         _tagConfigStore = tagConfigStore;
+        _workflowPlcConnection = workflowPlcConnection;
     }
 
     /// <summary>
@@ -44,9 +49,13 @@ public sealed class PlcDataBridge
         if (device is null)
             return new PlcReadResult(false, null, $"Device '{deviceId}' not found");
 
+        if (ValidateDeviceEndpoint(device) is { } endpointError)
+            return new PlcReadResult(false, null, endpointError);
+
         try
         {
-            var driver = _driverFactory.Create(device.DriverType);
+            var endpoint = BuildEndpoint(device);
+            var driver = await EnsureConnectedAsync(deviceId, device.DriverType, endpoint, ct).ConfigureAwait(false);
             var tagAddress = new TagAddress(address, valueType);
             var request = new TagReadRequest(address, tagAddress);
             var result = await driver.ReadAsync(request, ct).ConfigureAwait(false);
@@ -63,7 +72,7 @@ public sealed class PlcDataBridge
         }
         catch (Exception ex)
         {
-            return new PlcReadResult(false, null, ex.Message);
+            return new PlcReadResult(false, null, ex.ToString());
         }
     }
 
@@ -81,9 +90,13 @@ public sealed class PlcDataBridge
         if (device is null)
             return new PlcWriteResult(false, $"Device '{deviceId}' not found");
 
+        if (ValidateDeviceEndpoint(device) is { } endpointError)
+            return new PlcWriteResult(false, endpointError);
+
         try
         {
-            var driver = _driverFactory.Create(device.DriverType);
+            var endpoint = BuildEndpoint(device);
+            var driver = await EnsureConnectedAsync(deviceId, device.DriverType, endpoint, ct).ConfigureAwait(false);
             var tagAddress = new TagAddress(address, valueType);
             var request = new TagWriteRequest(address, tagAddress, value);
             await driver.WriteAsync(request, ct).ConfigureAwait(false);
@@ -96,7 +109,7 @@ public sealed class PlcDataBridge
         }
         catch (Exception ex)
         {
-            return new PlcWriteResult(false, ex.Message);
+            return new PlcWriteResult(false, ex.ToString());
         }
     }
 
@@ -201,6 +214,116 @@ public sealed class PlcDataBridge
                 return value.ToString();
             default:
                 return value;
+        }
+    }
+
+    private async Task<IDeviceDriver> EnsureConnectedAsync(
+        string deviceId,
+        string driverType,
+        DeviceEndpoint endpoint,
+        CancellationToken ct)
+    {
+        // 优先复用【设备配置】页已建立的连接（与手动「连接」按钮同一路径）
+        if (_workflowPlcConnection is not null)
+        {
+            try
+            {
+                await _workflowPlcConnection.ConnectDeviceAsync(deviceId, ct).ConfigureAwait(false);
+                if (_workflowPlcConnection.TryGetConnectedDriver(deviceId, out var shared) && shared is not null)
+                    return shared;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(
+                    $"无法连接设备「{deviceId}」（{endpoint.Host}:{ResolvePort(endpoint)}）：{ex.Message}", ex);
+            }
+        }
+
+        IDeviceDriver driver;
+        IDeviceDriver? staleDriver = null;
+        var staleOwned = false;
+        lock (_gate)
+        {
+            if (_connected.TryGetValue(deviceId, out var cached) &&
+                EndpointsEqual(cached.Endpoint, endpoint))
+            {
+                driver = cached.Driver;
+            }
+            else
+            {
+                if (_connected.TryGetValue(deviceId, out var stale))
+                {
+                    staleDriver = stale.Driver;
+                    staleOwned = stale.Owned;
+                    _connected.Remove(deviceId);
+                }
+
+                driver = _driverFactory.Create(driverType);
+                _connected[deviceId] = (driver, endpoint, Owned: true);
+            }
+        }
+
+        if (staleDriver is not null && staleOwned)
+            await DisconnectDriverBestEffortAsync(staleDriver).ConfigureAwait(false);
+
+        if (driver.State == DriverConnectionState.Connected)
+            return driver;
+
+        if (driver.State != DriverConnectionState.Disconnected)
+            await driver.DisconnectAsync(ct).ConfigureAwait(false);
+
+        await driver.ConnectAsync(endpoint, ct).ConfigureAwait(false);
+        return driver;
+    }
+
+    private static bool IsBeckhoffAds(string driverType) =>
+        driverType.Contains("Beckhoff", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(driverType, "Plc.Beckhoff.Ads", StringComparison.OrdinalIgnoreCase);
+
+    private static DeviceEndpoint BuildEndpoint(DeviceDescriptor device)
+    {
+        var port = device.Port;
+        if (port <= 0 && IsBeckhoffAds(device.DriverType))
+            port = 851;
+
+        return new DeviceEndpoint(device.Host.Trim(), port, device.Extra);
+    }
+
+    private static string? ValidateDeviceEndpoint(DeviceDescriptor device)
+    {
+        if (!string.IsNullOrWhiteSpace(device.Host))
+            return null;
+
+        return IsBeckhoffAds(device.DriverType)
+            ? $"设备「{device.DeviceId}」未配置 Host（AmsNetId）。请到【设备配置】填写，例如 127.0.0.1.1.1，端口 851。"
+            : $"设备「{device.DeviceId}」未配置 Host。";
+    }
+
+    private static int ResolvePort(DeviceEndpoint endpoint) =>
+        endpoint.Port > 0 ? endpoint.Port : 851;
+
+    private static bool EndpointsEqual(DeviceEndpoint a, DeviceEndpoint b) =>
+        string.Equals(a.Host, b.Host, StringComparison.OrdinalIgnoreCase) && a.Port == b.Port;
+
+    private static async Task DisconnectDriverBestEffortAsync(IDeviceDriver driver)
+    {
+        try
+        {
+            if (driver.State != DriverConnectionState.Disconnected)
+                await driver.DisconnectAsync().ConfigureAwait(false);
+        }
+        catch
+        {
+            // ignore
+        }
+
+        try
+        {
+            await driver.DisposeAsync().ConfigureAwait(false);
+        }
+        catch
+        {
+            // ignore
         }
     }
 }

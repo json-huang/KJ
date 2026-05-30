@@ -16,7 +16,6 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="28" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -27,27 +26,16 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     VerticalAlignment="Center"
                     FontSize="12"
                     FontWeight="SemiBold"
                     Foreground="#FFDCE8F5"
-                    Text="编辑日志" />
-                <Button
-                    Grid.Column="1"
-                    Margin="4,0,0,0"
-                    Padding="8,2"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Command="{Binding ClearEditorLogCommand}"
-                    Content="清空"
-                    FontSize="11"
-                    Foreground="{StaticResource KjTextSecondaryBrush}" />
+                    Text="日志" />
                 <Button
                     x:Name="CloseButton"
-                    Grid.Column="2"
+                    Grid.Column="1"
                     Width="24"
                     Height="22"
                     Background="Transparent"
@@ -58,28 +46,100 @@
                 </Button>
             </Grid>
 
-            <TextBlock
+            <TabView
+                x:Name="LogTabView"
                 Grid.Row="1"
-                Margin="12,8,12,0"
-                FontSize="11"
-                Foreground="{StaticResource KjTextMutedBrush}"
-                Text="可查看自动记录，也可直接输入备注（支持多行）。"
-                TextWrapping="WrapWholeWords" />
-
-            <TextBox
-                Grid.Row="2"
-                Margin="12,8,12,12"
-                AcceptsReturn="True"
-                TextWrapping="Wrap"
-                PlaceholderText="流程编辑日志将显示在这里…"
-                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                Text="{Binding EditorLogText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                FontFamily="Consolas"
-                FontSize="12"
-                Foreground="{StaticResource KjTextPrimaryBrush}"
-                Background="{StaticResource KjPanelBrush}"
-                BorderBrush="{StaticResource KjStrokeBrush}" />
+                Margin="4,4,4,4"
+                TabWidthMode="Equal"
+                IsAddTabButtonVisible="False"
+                CanReorderTabs="False"
+                CanDragTabs="False">
+                <TabViewItem Header="运行输出" IsClosable="False">
+                    <Grid RowSpacing="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="11"
+                                Foreground="{StaticResource KjTextMutedBrush}"
+                                Text="单步/运行结果（ADS 读写值、错误摘要）"
+                                TextWrapping="WrapWholeWords" />
+                            <Button
+                                Grid.Column="1"
+                                Padding="8,2"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{Binding ClearRunOutputCommand}"
+                                Content="清空"
+                                FontSize="11"
+                                Foreground="{StaticResource KjTextSecondaryBrush}" />
+                        </Grid>
+                        <TextBox
+                            Grid.Row="1"
+                            IsReadOnly="True"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            PlaceholderText="点击「单步」或「运行」后，步骤结果将显示在这里…"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            Text="{Binding RunOutputText, Mode=OneWay}"
+                            FontFamily="Consolas"
+                            FontSize="12"
+                            Foreground="{StaticResource KjTextPrimaryBrush}"
+                            Background="{StaticResource KjPanelBrush}"
+                            BorderBrush="{StaticResource KjStrokeBrush}" />
+                    </Grid>
+                </TabViewItem>
+                <TabViewItem Header="编辑日志" IsClosable="False">
+                    <Grid RowSpacing="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="11"
+                                Foreground="{StaticResource KjTextMutedBrush}"
+                                Text="保存、连线等编辑操作记录（可输入备注）"
+                                TextWrapping="WrapWholeWords" />
+                            <Button
+                                Grid.Column="1"
+                                Padding="8,2"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{Binding ClearEditorLogCommand}"
+                                Content="清空"
+                                FontSize="11"
+                                Foreground="{StaticResource KjTextSecondaryBrush}" />
+                        </Grid>
+                        <TextBox
+                            Grid.Row="1"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            PlaceholderText="流程编辑日志…"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            Text="{Binding EditorLogText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            FontFamily="Consolas"
+                            FontSize="12"
+                            Foreground="{StaticResource KjTextPrimaryBrush}"
+                            Background="{StaticResource KjPanelBrush}"
+                            BorderBrush="{StaticResource KjStrokeBrush}" />
+                    </Grid>
+                </TabViewItem>
+            </TabView>
         </Grid>
     </Border>
 </UserControl>

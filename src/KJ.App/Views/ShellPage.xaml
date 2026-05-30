@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:controls="using:KJ.App.Controls"
+    xmlns:hosting="using:KJ.WinUI.Hosting"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Grid Background="{StaticResource KjBackgroundBrush}">
@@ -64,5 +65,10 @@
         <Frame
             x:Name="RootFrame"
             Grid.Row="1" />
+
+        <hosting:GlobalNotificationHost
+            Grid.RowSpan="2"
+            Margin="0,40,0,0"
+            Canvas.ZIndex="2000" />
     </Grid>
 </Page>

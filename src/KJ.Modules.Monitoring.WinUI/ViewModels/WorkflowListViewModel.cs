@@ -48,6 +48,7 @@ public sealed class WorkflowListViewModel : BindableBase
     public DelegateCommand NewCommand { get; }
     public DelegateCommand OpenSelectedCommand { get; }
     public DelegateCommand<WorkflowListItem?> OpenItemCommand { get; }
+    public DelegateCommand<WorkflowListItem?> DeleteItemCommand { get; }
 
     public WorkflowListViewModel(IWorkflowStore store, IWorkflowContentNavigator contentNavigator)
     {
@@ -58,6 +59,7 @@ public sealed class WorkflowListViewModel : BindableBase
         NewCommand = new DelegateCommand(async () => await NewAsync());
         OpenSelectedCommand = new DelegateCommand(OpenSelected);
         OpenItemCommand = new DelegateCommand<WorkflowListItem?>(OpenItem);
+        DeleteItemCommand = new DelegateCommand<WorkflowListItem?>(async item => await DeleteAsync(item));
     }
 
     public void OpenItem(WorkflowListItem? item)
@@ -201,6 +203,38 @@ public sealed class WorkflowListViewModel : BindableBase
         finally
         {
             _isNavigating = false;
+        }
+    }
+
+    public async Task DeleteAsync(WorkflowListItem? item)
+    {
+        if (item is null)
+            return;
+
+        StatusText = "正在删除…";
+        try
+        {
+            await _store.DeleteAsync(item.Id).ConfigureAwait(false);
+            await _store.DeleteAutosaveAsync(item.Id).ConfigureAwait(false);
+
+            MainThread.Enqueue(() =>
+            {
+                if (ReferenceEquals(Selected, item))
+                    Selected = null;
+                Items.Remove(item);
+                IsEmpty = Items.Count == 0;
+                StatusText = IsEmpty ? "暂无流程，请点击「新建」创建" : $"共 {Items.Count} 条流程";
+            });
+
+            NavTrace.Write($"WorkflowList.DeleteAsync: deleted id={item.Id:N}");
+        }
+        catch (Exception ex)
+        {
+            MainThread.Enqueue(() =>
+            {
+                StatusText = $"删除失败: {ex.Message}";
+            });
+            NavTrace.Write($"WorkflowList.DeleteAsync: error {ex}");
         }
     }
 }

@@ -4,12 +4,18 @@ using KJ.Modules.Core.Diagnostics;
 using KJ.Modules.Core.UI;
 using KJ.Workflows;
 using KJ.Workflows.Modules;
+using KJ.Workflows.Modules.Builtins;
 using KJ.Modules.Monitoring.Workflows;
+using KJ.Domain;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Windows.Storage.Pickers;
+using WinRT.Interop;
 
 namespace KJ.Modules.Monitoring.ViewModels;
 
@@ -17,7 +23,10 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
 {
     private readonly IWorkflowStore _store;
     private readonly IWorkflowStepModuleCatalog _moduleCatalog;
+    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly DispatcherQueue? _dispatcher;
     private IWorkflowRuntime? _runtime;
+    private readonly ScriptCompilationService _scriptCompiler = new();
 
     private WorkflowDefinition _workflow = new();
     private readonly ObservableCollection<WorkflowStep> _steps = new();
@@ -27,6 +36,7 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
     private CancellationTokenSource? _autosaveCts;
     private int _canvasInteractionDepth;
     private bool _skipRecoveryPrompt;
+    private bool _explicitSavePerformed;
     private readonly List<WorkflowStep> _clipboardSteps = new();
     private int _pasteGeneration;
     private readonly ObservableCollection<WorkflowStep> _selectedSteps = new();
@@ -66,9 +76,41 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
 
     public ObservableCollection<WorkflowStepPropertyFieldViewModel> StepPropertyFields { get; } = new();
 
+    public sealed record DeviceOption(string DeviceId, string Label, string DriverType);
+
+    public ObservableCollection<DeviceOption> AvailableDevices { get; } = new();
+
+    public IReadOnlyList<string> PlcTypeOptions { get; } =
+    [
+        "BOOL",
+        "DINT",
+        "LINT",
+        "REAL",
+        "LREAL",
+        "STRING",
+    ];
+
     public bool HasStepPropertyFields => StepPropertyFields.Count > 0;
 
-    public bool ShowNoExtraParamsHint => !HasStepPropertyFields;
+    public bool IsScriptStepSelected =>
+        SelectedStep is not null &&
+        string.Equals(SelectedStep.Kind, ScriptStepDefaults.Kind, StringComparison.OrdinalIgnoreCase);
+
+    private string _scriptDraft = string.Empty;
+    public string ScriptDraft
+    {
+        get => _scriptDraft;
+        set => SetProperty(ref _scriptDraft, value ?? string.Empty);
+    }
+
+    private string _scriptReferencesDraft = string.Empty;
+    public string ScriptReferencesDraft
+    {
+        get => _scriptReferencesDraft;
+        set => SetProperty(ref _scriptReferencesDraft, value ?? string.Empty);
+    }
+
+    public bool ShowNoExtraParamsHint => !HasStepPropertyFields && !IsScriptStepSelected;
 
     public string SelectedModuleDescription =>
         SelectedStep is null
@@ -109,6 +151,8 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
             RaisePropertyChanged(nameof(StepTitle));
             RaisePropertyChanged(nameof(StepKind));
             RaisePropertyChanged(nameof(SelectedModuleDescription));
+            RaisePropertyChanged(nameof(IsScriptStepSelected));
+            LoadScriptDraftFromSelected();
             RefreshStepPropertyFields();
 
             if (value is null)
@@ -140,6 +184,8 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         RaisePropertyChanged(nameof(StepTitle));
         RaisePropertyChanged(nameof(StepKind));
         RaisePropertyChanged(nameof(SelectedModuleDescription));
+        RaisePropertyChanged(nameof(IsScriptStepSelected));
+        LoadScriptDraftFromSelected();
         RefreshStepPropertyFields();
 
         _selectedSteps.Clear();
@@ -248,13 +294,18 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
     public DelegateCommand ResumeCommand { get; }
     public DelegateCommand CancelCommand { get; }
     public DelegateCommand ClearEditorLogCommand { get; }
+    public DelegateCommand ClearRunOutputCommand { get; }
     public DelegateCommand UndoCommand { get; }
     public DelegateCommand RedoCommand { get; }
+    public DelegateCommand SaveScriptCommand { get; }
+    public DelegateCommand CompileScriptCommand { get; }
+    public DelegateCommand BrowseDllReferencesCommand { get; }
 
     public bool CanUndo => _history.CanUndo;
     public bool CanRedo => _history.CanRedo;
 
     private const int MaxEditorLogLines = 400;
+    private const int MaxRunOutputLines = 300;
 
     private string _editorLogText = string.Empty;
     public string EditorLogText
@@ -263,28 +314,171 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         set => SetProperty(ref _editorLogText, value);
     }
 
+    private string _runOutputText = string.Empty;
+    public string RunOutputText
+    {
+        get => _runOutputText;
+        set => SetProperty(ref _runOutputText, value);
+    }
+
     private WorkflowStep? _linkFrom;
     private WorkflowPort _linkFromPort = WorkflowPort.Right;
 
-    public WorkflowEditorViewModel(IWorkflowStore store, IWorkflowStepModuleCatalog moduleCatalog)
+    public WorkflowEditorViewModel(IWorkflowStore store, IWorkflowStepModuleCatalog moduleCatalog, IServiceScopeFactory scopeFactory)
     {
         _store = store;
         _moduleCatalog = moduleCatalog;
+        _scopeFactory = scopeFactory;
+        _dispatcher = DispatcherQueue.GetForCurrentThread();
         InitializeToolbox();
         AddStepCommand = new DelegateCommand(AddStep);
         AddFromToolboxCommand = new DelegateCommand<WorkflowToolboxItem>(AddStepFromToolbox);
-        SaveCommand = new DelegateCommand(async () => await SaveAsync());
+        SaveCommand = new DelegateCommand(ExecuteSave);
         RunCommand = new DelegateCommand(async () => await RunContinuousAsync(), () => CanStartContinuous());
         StepCommand = new DelegateCommand(async () => await StepAsync(), () => CanStep());
         PauseCommand = new DelegateCommand(Pause, () => _runtime?.State == WorkflowRunState.Running);
         ResumeCommand = new DelegateCommand(Resume, () => _runtime?.State == WorkflowRunState.Paused);
         CancelCommand = new DelegateCommand(Cancel, () => _runtime?.State is WorkflowRunState.Running or WorkflowRunState.Paused);
         ClearEditorLogCommand = new DelegateCommand(ClearEditorLog);
+        ClearRunOutputCommand = new DelegateCommand(ClearRunOutput);
         UndoCommand = new DelegateCommand(Undo, () => CanUndo);
         RedoCommand = new DelegateCommand(Redo, () => CanRedo);
+        SaveScriptCommand = new DelegateCommand(ExecuteSaveScript, () => IsScriptStepSelected);
+        CompileScriptCommand = new DelegateCommand(CompileScriptDraft, () => IsScriptStepSelected);
+        BrowseDllReferencesCommand = new DelegateCommand(async () => await BrowseDllReferencesAsync(), () => IsScriptStepSelected);
 
         _steps.CollectionChanged += (_, __) => TrackStepPropertyChanges();
         AppendEditorLog("流程编辑器已就绪。");
+    }
+
+    private void RunOnUiThread(Action action)
+    {
+        if (_dispatcher is null)
+        {
+            action();
+            return;
+        }
+
+        if (_dispatcher.HasThreadAccess)
+        {
+            action();
+            return;
+        }
+
+        _ = _dispatcher.TryEnqueue(() => action());
+    }
+
+    private async void RefreshAvailableDevicesBestEffort()
+    {
+        try
+        {
+            await using var scope = _scopeFactory.CreateAsyncScope();
+            var mgr = scope.ServiceProvider.GetRequiredService<IDeviceManager>();
+            var list = mgr.ListDevices()
+                .OrderBy(d => d.DisplayName)
+                .ToList();
+
+            RunOnUiThread(() =>
+            {
+                AvailableDevices.Clear();
+                foreach (var d in list)
+                {
+                    var hostPort = string.IsNullOrWhiteSpace(d.Host)
+                        ? ""
+                        : (d.Port > 0 ? $"{d.Host}:{d.Port}" : d.Host);
+                    var label = string.IsNullOrWhiteSpace(hostPort)
+                        ? $"{d.DisplayName}  ·  {d.DeviceId}  ·  {d.DriverType}"
+                        : $"{d.DisplayName}  ·  {d.DeviceId}  ·  {d.DriverType}  ·  {hostPort}";
+                    AvailableDevices.Add(new DeviceOption(d.DeviceId, label, d.DriverType));
+                }
+
+                RaisePropertyChanged(nameof(AvailableDevices));
+                TryApplyDefaultDeviceToSelectedStep();
+            });
+        }
+        catch
+        {
+            // best-effort only
+        }
+    }
+
+    private static bool IsPlcAdsStep(string kind) =>
+        string.Equals(kind, "Plc.Ads.Read", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(kind, "Plc.Ads.Write", StringComparison.OrdinalIgnoreCase);
+
+    private void TryApplyDefaultDevice(WorkflowStep step)
+    {
+        if (!IsPlcAdsStep(step.Kind))
+            return;
+
+        if (!string.IsNullOrWhiteSpace(step.Parameters.GetValueOrDefault("device")))
+            return;
+
+        var device = AvailableDevices.FirstOrDefault(d =>
+            d.DriverType.Contains("Beckhoff", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(d.DriverType, "Plc.Beckhoff.Ads", StringComparison.OrdinalIgnoreCase))
+            ?? AvailableDevices.FirstOrDefault();
+
+        if (device is null)
+            return;
+
+        step.Parameters["device"] = device.DeviceId;
+    }
+
+    private void TryApplyDefaultDeviceToSelectedStep()
+    {
+        if (SelectedStep is null)
+            return;
+
+        if (!string.IsNullOrWhiteSpace(SelectedStep.Parameters.GetValueOrDefault("device")))
+            return;
+
+        TryApplyDefaultDevice(SelectedStep);
+        RefreshStepPropertyFields();
+    }
+
+    private bool ValidatePlcAdsStepsBeforeRun(out string? error)
+    {
+        foreach (var step in _steps.Where(s => IsPlcAdsStep(s.Kind)))
+            TryApplyDefaultDevice(step);
+
+        foreach (var step in _steps.Where(s => IsPlcAdsStep(s.Kind)))
+        {
+            var deviceId = step.Parameters.GetValueOrDefault("device", "");
+            if (string.IsNullOrWhiteSpace(deviceId))
+            {
+                error = $"步骤「{step.Title}」未选择设备：请在属性面板的「设备」下拉框选择 Beckhoff ADS 设备。";
+                return false;
+            }
+
+            var known = AvailableDevices.Any(d =>
+                string.Equals(d.DeviceId, deviceId, StringComparison.OrdinalIgnoreCase));
+            if (!known)
+            {
+                error = $"步骤「{step.Title}」的设备 ID「{deviceId}」不存在，请先在【设备配置】中创建或刷新设备列表。";
+                return false;
+            }
+        }
+
+        error = null;
+        return true;
+    }
+
+    private async void ExecuteSave()
+    {
+        try
+        {
+            AppendEditorLog("SaveCommand: invoked");
+            await SaveAsync().ConfigureAwait(true);
+            AppendEditorLog("SaveCommand: completed");
+        }
+        catch (Exception ex)
+        {
+            // DelegateCommand(async ()=>...) 的异常可能被吞；这里显式落日志
+            AppendEditorLog($"SaveCommand: exception: {ex}", "ERROR");
+            SaveStatusText = $"保存失败：{ex.Message}";
+            IsDirty = true;
+        }
     }
 
     public void AppendEditorLog(string message, string level = "INFO")
@@ -292,22 +486,239 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         if (string.IsNullOrWhiteSpace(message))
             return;
 
-        var line = $"[{DateTimeOffset.Now:HH:mm:ss}] [{level}] {message.Trim()}";
-        EditorLogText = string.IsNullOrWhiteSpace(EditorLogText)
-            ? line
-            : $"{EditorLogText}{Environment.NewLine}{line}";
+        RunOnUiThread(() =>
+        {
+            var line = $"[{DateTimeOffset.Now:HH:mm:ss}] [{level}] {message.Trim()}";
+            EditorLogText = string.IsNullOrWhiteSpace(EditorLogText)
+                ? line
+                : $"{EditorLogText}{Environment.NewLine}{line}";
 
-        var lines = EditorLogText.Split(Environment.NewLine);
-        if (lines.Length > MaxEditorLogLines)
-            EditorLogText = string.Join(Environment.NewLine, lines.Skip(lines.Length - MaxEditorLogLines));
+            var lines = EditorLogText.Split(Environment.NewLine);
+            if (lines.Length > MaxEditorLogLines)
+                EditorLogText = string.Join(Environment.NewLine, lines.Skip(lines.Length - MaxEditorLogLines));
 
-        RaisePropertyChanged(nameof(EditorLogText));
+            RaisePropertyChanged(nameof(EditorLogText));
+        });
     }
 
     private void ClearEditorLog()
     {
         EditorLogText = string.Empty;
-        AppendEditorLog("日志已清空。");
+        AppendEditorLog("编辑日志已清空。");
+    }
+
+    public void AppendRunOutput(string message, string level = "INFO")
+    {
+        if (string.IsNullOrWhiteSpace(message))
+            return;
+
+        RunOnUiThread(() =>
+        {
+            var line = $"[{DateTimeOffset.Now:HH:mm:ss}] [{level}] {message.Trim()}";
+            RunOutputText = string.IsNullOrWhiteSpace(RunOutputText)
+                ? line
+                : $"{RunOutputText}{Environment.NewLine}{line}";
+
+            var lines = RunOutputText.Split(Environment.NewLine);
+            if (lines.Length > MaxRunOutputLines)
+                RunOutputText = string.Join(Environment.NewLine, lines.Skip(lines.Length - MaxRunOutputLines));
+
+            RaisePropertyChanged(nameof(RunOutputText));
+        });
+    }
+
+    private void ClearRunOutput()
+    {
+        RunOutputText = string.Empty;
+        RaisePropertyChanged(nameof(RunOutputText));
+    }
+
+    private void BeginRunOutputSession(bool clearPrevious, string? banner = null)
+    {
+        RunOnUiThread(() =>
+        {
+            if (clearPrevious)
+                RunOutputText = string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(banner))
+                AppendRunOutput(banner);
+        });
+    }
+
+    private static string ShortenForRunOutput(string? text, int maxLen = 480)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return string.Empty;
+
+        var first = text.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
+            .Select(l => l.Trim())
+            .FirstOrDefault(l => l.Length > 0);
+
+        if (string.IsNullOrWhiteSpace(first))
+            first = text.Trim();
+
+        return first.Length <= maxLen ? first : first[..maxLen] + "…";
+    }
+
+    private static string ShortenException(Exception ex) =>
+        ShortenForRunOutput(ex.InnerException?.Message ?? ex.Message);
+
+    private string FormatRunLogEntry(WorkflowRunLogEntry entry)
+    {
+        var stepLabel = entry.StepId == Guid.Empty
+            ? "流程"
+            : _steps.FirstOrDefault(s => s.Id == entry.StepId)?.Title ?? entry.Kind;
+
+        if (entry.Success)
+            return $"[{stepLabel}] {entry.Message}";
+
+        var detail = ShortenForRunOutput(entry.Error);
+        if (string.Equals(entry.Message, "Step failed.", StringComparison.OrdinalIgnoreCase))
+        {
+            return string.IsNullOrWhiteSpace(detail)
+                ? $"[{stepLabel}] 步骤失败"
+                : $"[{stepLabel}] {detail}";
+        }
+
+        var summary = ShortenForRunOutput(entry.Message);
+        return string.IsNullOrWhiteSpace(detail) || detail == summary
+            ? $"[{stepLabel}] {summary}"
+            : $"[{stepLabel}] {summary} — {detail}";
+    }
+
+    private static bool ShouldShowInRunOutput(WorkflowRunLogEntry entry)
+    {
+        if (!entry.Success)
+            return true;
+
+        if (entry.Message is "Step started." or "Step completed.")
+            return false;
+
+        if (entry.Message.StartsWith("Reading ", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        return true;
+    }
+
+    private async void ExecuteSaveScript()
+    {
+        try
+        {
+            if (!IsScriptStepSelected || SelectedStep is null)
+                return;
+
+            var normalized = ScriptDraft ?? string.Empty;
+            var refsNormalized = ScriptReferencesDraft ?? string.Empty;
+
+            var scriptUnchanged = SelectedStep.Parameters.GetValueOrDefault("script", string.Empty) == normalized;
+            var refsUnchanged = SelectedStep.Parameters.GetValueOrDefault("references", string.Empty) == refsNormalized;
+            if (scriptUnchanged && refsUnchanged)
+            {
+                AppendEditorLog("脚本/引用未变化，无需保存。");
+                return;
+            }
+
+            RecordUndoCheckpointForField(SelectedStep.Id, "param:script");
+            SelectedStep.Parameters["script"] = normalized;
+            SelectedStep.Parameters["references"] = refsNormalized;
+            MarkDirty();
+
+            // 保存脚本时一并落盘，避免仅关面板导致脚本草稿丢失。
+            AppendEditorLog("脚本/引用已写入步骤参数，正在保存到磁盘…");
+            await SaveAsync().ConfigureAwait(true);
+        }
+        catch (Exception ex)
+        {
+            AppendEditorLog($"保存脚本失败：{ex}", "ERROR");
+            SaveStatusText = $"保存失败：{ex.Message}";
+            IsDirty = true;
+        }
+    }
+
+    private void CompileScriptDraft()
+    {
+        if (!IsScriptStepSelected)
+            return;
+
+        var code = ScriptDraft ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            AppendEditorLog("脚本为空，无法编译。", "WARN");
+            return;
+        }
+
+        var refs = (ScriptReferencesDraft ?? string.Empty)
+            .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(x => x.Trim())
+            .Where(x => x.Length > 0)
+            .ToArray();
+        var result = _scriptCompiler.Compile(code, refs);
+        if (result.Success)
+        {
+            AppendEditorLog("脚本编译通过。");
+            return;
+        }
+
+        AppendEditorLog("脚本编译失败：", "ERROR");
+        foreach (var err in result.Errors)
+            AppendEditorLog(err, "ERROR");
+    }
+
+    private async Task BrowseDllReferencesAsync()
+    {
+        if (!IsScriptStepSelected)
+            return;
+
+        var hwnd = WorkflowAppServices.ResolveMainWindowHandle();
+        if (hwnd == IntPtr.Zero)
+        {
+            AppendEditorLog("无法获取主窗口句柄，暂时不能打开文件选择器。", "ERROR");
+            return;
+        }
+
+        var picker = new FileOpenPicker();
+        InitializeWithWindow.Initialize(picker, hwnd);
+        picker.ViewMode = PickerViewMode.List;
+        picker.FileTypeFilter.Add(".dll");
+        picker.FileTypeFilter.Add(".exe");
+
+        var files = await picker.PickMultipleFilesAsync();
+        if (files is null || files.Count == 0)
+            return;
+
+        var existing = new HashSet<string>(
+            (ScriptReferencesDraft ?? string.Empty)
+                .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim()),
+            StringComparer.OrdinalIgnoreCase);
+
+        foreach (var f in files)
+        {
+            if (!string.IsNullOrWhiteSpace(f.Path))
+                existing.Add(f.Path);
+        }
+
+        ScriptReferencesDraft = string.Join(Environment.NewLine, existing.OrderBy(x => x, StringComparer.OrdinalIgnoreCase));
+        RaisePropertyChanged(nameof(ScriptReferencesDraft));
+        AppendEditorLog($"已添加引用：{files.Count} 个文件。");
+        BrowseDllReferencesCommand.RaiseCanExecuteChanged();
+    }
+
+    private void LoadScriptDraftFromSelected()
+    {
+        if (!IsScriptStepSelected || SelectedStep is null)
+        {
+            ScriptDraft = string.Empty;
+            ScriptReferencesDraft = string.Empty;
+            RaisePropertyChanged(nameof(ScriptDraft));
+            RaisePropertyChanged(nameof(ScriptReferencesDraft));
+            return;
+        }
+
+        ScriptDraft = SelectedStep.Parameters.GetValueOrDefault("script", string.Empty);
+        ScriptReferencesDraft = SelectedStep.Parameters.GetValueOrDefault("references", string.Empty);
+        RaisePropertyChanged(nameof(ScriptDraft));
+        RaisePropertyChanged(nameof(ScriptReferencesDraft));
     }
 
     private IWorkflowRuntime Runtime
@@ -390,8 +801,6 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
                     Y = 40,
                     Parameters =
                     {
-                        ["amsNetId"] = "",
-                        ["amsPort"] = "851",
                         ["symbol"] = "MAIN.nSpeed",
                         ["type"] = "DINT",
                     }
@@ -404,8 +813,6 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
                     Y = 40,
                     Parameters =
                     {
-                        ["amsNetId"] = "",
-                        ["amsPort"] = "851",
                         ["symbol"] = "GVL.bRun",
                         ["type"] = "BOOL",
                         ["value"] = "true",
@@ -449,6 +856,7 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         TrackStepPropertyChanges();
         IsDirty = false;
         SaveStatusText = "已保存";
+        _explicitSavePerformed = false;
         RaisePropertyChanged(nameof(SubTitle));
         RaisePropertyChanged(nameof(Steps));
         RaisePropertyChanged(nameof(WorkflowName));
@@ -456,6 +864,7 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         _history.Clear();
         RefreshUndoCommands();
         AppendEditorLog($"已加载流程「{_workflow.Name}」：步骤 {_steps.Count} 个，连线 {Links.Count} 条。");
+        RefreshAvailableDevicesBestEffort();
     }
 
     private void InitializeToolbox()
@@ -475,21 +884,35 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
             return;
         }
 
+        TryApplyDefaultDevice(SelectedStep);
+
         var module = _moduleCatalog.GetModule(SelectedStep.Kind);
         if (module is not null)
         {
             foreach (var definition in module.Properties)
             {
+                if (IsScriptStepSelected &&
+                    (string.Equals(definition.Key, "script", StringComparison.OrdinalIgnoreCase) ||
+                     string.Equals(definition.Key, "references", StringComparison.OrdinalIgnoreCase)))
+                    continue;
+
                 StepPropertyFields.Add(new WorkflowStepPropertyFieldViewModel(
                     SelectedStep,
                     definition,
+                    deviceOptions: AvailableDevices.ToList(),
+                    typeOptions: PlcTypeOptions,
                     onBeforeChanged: () => RecordUndoCheckpointForField(SelectedStep.Id, $"param:{definition.Key}"),
                     onChanged: MarkDirty));
             }
         }
 
         RaisePropertyChanged(nameof(HasStepPropertyFields));
+        RaisePropertyChanged(nameof(IsScriptStepSelected));
+        LoadScriptDraftFromSelected();
         RaisePropertyChanged(nameof(ShowNoExtraParamsHint));
+        SaveScriptCommand.RaiseCanExecuteChanged();
+        CompileScriptCommand.RaiseCanExecuteChanged();
+        BrowseDllReferencesCommand.RaiseCanExecuteChanged();
     }
 
     private void AddStep() =>
@@ -647,6 +1070,7 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         };
 
         _moduleCatalog.GetModule(item.Kind)?.ApplyDefaults(step);
+        TryApplyDefaultDevice(step);
         return step;
     }
 
@@ -720,6 +1144,41 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
 
     private async Task SaveAsync()
     {
+        if (IsSaving)
+        {
+            AppendEditorLog("正在保存中，请稍候…", "WARN");
+            return;
+        }
+
+        var baseDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var expectedPath = Path.Combine(baseDir, "KJ", "workflows", $"{_workflow.Id:N}.json");
+        DateTime? beforeWriteUtc = null;
+        try
+        {
+            if (File.Exists(expectedPath))
+                beforeWriteUtc = File.GetLastWriteTimeUtc(expectedPath);
+        }
+        catch
+        {
+            // ignore IO issues for debug stamp
+        }
+
+        AppendEditorLog($"保存开始：wf={_workflow.Id:N} → {expectedPath}（beforeUtc={(beforeWriteUtc is null ? "null" : beforeWriteUtc.Value.ToString("O"))}）");
+
+        // 顶栏“保存”应当视为最终提交：如果脚本仍停留在草稿区，也一并写回步骤参数再落盘。
+        if (IsScriptStepSelected && SelectedStep is not null)
+        {
+            var draft = ScriptDraft ?? string.Empty;
+            var current = SelectedStep.Parameters.GetValueOrDefault("script", string.Empty);
+            if (!string.Equals(draft, current, StringComparison.Ordinal))
+                SelectedStep.Parameters["script"] = draft;
+
+            var refsDraft = ScriptReferencesDraft ?? string.Empty;
+            var refsCurrent = SelectedStep.Parameters.GetValueOrDefault("references", string.Empty);
+            if (!string.Equals(refsDraft, refsCurrent, StringComparison.Ordinal))
+                SelectedStep.Parameters["references"] = refsDraft;
+        }
+
         _workflow.Steps = _steps.ToList();
         if (_workflow.Links.Count > 0 || Links.Count > 0)
             _workflow.Links = Links.ToList();
@@ -732,13 +1191,36 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
             await _store.DeleteAutosaveAsync(_workflow.Id).ConfigureAwait(true);
             IsDirty = false;
             SaveStatusText = "已保存";
+            _explicitSavePerformed = true;
             RaisePropertyChanged(nameof(SubTitle));
-            AppendEditorLog($"保存成功：{_workflow.Name}（步骤 {_steps.Count}，连线 {Links.Count}）");
+            DateTime? afterWriteUtc = null;
+            try
+            {
+                if (File.Exists(expectedPath))
+                    afterWriteUtc = File.GetLastWriteTimeUtc(expectedPath);
+            }
+            catch
+            {
+                // ignore
+            }
+
+            AppendEditorLog($"保存成功：{_workflow.Name}（步骤 {_steps.Count}，连线 {Links.Count}，afterUtc={(afterWriteUtc is null ? "null" : afterWriteUtc.Value.ToString("O"))}）");
+
+            // 立即从磁盘回读一次验证，避免“看起来没保存”的误判
+            var verify = await _store.LoadAsync(_workflow.Id).ConfigureAwait(true);
+            if (verify is null)
+            {
+                AppendEditorLog("保存后校验失败：磁盘回读为 null。", "ERROR");
+            }
+            else
+            {
+                AppendEditorLog($"保存后校验：disk.updatedAt={verify.UpdatedAt:O} steps={verify.Steps.Count} links={verify.Links.Count}");
+            }
         }
         catch (Exception ex)
         {
             SaveStatusText = $"保存失败：{ex.Message}";
-            AppendEditorLog($"保存失败：{ex.Message}", "ERROR");
+            AppendEditorLog($"保存失败：{ex}", "ERROR");
             IsDirty = true;
         }
         finally
@@ -896,16 +1378,25 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
     {
         try
         {
+            if (!ValidatePlcAdsStepsBeforeRun(out var validationError))
+            {
+                SaveStatusText = validationError;
+                AppendRunOutput(validationError!, "WARN");
+                return;
+            }
+
             IsSaving = true;
             RefreshRunCommands();
             SaveStatusText = "运行中…";
-            AppendEditorLog("开始连续运行流程…");
+            BeginRunOutputSession(clearPrevious: true, "—— 开始连续运行 ——");
             await Runtime.StartContinuousAsync(CreateSnapshot()).ConfigureAwait(true);
+            FlushRunOutputFromStore();
         }
         catch (Exception ex)
         {
             SaveStatusText = $"运行失败：{ex.Message}";
-            AppendEditorLog($"运行失败：{ex.Message}", "ERROR");
+            AppendRunOutput($"运行失败：{ShortenException(ex)}", "ERROR");
+            FlushRunOutputFromStore();
         }
         finally
         {
@@ -918,26 +1409,36 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
     {
         try
         {
+            if (!ValidatePlcAdsStepsBeforeRun(out var validationError))
+            {
+                SaveStatusText = validationError;
+                AppendRunOutput(validationError!, "WARN");
+                return;
+            }
+
             IsSaving = true;
             RefreshRunCommands();
 
             if (Runtime.State is WorkflowRunState.Idle or WorkflowRunState.Completed or WorkflowRunState.Failed or WorkflowRunState.Canceled)
             {
                 SaveStatusText = "单步中…";
-                AppendEditorLog("开始单步运行流程…");
+                BeginRunOutputSession(clearPrevious: true, "—— 开始单步运行 ——");
                 await Runtime.StartStepAsync(CreateSnapshot()).ConfigureAwait(true);
             }
             else
             {
                 SaveStatusText = "单步中…";
-                AppendEditorLog("执行下一步…");
+                AppendRunOutput("执行下一步…");
                 await Runtime.StepOnceAsync().ConfigureAwait(true);
             }
+
+            FlushRunOutputFromStore();
         }
         catch (Exception ex)
         {
             SaveStatusText = $"单步失败：{ex.Message}";
-            AppendEditorLog($"单步失败：{ex.Message}", "ERROR");
+            AppendRunOutput($"单步失败：{ShortenException(ex)}", "ERROR");
+            FlushRunOutputFromStore();
         }
         finally
         {
@@ -970,11 +1471,65 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         RefreshRunCommands();
     }
 
+    private Guid? _lastDumpedRunId;
+    private int _lastDumpedRunLogCount;
+
+    private void FlushRunOutputFromStore() =>
+        RunOnUiThread(DumpRecentRunLogsBestEffort);
+
+    private void DumpRecentRunLogsBestEffort()
+    {
+        try
+        {
+            var runId = _runtime?.ActiveRunId;
+            if (runId is null)
+                return;
+
+            if (_lastDumpedRunId != runId)
+            {
+                _lastDumpedRunId = runId;
+                _lastDumpedRunLogCount = 0;
+            }
+
+            using var scope = _scopeFactory.CreateScope();
+            var store = scope.ServiceProvider.GetService(typeof(IWorkflowRunLogStore)) as IWorkflowRunLogStore;
+            if (store is null)
+                return;
+
+            var entries = store.GetRecent(200)
+                .Where(e => e.RunId == runId.Value)
+                .OrderBy(e => e.Timestamp)
+                .ToList();
+
+            if (entries.Count <= _lastDumpedRunLogCount)
+                return;
+
+            foreach (var e in entries.Skip(_lastDumpedRunLogCount))
+            {
+                if (!ShouldShowInRunOutput(e))
+                    continue;
+
+                var line = FormatRunLogEntry(e);
+                AppendRunOutput(line, e.Success ? "INFO" : "ERROR");
+            }
+
+            _lastDumpedRunLogCount = entries.Count;
+        }
+        catch
+        {
+            // ignore
+        }
+    }
+
     private void OnRuntimeChanged()
     {
-        RaisePropertyChanged(nameof(RuntimeCurrentStepId));
-        RaisePropertyChanged(nameof(RuntimeHint));
-        RefreshRunCommands();
+        RunOnUiThread(() =>
+        {
+            RaisePropertyChanged(nameof(RuntimeCurrentStepId));
+            RaisePropertyChanged(nameof(RuntimeHint));
+            RefreshRunCommands();
+            DumpRecentRunLogsBestEffort();
+        });
     }
 
     private void RefreshRunCommands()
@@ -988,12 +1543,50 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
 
     public async Task BeginEditorSessionAsync()
     {
+        // 如果上次异常退出留下 autosave，会导致“未点保存但重开仍是修改后内容”的错觉/体验问题。
+        // 当前版本已禁用自动保存调度，因此进入编辑器时直接清理遗留的 autosave。
+        await _store.DeleteAutosaveAsync(_workflow.Id).ConfigureAwait(true);
         await _store.MarkEditorSessionOpenAsync(_workflow.Id).ConfigureAwait(true);
     }
 
     public async Task EndEditorSessionAsync()
     {
+        // 用户明确要求：不点保存就“不做修改”。因此离开编辑器时如未显式保存，则丢弃本次会话的内存更改。
+        if (IsDirty && !_explicitSavePerformed)
+        {
+            var official = await _store.LoadAsync(_workflow.Id).ConfigureAwait(true);
+            if (official is not null)
+            {
+                ApplyWorkflow(official);
+                AppendEditorLog("已丢弃未保存的更改（已恢复为磁盘版本）。", "WARN");
+            }
+        }
+
+        await _store.DeleteAutosaveAsync(_workflow.Id).ConfigureAwait(true);
         await _store.MarkEditorSessionClosedAsync().ConfigureAwait(true);
+    }
+
+    /// <summary>关闭属性面板：仅撤销脚本编辑区未点「保存脚本」的草稿，不改动画布上的步骤。</summary>
+    public void OnPropertiesPaneClosed()
+    {
+        if (!IsScriptStepSelected)
+            return;
+
+        var step = SelectedStep;
+        if (step is null)
+            return;
+
+        var savedScript = step.Parameters.GetValueOrDefault("script", string.Empty);
+        var savedRefs = step.Parameters.GetValueOrDefault("references", string.Empty);
+        var draftScript = ScriptDraft ?? string.Empty;
+        var draftRefs = ScriptReferencesDraft ?? string.Empty;
+
+        if (string.Equals(draftScript, savedScript, StringComparison.Ordinal) &&
+            string.Equals(draftRefs, savedRefs, StringComparison.Ordinal))
+            return;
+
+        LoadScriptDraftFromSelected();
+        AppendEditorLog("已撤销属性面板中未保存的脚本草稿。", "WARN");
     }
 
     public void ConfirmNavigationRequest(NavigationContext navigationContext, Action<bool> continuationCallback)
@@ -1079,8 +1672,6 @@ public sealed class WorkflowEditorViewModel : BindableBase, IConfirmNavigationRe
         IsDirty = true;
         if (!IsSaving)
             SaveStatusText = "● 未保存";
-
-        ScheduleAutosave();
     }
 
     public void MarkDirtyAfterCanvasInteraction()

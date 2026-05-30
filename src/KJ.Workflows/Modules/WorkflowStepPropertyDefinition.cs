@@ -7,16 +7,22 @@ public sealed class WorkflowStepPropertyDefinition
         string key,
         string label,
         string? placeholder = null,
-        bool isReadOnly = false)
+        bool isReadOnly = false,
+        bool isMultiline = false,
+        int minLines = 3)
     {
         Key = key;
         Label = label;
         Placeholder = placeholder;
         IsReadOnly = isReadOnly;
+        IsMultiline = isMultiline;
+        MinLines = Math.Max(1, minLines);
     }
 
     public string Key { get; }
     public string Label { get; }
     public string? Placeholder { get; }
     public bool IsReadOnly { get; }
+    public bool IsMultiline { get; }
+    public int MinLines { get; }
 }

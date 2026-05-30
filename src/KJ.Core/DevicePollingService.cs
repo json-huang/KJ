@@ -157,6 +157,64 @@ public sealed class DevicePollingService : ICommsService, IAsyncDisposable
         }
     }
 
+    // ── 手动连接/断开（UI 用）──────────────────────────────────────────
+
+    public async Task ConnectNowAsync(string deviceId, CancellationToken ct = default)
+    {
+        var device = _deviceManager.GetDevice(deviceId);
+        if (device is null)
+            throw new InvalidOperationException($"Device '{deviceId}' not found");
+
+        if (string.IsNullOrWhiteSpace(device.Host))
+            throw new InvalidOperationException($"Device '{deviceId}' has no host configured");
+
+        // 若已有会话且已连接，则不重复连接
+        lock (_gate)
+        {
+            if (_sessions.TryGetValue(deviceId, out var s) && s.Driver is { State: DriverConnectionState.Connected })
+                return;
+        }
+
+        await ConnectDeviceAsync(device, ct).ConfigureAwait(false);
+    }
+
+    public bool TryGetConnectedDriver(string deviceId, out IDeviceDriver? driver)
+    {
+        lock (_gate)
+        {
+            if (_sessions.TryGetValue(deviceId, out var session) &&
+                session.Driver is { State: DriverConnectionState.Connected })
+            {
+                driver = session.Driver;
+                return true;
+            }
+        }
+
+        driver = null;
+        return false;
+    }
+
+    public async Task DisconnectNowAsync(string deviceId, CancellationToken ct = default)
+    {
+        DeviceSession? session = null;
+        lock (_gate)
+        {
+            if (_sessions.TryGetValue(deviceId, out var s))
+            {
+                session = s;
+                _sessions.Remove(deviceId);
+            }
+        }
+
+        if (session?.Driver is not null)
+        {
+            try { await session.Driver.DisconnectAsync(ct).ConfigureAwait(false); } catch { /* best-effort */ }
+            try { await session.Driver.DisposeAsync().ConfigureAwait(false); } catch { /* best-effort */ }
+        }
+
+        try { _deviceManager.UpdateDeviceState(deviceId, "Disconnected"); } catch { /* ignore */ }
+    }
+
     private async Task DisconnectAllDevicesAsync()
     {
         List<DeviceSession> sessions;

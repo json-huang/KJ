@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KJ.Domain\KJ.Domain.csproj" />
+    <ProjectReference Include="..\KJ.Workflows\KJ.Workflows.csproj" />
     <ProjectReference Include="..\KJ.Drivers.Abstractions\KJ.Drivers.Abstractions.csproj" />
     <ProjectReference Include="..\KJ.Diagnostics\KJ.Diagnostics.csproj" />
   </ItemGroup>
